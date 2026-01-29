@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ratio>
 #include <vector>
 #include <algorithm>
 #include <cmath>
@@ -15,26 +16,26 @@
 typedef long long ll;
 using namespace std;
 
-void sumary(ll n, ll k, ll last, vector<ll>& a) {
-    if (k == 0) {
-        if (n == 0) {
-            for (ll x : a) cout << x << " ";
-            cout << "\n";
-        }
+void summary(ll n, ll k, ll leftcordon, vector<ll>& a){
+    if(k==0){
+        for(ll i:a)cout<<i<<" ";
+        cout<<"\n";
         return;
     }
-    for(ll i=last+1;i<=n;++i){
-        a.push_back(i);
-        sumary(n - i, k - 1, i, a);
-        a.pop_back();
+    ll start = (leftcordon == 0) ? 1 : leftcordon + 1;
+    for(ll i=start; i<=n;++i){
+        if(leftcordon==0 || i%leftcordon==0){
+            a.push_back(i);
+            summary(n,k-1,i,a);
+            a.pop_back();
+        }
     }
 }
-
 int main(){
     ll n=0,k=0;
     cin>>n;
     cin>>k;
     vector<ll> fun;
-    sumary(n,k,0,fun);
+    summary(n,k,0,fun);
     return 0;
 }
