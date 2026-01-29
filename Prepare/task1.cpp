@@ -30,7 +30,6 @@ void sumary(ll n, ll k, ll last, vector<ll>& a) {
     }
 }
 
-
 int main(){
     ll n=0,k=0;
     cin>>n;
