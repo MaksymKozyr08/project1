@@ -37,5 +37,6 @@ int main(){
     cin>>k;
     vector<ll> fun;
     summary(n,k,0,fun);
+    cout<<"done";
     return 0;
 }
