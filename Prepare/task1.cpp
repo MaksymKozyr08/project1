@@ -52,17 +52,16 @@ void outout(ll n,ll k, ll cordon, vector<ll> a){
 
 void task28(ll n,ll k,ll parny,ll cordon,vector<ll> a){
     if(k==0){
-        if(parny==k/2){
+        if(parny==a.size()/2){
             for(ll i:a)cout<<i<<" ";
             cout<<"\n";
             return;
         }
     }
     
-    for(ll i=cordon+1;i<n;++i){
-        if(i%2==0)parny++;
+    for(ll i=cordon+1;i<=n;++i){
         a.push_back(i);
-        task28(n, k-1,parny,i,a);
+        task28(n, k-1,parny+(i%2==0),i,a);
         a.pop_back();
     }
 }
