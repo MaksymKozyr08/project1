@@ -36,9 +36,23 @@ ll factorial( ll n){
     return n* factorial(n-1); 
 }
 
+void outout(ll n,ll k, ll cordon, vector<ll> a){
+    if(k==0){
+        for(ll i:a)cout<<i<<" ";
+        cout<<"\n";
+        return;
+    }
+
+    for(ll i=cordon+1;i<n;++i){
+        a.push_back(i);
+        outout(n,k-1,i,a);
+        a.pop_back();
+    }
+}
+
 int main(){
     ll n=0,k=0;
-    cin>>n;
+    /*cin>>n;
     cin>>k;
     vector<ll> a;
     summary(n,k,0,a);
@@ -46,6 +60,10 @@ int main(){
     cout<<"\n";
     cin>>n;
     cout<<factorial(n)<<endl;
-    cout<<"done";
+    cout<<"done";*/
+    cin>>n;
+    cin>>k;
+    vector<ll> a;
+    outout(n,k,0,a);
     return 0;
 }
