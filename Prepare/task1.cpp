@@ -61,7 +61,9 @@ void task28(ll n,ll k,ll parny,ll cordon,vector<ll> a){
     
     for(ll i=cordon+1;i<n;++i){
         if(i%2==0)parny++;
+        a.push_back(i);
         task28(n, k-1,parny,i,a);
+        a.pop_back();
     }
 }
 int main(){
