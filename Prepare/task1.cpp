@@ -50,6 +50,20 @@ void outout(ll n,ll k, ll cordon, vector<ll> a){
     }
 }
 
+void task28(ll n,ll k,ll parny,ll cordon,vector<ll> a){
+    if(k==0){
+        if(parny==k/2){
+            for(ll i:a)cout<<i<<" ";
+            cout<<"\n";
+            return;
+        }
+    }
+    
+    for(ll i=cordon+1;i<n;++i){
+        if(i%2==0)parny++;
+        task28(n, k-1,parny,i,a);
+    }
+}
 int main(){
     ll n=0,k=0;
     /*cin>>n;
@@ -60,10 +74,14 @@ int main(){
     cout<<"\n";
     cin>>n;
     cout<<factorial(n)<<endl;
-    cout<<"done";*/
+    cout<<"done";
     cin>>n;
     cin>>k;
     vector<ll> a;
-    outout(n,k,0,a);
+    outout(n,k,0,a);*/
+    cin>>n;
+    cin>>k;
+    vector<ll> a;
+    task28(n,k,0,0,a);
     return 0;
 }
