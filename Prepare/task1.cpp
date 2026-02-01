@@ -66,7 +66,7 @@ void task28(ll n,ll k,ll parny,ll cordon,vector<ll> a){
     }
 }
 
-void task29(ll n,ll k,ll leftkordon,ll parn,vector<ll> a){
+void task29(ll n,ll k,ll leftkordon,ll parn,vector<ll>& a){
     if(k==0){
         if(parn>=(a.size()+1)/2){
             for(ll i:a)cout<<i<<" ";
@@ -79,6 +79,14 @@ void task29(ll n,ll k,ll leftkordon,ll parn,vector<ll> a){
         task29(n,k-1,i,parn+(i%2==0),a);
         a.pop_back();
     }
+}
+
+void moveleft(vector<ll>& a){
+    for( ll i=0;i<a.size()-1;++i){
+        a[i]=a[i+1];
+    }
+    for(ll i:a)cout<<i<<" ";
+    cout<<endl;
 }
 int main(){
     ll n=0,k=0;
