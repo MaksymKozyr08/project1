@@ -65,6 +65,21 @@ void task28(ll n,ll k,ll parny,ll cordon,vector<ll> a){
         a.pop_back();
     }
 }
+
+void task29(ll n,ll k,ll leftkordon,ll parn,vector<ll> a){
+    if(k==0){
+        if(parn>=(a.size()+1)/2){
+            for(ll i:a)cout<<i<<" ";
+            cout<<"\n";
+            return;
+        }
+    }
+    for(ll i=leftkordon+1;i<=n;++i){
+        a.push_back(i);
+        task29(n,k-1,i,parn+(i%2==0),a);
+        a.pop_back();
+    }
+}
 int main(){
     ll n=0,k=0;
     /*cin>>n;
@@ -79,7 +94,11 @@ int main(){
     cin>>n;
     cin>>k;
     vector<ll> a;
-    outout(n,k,0,a);*/
+    outout(n,k,0,a);
+    cin>>n;
+    cin>>k;
+    vector<ll> a;
+    task28(n,k,0,0,a);*/
     cin>>n;
     cin>>k;
     vector<ll> a;
