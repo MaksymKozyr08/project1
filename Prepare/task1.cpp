@@ -111,7 +111,7 @@ void task30(ll n,ll k,vector<ll> a,vector<bool> b){
     for(ll i=0;i<n;++i){
         if(b[i])continue;
 
-        if(!a.empty() && abs(a.back() - i) > k){
+        if(!a.empty() && abs(a.back() - i) < k){
             a.push_back(i);
             b[i]=true;
             task30(n,k,a,b);
@@ -121,8 +121,8 @@ void task30(ll n,ll k,vector<ll> a,vector<bool> b){
     }
 }
 int main(){
-    ll n=0,k=0;
-    /*cin>>n;
+    /*ll n=0,k=0;
+    cin>>n;
     cin>>k;
     vector<ll> a;
     summary(n,k,0,a);
@@ -142,7 +142,7 @@ int main(){
     cin>>n;
     cin>>k;
     vector<ll> a;
-    task28(n,k,0,0,a);*/
+    task28(n,k,0,0,a);
     cin>>n;
     vector<ll> a(n);
     for(ll i=0;i<n;++i){
@@ -150,6 +150,12 @@ int main(){
     }
     for(ll i:a)cout<<i<<" ";
     cout<<endl;
-    moveright(a);
+    moveright(a);*/
+    ll n, k;
+    if (cin >> n >> k) {
+        vector<ll> path;
+        vector<bool> used(n + 1, false);
+        task30(n, k, path, used);
+    }
     return 0;
 }
