@@ -101,17 +101,17 @@ void moveright(vector<ll>& a){
     cout<<endl;
 }
 
-void task30(ll n,ll k,vector<ll> a,vector<bool> b){
+void task30(ll n,ll k,vector<ll>& a,vector<bool>& b){
     if(a.size()==n){
         for(ll i:a)cout<<i<<" ";
         cout<<"\n";
         return;
     }
 
-    for(ll i=0;i<n;++i){
+    for(ll i=1;i<=n;++i){
         if(b[i])continue;
 
-        if(!a.empty() && abs(a.back() - i) < k){
+        if(a.empty() || abs(a.back() - i) <= k){
             a.push_back(i);
             b[i]=true;
             task30(n,k,a,b);
