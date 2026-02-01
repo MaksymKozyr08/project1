@@ -82,9 +82,21 @@ void task29(ll n,ll k,ll leftkordon,ll parn,vector<ll>& a){
 }
 
 void moveleft(vector<ll>& a){
+    ll b=a[0];
     for( ll i=0;i<a.size()-1;++i){
         a[i]=a[i+1];
     }
+    a[a.size()-1]=b;
+    for(ll i:a)cout<<i<<" ";
+    cout<<endl;
+}
+
+void moveright(vector<ll>& a){
+    ll b=a[a.size()-1];
+    for( ll i=a.size()-1;i>0;i--){
+        a[i]=a[i-1];
+    }
+    a[0]=b;
     for(ll i:a)cout<<i<<" ";
     cout<<endl;
 }
@@ -106,10 +118,18 @@ int main(){
     cin>>n;
     cin>>k;
     vector<ll> a;
-    task28(n,k,0,0,a);*/
+    task28(n,k,0,0,a);
     cin>>n;
     cin>>k;
     vector<ll> a;
-    task28(n,k,0,0,a);
+    task28(n,k,0,0,a);*/
+    cin>>n;
+    vector<ll> a(n);
+    for(ll i=0;i<n;++i){
+        a[i]=rand()%100;
+    }
+    for(ll i:a)cout<<i<<" ";
+    cout<<endl;
+    moveright(a);
     return 0;
 }
