@@ -157,5 +157,6 @@ int main(){
         vector<bool> used(n + 1, false);
         task30(n, k, path, used);
     }
+    cout<<"done";
     return 0;
 }
