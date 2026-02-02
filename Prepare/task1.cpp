@@ -149,19 +149,12 @@ ll sumrum(string s){
             a.push_back(1000);
         }
     }
-    for(ll i:a)cout<<i<<" ";
-    cout<<"\n";
-    for(ll i=1;i<a.size();++i){
-        if(a[i]>a[i-1]){
-            sum=sum+a[i]-a[i-1];
-            cout<<"1:"<<sum<<endl;
-        }
-        else if(i==1){
-            sum+=a[0];
-        }
+    for(ll i=0;i<a.size();++i){
+        if(i+1<a.size() && a[i]<a[i+1]){
+            sum-=a[i];
+        } 
         else{
             sum+=a[i];
-            cout<<"2:"<<sum<<endl;
         }
     }
     return sum;
