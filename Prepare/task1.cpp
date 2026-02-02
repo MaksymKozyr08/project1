@@ -120,6 +120,38 @@ void task30(ll n,ll k,vector<ll>& a,vector<bool>& b){
         }
     }
 }
+
+ll sumrum(string s){
+    vector<ll> a;
+    for(ll i=0;i<s.size();++i){
+        if(s[i]=='I'){
+            a.push_back(1);
+        }
+        else if(s[i]=='V'){
+            a.push_back(5);
+        }
+        else if(s[i]=='X'){
+            a.push_back(10);
+        }
+        else if(s[i]=='L'){
+            a.push_back(50);
+        }
+        else if(s[i]=='C'){
+            a.push_back(100);
+        }
+        else if(s[i]=='D'){
+            a.push_back(500);
+        }
+        else if(s[i]=='M'){
+            a.push_back(1000);
+        }
+    }
+    for(ll i:a)cout<<i<<" ";
+    cout<<"\n";
+    for(ll i=0;i<a.size();++i){
+        
+    }
+}
 int main(){
     /*ll n=0,k=0;
     cin>>n;
