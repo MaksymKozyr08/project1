@@ -16,6 +16,8 @@
 typedef long long ll ;
 typedef long double ld;
 using namespace std;
+
+
 void summary(ll n,ll k,ll leftcordon,vector<ll>& a){
     if(k==0){
         for(ll i:a)cout<<i<<" ";
@@ -186,13 +188,16 @@ int main(){
     }
     for(ll i:a)cout<<i<<" ";
     cout<<endl;
-    moveright(a);*/
+    moveright(a);
     ll n, k;
     if (cin >> n >> k) {
         vector<ll> path;
         vector<bool> used(n + 1, false);
         task30(n, k, path, used);
     }
-    cout<<"done";
+    cout<<"done";*/
+    string s;
+    cin>>s;
+    cout<<sumrum(s);
     return 0;
 }
