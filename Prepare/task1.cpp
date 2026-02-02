@@ -123,6 +123,7 @@ void task30(ll n,ll k,vector<ll>& a,vector<bool>& b){
 
 ll sumrum(string s){
     vector<ll> a;
+    ll sum=0;
     for(ll i=0;i<s.size();++i){
         if(s[i]=='I'){
             a.push_back(1);
@@ -149,8 +150,11 @@ ll sumrum(string s){
     for(ll i:a)cout<<i<<" ";
     cout<<"\n";
     for(ll i=0;i<a.size();++i){
-        
+        if(a[i]>a[i-1]){
+            sum=sum+a[i]-a[i-1];
+        }
     }
+    return sum;
 }
 int main(){
     /*ll n=0,k=0;
