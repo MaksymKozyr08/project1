@@ -151,9 +151,17 @@ ll sumrum(string s){
     }
     for(ll i:a)cout<<i<<" ";
     cout<<"\n";
-    for(ll i=0;i<a.size();++i){
+    for(ll i=1;i<a.size();++i){
         if(a[i]>a[i-1]){
             sum=sum+a[i]-a[i-1];
+            cout<<"1:"<<sum<<endl;
+        }
+        else if(i==1){
+            sum+=a[0];
+        }
+        else{
+            sum+=a[i];
+            cout<<"2:"<<sum<<endl;
         }
     }
     return sum;
