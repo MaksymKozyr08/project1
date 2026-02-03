@@ -16,8 +16,7 @@
 typedef long long ll ;
 typedef long double ld;
 using namespace std;
-
-
+//ttt
 void summary(ll n,ll k,ll leftcordon,vector<ll>& a){
     if(k==0){
         for(ll i:a)cout<<i<<" ";

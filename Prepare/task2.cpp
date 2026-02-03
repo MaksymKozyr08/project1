@@ -1,35 +1,34 @@
 #include <iostream>
-#include <ratio>
 #include <vector>
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <cstdio>
-#include <cstring>
-#include <cctype>
-#include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <cstdarg>
+#include <string>
+using namespace std;
 
 
 typedef long long ll ;
 typedef long double ld;
-using namespace std;
 
-
-string prefix(vector<string>& a){
-    for(ll i=0;i<a.size();++i){
-        
+// Finds longest common prefix of all strings in the vector
+string prefix(const vector<string>& a) {
+    if (a.empty()) return "";
+    string s = a[0];
+    for (size_t i = 1; i < a.size(); ++i) {
+        size_t j = 0;
+        while (j < s.size() && j < a[i].size() && s[j] == a[i][j]) {
+            ++j;
+        }
+        s = s.substr(0, j);
+        if (s.empty()) break;
     }
+    return s;
 }
-int main(){
+
+int main() {
     ll n;
-    cin>>n;
-    vector<string> s;
-    for(ll i=0;i<n;++i){
-        cin>>s[i];
+    cin >> n;
+    vector<string> s(n);
+    for (ll i = 0; i < n; ++i) {
+        cin >> s[i];
     }
+    cout << prefix(s) << endl;
     return 0;
 }
