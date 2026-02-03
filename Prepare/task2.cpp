@@ -21,7 +21,7 @@ using namespace std;
 
 string prefix(vector<string>& a){
     for(ll i=0;i<a.size();++i){
-
+        
     }
 }
 int main(){
