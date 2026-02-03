@@ -7,7 +7,6 @@ using namespace std;
 typedef long long ll ;
 typedef long double ld;
 
-// Finds longest common prefix of all strings in the vector
 string prefix(const vector<string>& a) {
     if (a.empty()) return "";
     string s = a[0];
