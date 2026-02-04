@@ -19,9 +19,9 @@ typedef long double ld;
 using namespace std;
 
 string prefix(vector<string>& a){
-    string s;
-    
-    return s;
+    string s=a[0];
+    while(s.size()>0)
+    return "";
 }
 
 int main(){
