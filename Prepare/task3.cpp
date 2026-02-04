@@ -20,7 +20,15 @@ using namespace std;
 
 string prefix(vector<string>& a){
     string s=a[0];
-    while(s.size()>0)
+    while(s.size()>0){
+        for(ll i=0;i<a.size();++i){
+            if(a[i].substr(0,s.size())!=s){
+                s.pop_back();
+                continue;
+            }
+        }
+        return s;
+    }
     return "";
 }
 
