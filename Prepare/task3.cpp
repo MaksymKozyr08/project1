@@ -18,15 +18,20 @@ typedef long double ld;
 
 using namespace std;
 
+string prefix(vector<string>& a){
+    string s;
+    
+    return s;
+}
 
 int main(){
     ll n;
-    cin>>n;
-    vector<string> a;
-    for(ll i=0;i<n;++i){
-        cin>>a[i];
+    cin >> n;
+    vector<string> a(n);
+    for (ll i = 0; i < n; ++i) {
+        cin >> a[i];
     }
-    for(ll i:a)cout<<i<<" ";
+    for(string i:a)cout<<i<<" ";
     cout<<"\n";
     cout<<prefix(a);
     return 0;
