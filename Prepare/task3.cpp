@@ -18,12 +18,13 @@ typedef long double ld;
 
 using namespace std;
 
-string prefix(vector<string>& a){
-    string s=a[0];
-    if(a.empty())return "";
+//1
+string prefix(vector<string>& strs){
+    string s=strs[0];
+    if(strs.empty())return "";
     while(s.size()>0){
-        for(ll i=1;i<a.size();++i){
-            if(a[i].substr(0,s.size())!=s){
+        for(ll i=1;i<strs.size();++i){
+            if(strs[i].substr(0,s.size())!=s){
                 s.pop_back();
             }
         }
