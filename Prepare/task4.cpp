@@ -12,34 +12,30 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdarg>
+#include <stack>
 
 typedef long long ll;
 typedef long double ld;
 
 using namespace std;
-bool check(string s){
-    ll sum1=0;
-    ll sum2=0;
-    ll sum3=0;
-    for(ll i=0;i<s.size();++i){
-        if(s[i]=='[' && sum1!=0){
-            return false;
+bool check(string s) {
+    stack<char> st;
+    for (int i = 0; i < s.size(); ++i) {
+        if (s[i] == '(' || s[i] == '{' || s[i] == '[') {
+            st.push(s[i]);
+        } else {
+            if (st.empty()) return false;
+            char top = st.top();
+            if ((s[i] == ')' && top == '(') || 
+                (s[i] == '}' && top == '{') || 
+                (s[i] == ']' && top == '[')) {
+                st.pop();
+            } else {
+                return false;
+            }
         }
-        if(s[i]=='{' && sum2!=0){
-            return false;
-        }
-        if(s[i]=='(' && sum2!=0){
-            return false;
-        }
-        if(s[i]=='(')sum1++;
-        if(s[i]=='{')sum1++;
-        if(s[i]=='[')sum3++;
-        if(s[i]=='}')sum1--;
-        if(s[i]==']')sum2--;
-        if(s[i]==')')sum3--;
     }
-    if((sum1+sum2+sum3)!=0)return false;
-    return true;
+    return st.empty();
 }
 int main(){
     string s;
