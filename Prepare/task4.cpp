@@ -19,23 +19,20 @@ typedef long double ld;
 
 using namespace std;
 bool check(string s) {
-    stack<char> st;
-    for (int i = 0; i < s.size(); ++i) {
-        if (s[i] == '(' || s[i] == '{' || s[i] == '[') {
-            st.push(s[i]);
-        } else {
-            if (st.empty()) return false;
-            char top = st.top();
-            if ((s[i] == ')' && top == '(') || 
-                (s[i] == '}' && top == '{') || 
-                (s[i] == ']' && top == '[')) {
-                st.pop();
-            } else {
+    stack<char> sq;
+    for(ll i=0;i<s.size();++i){
+        if(s[i]=='(' || s[i]=='[' || s[i]=='{')sq.push(s[i]);
+        else{
+            if(sq.empty())return false;
+            if(s[i]==')' && sq.top()=='(')sq.pop();
+            if(s[i]==']' && sq.top()=='[')sq.pop();
+            if(s[i]=='}' && sq.top()=='{')sq.pop();
+            else{
                 return false;
             }
         }
     }
-    return st.empty();
+    if(sq.empty())return true;
 }
 int main(){
     string s;
