@@ -33,6 +33,7 @@ bool check(string s) {
         }
     }
     if(sq.empty())return true;
+    return false;
 }
 int main(){
     string s;
