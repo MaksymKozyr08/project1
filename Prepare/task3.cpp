@@ -18,7 +18,6 @@ typedef long double ld;
 
 using namespace std;
 
-//123
 string prefix(vector<string>& strs){
     string s=strs[0];
     if(strs.empty())return "";
