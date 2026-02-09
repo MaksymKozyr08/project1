@@ -1,108 +1,151 @@
 #include <iostream>
-#include <vector>
-#include <ctime>
 #include <iomanip>
+#include <vector>
 #include <string>
+#include <ctime>
 #include <cmath>
 #include <algorithm>
 
 using namespace std;
 
-struct TestResult {
-    string label;
-    double ops_per_sec;
-    double error_pct;
+// Кількість прогонів для усереднення (як у твоїх нотатках k=1..10)
+const int NUM_TESTS = 10;
+// Кількість ітерацій у внутрішньому циклі
+const int INNER_ITERATIONS = 1000000;
+// Кількість операцій за одну ітерацію (a+b, b+c, a+c) -> 3 операції
+const int OPS_PER_ITER = 3;
+
+// Структура для збереження результатів
+struct Result {
+    string typeName;
+    string opName;
+    double opsPerSec;
 };
 
-// Function to perform a series of measurements and ensure stability
-TestResult run_benchmark(string label, char op, string type) {
-    const int SAMPLES = 10;
-    long long iterations = 10000000; // Starting point for iterations
-    vector<double> results;
+// Шаблонна функція для тестування (працює з int, long, double тощо)
+template <typename T>
+double run_test(char op) {
+    double total_ops_per_sec = 0;
 
-    // We run 12 samples: 2 for "warm-up" and 10 for the actual statistics
-    for (int s = 0; s < SAMPLES + 2; s++) {
-        volatile double a = 41.25, b = 1.5, c = 0;
-        volatile long long al = 41, bl = 9, cl = 0;
+    // Змінні оголошуємо volatile, щоб компілятор не викинув "зайвий" код при оптимізації
+    volatile T a = 10, b = 20, c = 0; 
+    
+    // Для ділення беремо інші числа, щоб не ділити на 0 і не зменшувати числа до 0 занадто швидко
+    if (op == '/') { a = 10000; b = 2; c = 1; }
 
-        clock_t t1 = clock();
-        for (long long i = 0; i < iterations; i++) {
-            if (type == "int") {
-                if (op == '+') cl = al + bl;
-                else if (op == '*') cl = al * bl;
-                else if (op == '/') cl = al / bl;
-            } else {
-                if (op == '+') c = a + b;
-                else if (op == '/') c = a / b;
+    for (int k = 0; k < NUM_TESTS; k++) {
+        clock_t t1, t2, t01, t02;
+
+        // 1. Вимірюємо час РОБОЧОГО циклу
+        t1 = clock();
+        for (int i = 0; i < INNER_ITERATIONS; i++) {
+            switch (op) {
+                case '+':
+                    c = a + b; b = a + c; a = b + c;
+                    break;
+                case '-':
+                    c = a - b; b = a - c; a = b - c;
+                    break;
+                case '*':
+                    // Для множення скидаємо значення, щоб не було переповнення (infinity)
+                    c = a * b; b = a * c; a = b * c;
+                    if (a > 1000000 || a < -1000000) { a=2; b=3; } 
+                    break;
+                case '/':
+                     // Для ділення простіша логіка, щоб уникнути 0
+                    c = a / b; b = c + 2; a = b + 10;
+                    break;
             }
         }
-        clock_t t2 = clock();
+        t2 = clock();
 
-        double duration = (double)(t2 - t1) / CLOCKS_PER_SEC;
+        // Відновлюємо значення для чистоти експерименту
+        T temp_a = a, temp_b = b, temp_c = c;
+
+        // 2. Вимірюємо час ПОРОЖНЬОГО циклу (тільки присвоєння)
+        // Це саме те, що було у твоїх нотатках: c=a; b=c; a=b;
+        t01 = clock();
+        for (int i = 0; i < INNER_ITERATIONS; i++) {
+            c = temp_a; temp_b = c; temp_a = temp_b;
+        }
+        t02 = clock();
+
+        // 3. Розрахунок чистого часу
+        double work_time = (double)(t2 - t1) / CLOCKS_PER_SEC;
+        double empty_time = (double)(t02 - t01) / CLOCKS_PER_SEC;
         
-        // Adaptive iteration adjustment to ensure duration is long enough for accuracy
-        if (duration < 0.1 && s < 2) {
-            iterations *= 10;
-            s = -1; // Reset and try again with more iterations
-            continue;
-        }
+        double pure_time = work_time - empty_time;
 
-        if (s >= 2) {
-            results.push_back((double)iterations / duration);
-        }
+        // Захист від дуже малих значень (якщо empty_time > work_time через похибку таймера)
+        if (pure_time <= 0) pure_time = 0.000001;
+
+        double current_d = (double)(INNER_ITERATIONS * OPS_PER_ITER) / pure_time;
+        total_ops_per_sec += current_d;
     }
 
-    // Calculate Average (Mean)
-    double sum = 0;
-    for (double r : results) sum += r;
-    double mean = sum / SAMPLES;
-
-    // Calculate Standard Deviation for Error Margin
-    double sq_sum = 0;
-    for (double r : results) sq_sum += pow(r - mean, 2);
-    double stdev = sqrt(sq_sum / SAMPLES);
-    double error_pct = (stdev / mean) * 100;
-    
-    return {label, mean, error_pct};
-}
-
-void display_results(vector<TestResult>& results) {
-    double max_speed = 0;
-    for (auto& r : results) if (r.ops_per_sec > max_speed) max_speed = r.ops_per_sec;
-
-    cout << "\n" << string(90, '-') << endl;
-    cout << setw(15) << left << "Operation" << " | " 
-         << setw(12) << "Ops/Sec" << " | " 
-         << setw(40) << "Performance Diagram (Relative)" << " | " 
-         << "Error %" << endl;
-    cout << string(90, '-') << endl;
-
-    for (auto& r : results) {
-        int bar_length = (int)((r.ops_per_sec / max_speed) * 40);
-        string bar(bar_length, 'X');
-
-        cout << setw(15) << left << r.label << " | " 
-             << scientific << setprecision(2) << r.ops_per_sec << " | " 
-             << setw(40) << left << bar << " | " 
-             << fixed << setprecision(2) << r.error_pct << "%" << endl;
-    }
-    cout << string(90, '-') << endl;
+    return total_ops_per_sec / NUM_TESTS; // Повертаємо середнє
 }
 
 int main() {
-    cout << "Starting hardware performance benchmark..." << endl;
-    cout << "Note: Please remain idle for better precision (Target < 2%)." << endl;
-
-    vector<TestResult> results;
+    vector<Result> results;
     
-    // Testing various data types and operations
-    results.push_back(run_benchmark("int addition", '+', "int"));
-    results.push_back(run_benchmark("int multiply", '*', "int"));
-    results.push_back(run_benchmark("int division", '/', "int"));
-    results.push_back(run_benchmark("double add",   '+', "double"));
-    results.push_back(run_benchmark("double div",   '/', "double"));
+    cout << "Performing calculations. Please wait..." << endl;
 
-    display_results(results);
+    // --- ТЕСТУВАННЯ ---
+    // Тут ти можеш додати або прибрати типи даних відповідно до твого варіанту
     
+    // INT
+    results.push_back({"int", "+", run_test<int>('+')});
+    results.push_back({"int", "-", run_test<int>('-')});
+    results.push_back({"int", "*", run_test<int>('*')});
+    results.push_back({"int", "/", run_test<int>('/')});
+
+    // LONG
+    results.push_back({"long", "+", run_test<long>('+')});
+    results.push_back({"long", "-", run_test<long>('-')});
+    results.push_back({"long", "*", run_test<long>('*')});
+    results.push_back({"long", "/", run_test<long>('/')});
+
+    // FLOAT
+    results.push_back({"float", "+", run_test<float>('+')});
+    results.push_back({"float", "-", run_test<float>('-')});
+    results.push_back({"float", "*", run_test<float>('*')});
+    results.push_back({"float", "/", run_test<float>('/')});
+
+    // DOUBLE
+    results.push_back({"double", "+", run_test<double>('+')});
+    results.push_back({"double", "-", run_test<double>('-')});
+    results.push_back({"double", "*", run_test<double>('*')});
+    results.push_back({"double", "/", run_test<double>('/')});
+
+
+    // --- ВІДОБРАЖЕННЯ РЕЗУЛЬТАТІВ ---
+    
+    // Знаходимо максимальну швидкість для розрахунку відсотків (це буде 100%)
+    double max_speed = 0;
+    for (const auto& r : results) {
+        if (r.opsPerSec > max_speed) max_speed = r.opsPerSec;
+    }
+
+    cout << "\n--------------------------------------------------------------------------------------\n";
+    cout << setw(8) << "Type" << setw(5) << "Op" << setw(15) << "Ops/Sec" << "   " << "Diagram\n";
+    cout << "--------------------------------------------------------------------------------------\n";
+
+    for (const auto& r : results) {
+        // Розрахунок відсотків
+        int percent = (int)((r.opsPerSec / max_speed) * 100);
+        
+        // Малюємо діаграму (максимальна довжина - 40 символів 'X')
+        int bar_length = (int)((r.opsPerSec / max_speed) * 40);
+        string bar(bar_length, 'X');
+
+        cout << setw(8) << r.typeName 
+             << setw(5) << r.opName 
+             << setw(15) << scientific << setprecision(2) << r.opsPerSec 
+             << "   " << left << setw(42) << bar 
+             << right << setw(4) << percent << "%" << endl;
+    }
+    cout << "--------------------------------------------------------------------------------------\n";
+
     return 0;
 }
