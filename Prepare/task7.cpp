@@ -40,6 +40,9 @@ int main(){
     cin>>val;
     ll k=permutation(a,val);
     cout<<k;
-    
+    cout<<"\n";
+    for(ll i=0;i<n;++i){
+        cout<<a[i]<<" ";
+    }
     return 0;
 }
