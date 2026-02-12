@@ -56,7 +56,7 @@ ll sorting(vector<ll> nums,ll target){
 
 ll lastword(string s){
     ll k=0;
-    for(size_t i=s.length()-1;i>=0;i--){
+    for(int i=s.length()-1;i>=0;i--){
         if(s[i]!=' ')k++;
         if(s[i]==' ' && k!=0)return k;
     }
