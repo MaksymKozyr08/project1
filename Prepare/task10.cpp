@@ -35,7 +35,7 @@ vector<ll> Hornersmethod(vector<ll>& a, ll x0){
 
 
 ll sorting(vector<ll> nums,ll target){
-    unsigned 
+    ll 
     left=0,
     right=nums.size()-1,
     mid;
