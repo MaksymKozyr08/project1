@@ -34,12 +34,17 @@ vector<ll> Hornersmethod(vector<ll>& a, ll x0){
 }
 
 
-ll sorting(vector<ll> a,ll target){
-    unsigned left=0, right=a.size(),mid;
-    if(a.empty())return 0;
-    while(left<right){
+ll sorting(vector<ll> nums,ll target){
+    unsigned 
+    left=0,
+    right=nums.size()-1,
+    mid;
+
+    if(nums.empty())return -1;
+    while(left<=right){
         mid=left+((right-left)/2);
-        if(target<mid){
+        if(nums[mid]==target)return mid;
+        else if(target<nums[mid]){
             right=mid-1;
         }
         else{
@@ -49,6 +54,7 @@ ll sorting(vector<ll> a,ll target){
     return left;
 }
 int main(){
+    /*
     ll n;
     cin>>n;
     vector<ll> a(n);
@@ -58,5 +64,15 @@ int main(){
     ll x0;
     cin>>x0;
     vector<ll> res=Hornersmethod(a,x0);
+    */
+    ll n=0;
+    cin>>n;
+    vector<ll> a(n);
+    for(ll i=0;i<n;++i){
+        cin>>a[i];
+    }
+    ll target=0;
+    cin>>target;
+    cout<<sorting(a,target);
     return 0;
 }
