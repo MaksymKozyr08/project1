@@ -21,6 +21,10 @@ using namespace std;
 
 vector<ll> Hornersmethod(vector<ll>& a, ll x0){
     vector<ll> res;
+    res[0]=a[0];
+    for(ll i=1;i<a.size();++i){
+        res[i]=x0*res[i-1]+a[i];
+    }
     for(ll i:res)cout<<i<<" ";
     return res;
 }
