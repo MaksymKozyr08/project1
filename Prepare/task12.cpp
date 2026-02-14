@@ -19,20 +19,17 @@ typedef long double ld;
 
 using namespace std;
 string summary(string a,string b){
-    string result(max(a.size(), b.size()), '0');
-    if(result.size()==0)return "0";
-    ll k=0;
-    for(ll i=max(a.size(),b.size())-1;i>=0;i--){
-        if(((a[i]+b[i]+k)-'0')>1){
-            result[i]='0';
-        }
-        else{
-            result[i]=((a[i]+b[i]+k)-'0');
-            k=0;
-        }
+    string result(max(a.size(),b.size()),'0');
+    if(a.empty()&&b.empty())return "0";
+    ll sum=0;
+    for(ll i=0;i<result.size();i++){
+        if(i<a.size())sum+=(a[a.size()-1-i]-'0');
+        if(i<b.size())sum+=(b[b.size()-1-i]-'0');
+        result[result.size()-1-i]=(char)((sum%2)+'0');
+        sum/=2;
     }
-    if(k!=0){
-        result.insert(result.begin(), '1');
+    if(sum){
+        result.insert(result.begin(),'1');
     }
     return result;
 }
