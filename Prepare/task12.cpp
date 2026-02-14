@@ -22,12 +22,13 @@ string summary(string a,string b){
     string result;
     ll k=0;
     for(ll i=max(a.size(),b.size());i>=0;i--){
-        if((a[i]+b[i])>1){
+        if((a[i]+b[i]+k)>1){
             result[i]=0;
             k++;
         }
         else{
-            result[i]=a[i]+b[i];
+            result[i]=a[i]+b[i]+k;
+            k--;
         }
     }
     if(k!=0){
