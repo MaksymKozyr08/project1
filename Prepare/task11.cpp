@@ -34,10 +34,7 @@ vector<ll> permutation(vector<ll>& a){
 int main(){
     ll n;
     cin>>n;
-    vector<ll> a(n);
-    for(ll i=0;i<n;++i){
-        cin>>a[i];
-    }
+    vector<ll> a;
     permutation(a);
     for(ll i:a)cout<<i<<" ";
     return 0;
