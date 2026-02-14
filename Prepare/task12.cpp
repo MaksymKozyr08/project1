@@ -19,7 +19,7 @@ typedef long double ld;
 
 using namespace std;
 string summary(string a,string b){
-    string result;
+    string result(max(a.size(), b.size()), '0');
     ll k=0;
     for(ll i=max(a.size(),b.size());i>=0;i--){
         if((a[i]+b[i]+k)>1){
@@ -41,5 +41,6 @@ int main(){
     cin>>s1;
     cin>>s2;
     string result=summary(s1,s2);
+    cout<<result;
     return 0;
 }
