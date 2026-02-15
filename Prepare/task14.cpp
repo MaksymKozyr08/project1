@@ -18,20 +18,24 @@ typedef long long ll;
 typedef long double ld;
 
 using namespace std;
-int mySqrt(int x){
-    if(x==0)return 0;
-    ll l=1,r=x,ans=0;
-    while(l<=r){
-        ll mid=l+(r-l)/2;
-        if(mid*mid<=x){
-            ans=mid;
-            l=mid+1;
-        }
-        else{
-            r=mid-1;
-        }
+ll mySqrt(ll x){
+    if(x==0){
+        return 0;
     }
-    return ans;
+    ll leftcordon=0;
+    ll rightcordon=x;
+    ll mid=rightcordon/2;
+    while(leftcordon<=rightcordon){
+        if(mid*mid==x)return mid;
+        else if(mid*mid<x){
+            leftcordon=mid+1;
+        }
+        else if(mid*mid>x){
+            rightcordon=mid-1;
+        }
+        mid=leftcordon+(rightcordon-leftcordon)/2;
+    }
+    return rightcordon;
 }
 int main(){
     int x;
