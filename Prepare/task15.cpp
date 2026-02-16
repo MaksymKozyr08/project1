@@ -28,7 +28,6 @@ ll fib(int n){
         w=x+y;
         y=x;
         x=w;
-        //cout<<x<<" "<< y<<" "<<w<<"\n";
     }
     return w;
 }
