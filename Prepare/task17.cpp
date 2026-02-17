@@ -19,15 +19,15 @@ typedef long double ld;
 
 using namespace std;
 void result(vector<ll>& nums1,ll n,vector<ll>& nums2,ll m){
-    ll i=n-1;
-    ll j=m-1;
+    ll i=m-1;
+    ll j=n-1;
     ll k=n+m-1;
     while(j>=0){
-        if(i>=0 && nums2[j]>nums1[i]){
-            nums1[k--]=nums2[j--];
+        if(i>=0 && nums1[i] > nums2[j]){
+            nums1[k--] = nums1[i--];
         }
         else{
-            nums1[k--]=nums1[i--];
+            nums1[k--] = nums2[j--];
         }
     }
 }
