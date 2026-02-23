@@ -1,0 +1,37 @@
+relational-реляційний
+related-пов'язаний
+introduced-введений
+allows-дозволяє
+rows-рядки
+features-характеристики
+Durability-Довговічність
+enabling-включення
+Scalability-Масштабованість
+capabilities-можливості
+differs-відрізняється
+reltionships-відносини
+particular-особливий
+represents-представляє
+consistency-послідовність
+maintain-підтримувати
+pre-defined-заздалегідь визначеними
+invention-винаходи
+ongoing field-галузь
+uncover-виявлення
+retrieve-
+integrity-цілісність
+completeness-повнота
+disaster-
+Backup-
+recovery-
+sharding-шарування
+
+
+
+
+Oracle: Oracle Database is a relational database management system (RDBMS) developed and marketed by Oracle Corporation and is one of the most commonly used enterprise database systems in the world.
+MySQL: MySQL is a commonly used, open-source, relational database management system used for creating and administering databases. Developed and distributed by Oracle Corporation, MySQL is known for ease of use, extensive community support, and reliability.
+Note: An open-source alternative to MySQL is called MariaDB which was designed as a replacement for MySQL after the acquisition of MySQL by Oracle Corporation.
+PostgreSQL: PostgreSQL is an open-source object-relational database management system known for its advanced, feature-rich capabilities which extend the abilities of SQL. Developed as part of the POSTGRES project at the University of California at Berkeley, PostgreSQL offers ACID-compliant features that safely store and scale complicated data workloads (PostgreSQL.org 2024).
+MSSQL: MSSQL, which stands for Microsoft SQL Server, is a relational database management system developed by Microsoft. This database platform is commonly used in large enterprise environments to support high-volume transaction processing, business intelligence, and analytics applications.
+SQLite: Unlike other examples in this list, SQLite is actually a software library that provides an RDBMS. Unlike the other RDBMSs in this list, SQLite is serverless and self-contained with zero configuration. This is because it is embedded within the application using SQLite and, as a result, doesn't need a separate server.
