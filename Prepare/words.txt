@@ -25,6 +25,8 @@ disaster-
 Backup-
 recovery-
 sharding-шарування
+variable-зміна
+
 
 
 
