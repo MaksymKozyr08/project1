@@ -28,8 +28,6 @@ void perform_test(string label) {
     long total_loops = 2000000;
     T divisor = (T)3;
     if (divisor == 0) divisor = 1;
-   
-    // Додавання
     sum_rate = 0;
     for (int k = 0; k < 10; k++) {
         v1 = 0; v2 = 1; v3 = 0;
@@ -58,8 +56,6 @@ void perform_test(string label) {
         sum_rate += rate;
     }
     results_storage.push_back({"+", label, sum_rate / 10.0});
-
-    // Віднімання
     sum_rate = 0;
     for (int k = 0; k < 10; k++) {
         v1 = 0; v2 = 1; v3 = 0;
@@ -88,8 +84,6 @@ void perform_test(string label) {
         sum_rate += rate;
     }
     results_storage.push_back({"-", label, sum_rate / 10.0});
-
-    // Множення
     sum_rate = 0;
     for (int k = 0; k < 10; k++) {
         v1 = 1; v2 = 1; v3 = 1;
@@ -118,8 +112,6 @@ void perform_test(string label) {
         sum_rate += rate;
     }
     results_storage.push_back({"*", label, sum_rate / 10.0});
-
-    // Ділення
     sum_rate = 0;
     for (int k = 0; k < 10; k++) {
         v1 = 1000000; v2 = 1; v3 = 1;
