@@ -158,7 +158,7 @@ int main() {
     for (const auto& r : results_storage) {
         if (r.ops_per_sec > max_val) max_val = r.ops_per_sec;
     }
-
+    
     cout << "----------------------------------------------------------------------\n";
     cout << left << setw(8) << "Type Op" 
          << setw(15) << "Ops/Sec" 
