@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+
+    <title>Olexa Rabbit — головна</title>
+    <meta
+      name="description"
+      content="Olexa Rabbit — магазин кроликів: новини, про виробництво та контакти."
+    />
+
+    <link rel="icon" href="./assets/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Перейти до вмісту</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./index.html" aria-label="На головну">
+          <span class="brand-mark" aria-hidden="true">
+            <img
+              src="./assets/icons/favicon.svg"
+              alt=""
+              width="28"
+              height="28"
+              loading="eager"
+              decoding="async"
+            />
+          </span>
+          <span class="brand-text">Olexa <span>Rabbit</span></span>
+        </a>
+
+        <nav class="nav" aria-label="Головна навігація">
+          <a href="./catalog.html">Каталог</a>
+          <a href="./news.html">Новини</a>
+          <a href="./tips.html">Поради</a>
+          <a href="./reviews.html">Відгуки</a>
+          <a href="./contact.html">Контакти</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="btn btn-ghost cart-btn" type="button" id="cartOpen">
+            Кошик <span class="cart-count" id="cartCount">0</span>
+          </button>
+          <button class="btn btn-ghost" type="button" id="trackOrder">
+            Відстежити
+          </button>
+          <button
+            class="btn btn-ghost icon-only"
+            type="button"
+            id="themeToggle"
+            aria-label="Змінити тему"
+          >
+            <span id="themeIcon">☀</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="hero-copy">
+            <h1>Olexa Rabbit</h1>
+            <p class="lead">
+              Магазин кроликів з акцентом на турботу: ми ділимось досвідом, а потім
+              пропонуємо купівлю.
+            </p>
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="./catalog.html">Каталог порід</a>
+              <a class="btn btn-ghost" href="./tips.html">Поради по вирощуванню</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="why">
+        <div class="container">
+          <h2>Чому обирають нас</h2>
+
+          <div class="grid">
+            <article class="feature">
+              <h3>Підбір породи</h3>
+              <p>Підкажемо породу під твої умови та бюджет.</p>
+            </article>
+            <article class="feature">
+              <h3>Догляд</h3>
+              <p>Розкажемо про корм, клітку, гігієну та щеплення.</p>
+            </article>
+            <article class="feature">
+              <h3>Підтримка</h3>
+              <p>Після покупки можна написати й уточнити питання.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="home-reviews">
+        <div class="container">
+          <div class="section-head">
+            <h2>Відгуки</h2>
+            <a class="link" href="./reviews.html">Усі відгуки →</a>
+          </div>
+
+          <div class="news-grid">
+            <article class="news-card">
+              <h3>«Діти в захваті»</h3>
+              <p class="muted">Карликовий кролик спокійний і швидко звик до дому.</p>
+            </article>
+            <article class="news-card">
+              <h3>«Все пояснили»</h3>
+              <p class="muted">Отримали чіткі інструкції по харчуванню та щепленнях.</p>
+            </article>
+            <article class="news-card">
+              <h3>«Зручно замовляти»</h3>
+              <p class="muted">Каталог, кошик і зв’язок — усе зрозуміло для клієнта.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="achievements">
+        <div class="container">
+          <h2>Досягнення</h2>
+
+          <div class="grid">
+            <article class="feature">
+              <h3>120+</h3>
+              <p class="muted">клієнтів, які вже обрали кролика.</p>
+            </article>
+            <article class="feature">
+              <h3>15+</h3>
+              <p class="muted">порід в каталозі (демо).</p>
+            </article>
+            <article class="feature">
+              <h3>5 років</h3>
+              <p class="muted">досвіду догляду за кроликами.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-top">
+        <div class="container footer-inner">
+          <div class="footer-line"></div>
+          <small>© <span id="year"></span> Olexa Rabbit</small>
+          <a class="muted" href="#top" id="backToTop">На початок</a>
+        </div>
+      </div>
+      <div class="footer-bar">
+        <div class="container footer-bar-inner">
+          <span>Телефон: +38 (000) 000-00-00</span>
+          <span>Email: olexa.rabbit@example.com</span>
+          <span>Соцмережі: Instagram / Facebook (демо)</span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="modal" id="cartModal" hidden>
+      <div class="modal-backdrop" data-close="cart"></div>
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Кошик">
+        <div class="modal-head">
+          <div class="modal-title">Кошик</div>
+          <button class="icon-btn" type="button" data-close="cart" aria-label="Закрити">
+            ✕
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="cart-list" id="cartList"></div>
+          <div class="cart-empty muted" id="cartEmpty">Кошик порожній.</div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" type="button" id="cartClear">Очистити</button>
+          <a class="btn btn-primary" href="./contact.html">Оформити</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/main.js" defer></script>
+  </body>
+</html>

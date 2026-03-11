@@ -11,8 +11,15 @@ void print(vector<ll>& a){
     cout<<"\n";
 }
 void insertionsort(vector<ll>& a){
-    for(size_t i=0;i<a.size();++i){
-               
+    if(a.size()<2)return;
+    for(size_t i=1;i<a.size();++i){
+        ll key=a[i];
+        size_t j=i;
+        while(j>0 && a[j-1]>key){
+            a[j]=a[j-1];
+            --j;
+        }
+        a[j]=key;
     }
 }
 int main(){
