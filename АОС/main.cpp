@@ -60,7 +60,7 @@ CFloat to_cstm(ld v){
         r.b.m=0;
     }else{
         r.b.e=nx;
-        r.b.m=(uint32_t)((mant-1.0)*524288); // 524288 це 2^19
+        r.b.m=(uint32_t)((mant-1.0)*524288);
     }
     return r;
 }
