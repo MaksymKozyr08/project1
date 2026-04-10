@@ -66,3 +66,5 @@ transparent-прозорий
 consuming-споживати
 execute-виконувати
 necessary-необхідний
+equals-дорівнює
+dementional-вимірний

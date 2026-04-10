@@ -26,8 +26,22 @@ vector<CFloat> st;
 CFloat to_cstm(ld v){
     CFloat r;
     r.raw=0;
+
+    if (v > 2e64L) {
+        r.b.e = 4095;
+        r.b.s = 0;
+        r.b.m = 0;
+        return r;
+    }
+    if (v < -2e64L) {
+        r.b.e = 4095;
+        r.b.s = 1;
+        r.b.m = 0;
+        return r;
+    }
+
     if(isnan(v)){
-        r.b.e=4095;
+        r.b.e=4095; 
         r.b.m=1;
         return r;
     }
@@ -135,7 +149,6 @@ ld pop_f(){
         st.pop_back();
         return r;
     }
-    cout<<"Stack is empty!\n";
     return 0.0;
 }
 
@@ -177,14 +190,12 @@ int main(){
         }else if(s=="DIV"){
             if(st.size()>1){
                 ld b=pop_f();
-                ld a=pop_f();
+                ld a=pop_f();  
                 if(b!=0){
                     push_f(a/b);
                 }else if(a==0&&b==0){
-                    cout<<"Division zero by zero\n";
                     push_f(NAN);
                 }else{
-                    cout<<"Division by zero!\n";
                     push_f((a>0)?INFINITY:-INFINITY);
                 }
             }
