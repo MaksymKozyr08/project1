@@ -68,3 +68,49 @@ execute-виконувати
 necessary-необхідний
 equals-дорівнює
 dementional-вимірний
+distinguish-розрізняти
+aware- усвідомлювати
+implied-мається на увазі
+warranty-гарантія
+assume-припустити
+omissions-пропуски
+care-увага
+government-уряд
+inquiries-запит
+permission-дозвіл
+obtained-отримано
+conceived-задумано
+expressive-виразний
+execution-виконання
+expression-вираз
+inherited-успадкований
+variable-зміна
+appears-з'являється
+toolchain-набір інструментів
+surprisingly-на диво
+excutable-виконуваний файл
+labeled-з позначкою
+prevents-запобігає
+appear-зявлятися
+certain-певний
+instance-приклад
+expression-вираз
+semicolons-капка з комою
+Slice — зріз (динамічний масив у Go).
+Sequence — послідовність.
+Contiguous — безперервний, суміжний (про пам'ять або елементи).
+Indexing — індексування.
+Half-open intervals — напіввідкриті інтервали.
+Abbreviate — скорочувати.
+Parenthesized list — список у дужках.
+Import declarations — оголошення імпорту.
+External source — зовнішнє джерело.
+Alternatives — альтернативи.
+Platform-independent — платформонезалежний.
+Fashion — спосіб, манера (у контексті "in a ... fashion").
+Dynamically sized — з динамічним розміром.
+Exclude — виключати.
+Simplify — спрощувати.
+Yields — видає, повертає (результат).
+Implementation — реалізація.
+Conventionally — зазвичай, за домовленістю.
