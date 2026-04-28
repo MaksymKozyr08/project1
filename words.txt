@@ -114,3 +114,13 @@ Simplify — спрощувати.
 Yields — видає, повертає (результат).
 Implementation — реалізація.
 Conventionally — зазвичай, за домовленістю.
+disappears-зникає
+gibberish-беліберда
+tempted-спокушення
+Likewise-аналогічно
+attached-додано
+responsible-відповідальний
+desired-бажаний
+relative-відносний
+assumed-пропустити
+almost-майже
