@@ -124,3 +124,167 @@ desired-бажаний
 relative-відносний
 assumed-пропустити
 almost-майже
+involve-залучати
+defining-визначення
+Interchange-трансфер
+mapping-картографування
+consistency-послідовність
+replicate-дублювати
+deterministic-детермінований
+systematic-систематичний
+sub-система
+primarily-переважно
+Plain-простий
+insight-аналіз
+comprehensive-всебічний
+deprecated-застарілий
+partition-розділ
+properties-властивості
+unleash
+concurrent-паралельний
+durability-довговічність
+aggregate-агрегат
+statically-статично
+valid-коректний
+redirecting	перенаправлення
+standard	стандартний
+error	помилка
+lacks	бракує, не вистачає
+ease	легкість
+dedicated	виділений, спеціальний
+operator	оператор
+refer	посилатися, звертатися
+descriptor	дескриптор (файловий)
+produce	виробляти, створювати
+numbered	пронумерований
+streams	потоки (даних)
+internally	внутрішньо
+respectively	відповідно
+notation	нотація, позначення
+placed	розміщений
+immediately	негайно, відразу
+perform	виконувати
+capture	захоплювати, фіксувати
+single	єдиний, один
+traditional	традиційний
+versions	версії
+significant	значний, важливий
+occur	відбуватися, траплятися
+streamlined	оптимізований, спрощений
+append	додавати (в кінець файлу)
+disposing	утилізація, позбавлення
+unwanted	небажаний
+silence	тиша
+golden	золотий
+throw away	викидати
+applies	застосовується
+particularly	особливо
+status	стан, статус
+suppress	придушувати, приховувати
+culture	культура
+ancient	стародавній
+concept	концепція
+universality	універсальність
+appeared	з'явився
+concatenate	зчеплювати, об'єднувати
+analogous	аналогічний
+paging	розбиття на сторінки
+short	короткий
+join	з'єднувати
+downloaded	завантажений
+split	розділений
+multiple	множинний, декілька
+multimedia	мультимедіа
+arranged	розташований, впорядкований
+wildcards	символи підстановки (*, ?)
+expand	розгортати, розширювати
+hung	завис
+supposed	повинен (був зробити)
+default	за замовчуванням
+attached	прикріплений, підключений
+keyboard	клавіатура
+dumbest	найдурніший
+processor	процесор (тут: текстовий редактор)
+accepts	приймає
+source	джерело
+serves	служить
+demonstrate	демонструвати
+options	опції, налаштування
+glance	погляд (at first glance - на перший погляд)
+versus	проти (vs.)
+connects	з'єднує
+overwrite	перезаписувати
+destroying	знищення
+silently	мовчки (без виводу на екран)
+treat	ставитися, обробляти
+respect	повага
+complex	складний
+operations	операції
+frequently	часто
+referred	згадується, називається
+executable	виконуваний (про файл)
+features	особливості, функції
+duplicates	дублікати
+omit	пропускати, вилучати
+counts	підрахунки
+contained	міститься
+handy	зручний
+limits	обмежує
+matching	відповідний, той що співпадає
+pattern	шаблон
+encounters	стикається
+embedded	вбудований
+compression	стиснення (архівація)
+ignore	ігнорувати
+case	регістр (великі/малі літери)
+sensitive	чутливий
+excerpt	уривок
+header	заголовок
+footer	нижній колонтитул, підвал
+leaving	залишаючи
+negative	від'ємний
+positive	позитивний
+real time	реальний час
+progress	прогрес
+missing	відсутній
+privileges	привілеї (права доступу)
+required	вимагається
+continues	продовжує
+monitor	стежити, моніторити
+appended	доданий (в кінець)
+plumbing	сантехніка (як метафора конвеєрів)
+metaphor	метафора
+fitting	з'єднувач, фітинг
+intermediate	проміжний
+stage	етап, стадія
+documentation	документація
+specialized	спеціалізований
+informative	інформативний
+imagination	уява
+toy	іграшка
+analogy	аналогія
+shiny	блискучий
+graphics	графіка
+cute	милий
+tired	втомлений
+cycle	цикл
+repeats	повторюється
+counter	лічильник (або прилавок у магазині)
+market	ринок
+demand	попит
+sealed	запечатаний
+cartridges	картриджі
+discover	виявляти, відкривати
+limited	обмежений
+largest	найбільший
+huge	величезний
+collection	колекція
+steel	сталь
+struts	розпірки, стійки
+screws	гвинти
+nuts	гайки
+gears	шестерні
+pulleys	шківи
+motors	мотори
+suggestions	пропозиції, поради
+satisfying	такий, що приносить задоволення

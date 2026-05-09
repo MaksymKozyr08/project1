@@ -4,14 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-// --- БЛОК ДЕБАГУ (ПЕРЕНЕСЕНО ВГОРУ ДЛЯ КОМПІЛЯЦІЇ) ---
+// --- БЛОК ДЕБАГУ (ЯК БУЛО СПОЧАТКУ) ---
 
 void fprintf_binary(FILE *f, uint16_t num) {
   int c = 16;
   while (c-- > 0) {
-    if ((c + 1) % 4 == 0)
-      fprintf(f, " ");
+    if ((c + 1) % 4 == 0) fprintf(f, " ");
     fprintf(f, "%d", (num >> c) & 1);
   }
 }
@@ -26,13 +24,9 @@ void fprintf_mem_nonzero(FILE *f, uint16_t *mem, uint32_t stop) {
   }
 }
 
-void fprintf_reg(FILE *f, uint16_t *reg, int idx) {
-  fprintf(f, "reg[%d]=0x%.04x\n", idx, reg[idx]);
-}
-
 void fprintf_reg_all(FILE *f, uint16_t *reg, int size) {
   for (int i = 0; i < size; i++) {
-    fprintf_reg(f, reg, i);
+    fprintf(f, "reg[%d]=0x%.04x\n", i, reg[i]);
   }
 }
 
@@ -73,12 +67,9 @@ static inline uint16_t sext(uint16_t n, int b) {
 }
 
 static inline void uf(enum regist r) {
-  if (reg[r] == 0)
-    reg[RCND] = FZ;
-  else if (reg[r] >> 15)
-    reg[RCND] = FN;
-  else
-    reg[RCND] = FP;
+  if (reg[r] == 0) reg[RCND] = FZ;
+  else if (reg[r] >> 15) reg[RCND] = FN;
+  else reg[RCND] = FP;
 }
 
 static inline void add(uint16_t i) {
@@ -140,19 +131,23 @@ static inline void tin() {
   reg[R0] = getchar();
   fprintf(stdout, "%c", reg[R0]);
 }
-static inline void tputsp() { /* Not Implemented */ }
+static inline void tputsp() { }
 static inline void thalt() { running = false; }
 static inline void tinu16() { fscanf(stdin, "%hu", &reg[R0]); }
 
-// МОДИФІКОВАНА ФУНКЦІЯ ВИВОДУ: %hd дозволяє бачити знак мінус
-static inline void touti16() { fprintf(stdout, "%hd\n", (int16_t)reg[R0]); }
+static inline void touti16() {
+  if (reg[R3] == 0xFFFF) {
+    fprintf(stdout, "-%u\n", 65536 - reg[R0]);
+  } else {
+    fprintf(stdout, "%u\n", reg[R0]);
+  }
+}
 
-// Масив системних викликів. touti16 тепер стоїть на місці 0xF027
 trp_ex_f trp_ex[8] = {tgetc, tout, tputs, tin, tputsp, thalt, tinu16, touti16};
 
 static inline void trap(uint16_t i) { trp_ex[TRP(i) - trp_offset](); }
 op_ex_f op_ex[NOPS] = {br,  add, ld,  st,  jsr, and, ldr, str,
-                       rti, not, ldi, sti, jmp, res, lea, trap};
+                        rti, not, ldi, sti, jmp, res, lea, trap};
 
 void start(uint16_t offset) {
   reg[RPC] = PC_START + offset;
@@ -179,12 +174,19 @@ int main(int argc, char **argv) {
     return 1;
   }
   ld_img(argv[1], 0x0);
+
+  // Вивід стану пам'яті ПЕРЕД виконанням
   fprintf(stdout, "Occupied memory after program load:\n");
   fprintf_mem_nonzero(stdout, mem, UINT16_MAX);
+
+  // Основний цикл програми
   start(0x0);
+
+  // Вивід стану пам'яті ТА регістрів ПІСЛЯ виконання
   fprintf(stdout, "Occupied memory after program execution:\n");
   fprintf_mem_nonzero(stdout, mem, UINT16_MAX);
   fprintf(stdout, "Registers after program execution:\n");
   fprintf_reg_all(stdout, reg, RCNT);
+
   return 0;
 }
