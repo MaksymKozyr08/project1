@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Графи автоматів (Завдання 20 та 21)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #0f5132;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .card {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 20px;
+            flex: 1;
+            min-width: 450px;
+            max-width: 550px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card h2 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+        svg {
+            background-color: #ffffff;
+            overflow: visible;
+        }
+        .node circle {
+            fill: #fff2cc;
+            stroke: #d6b656;
+            stroke-width: 2.5;
+        }
+        .node.final circle.outer {
+            fill: none;
+            stroke: #385723;
+            stroke-width: 2.5;
+        }
+        .node.final circle.inner {
+            fill: #e2f0d9;
+            stroke: #385723;
+            stroke-width: 2;
+        }
+        .node text {
+            font-size: 14px;
+            font-weight: bold;
+            fill: #212529;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+        .edge path {
+            fill: none;
+            stroke: #434343;
+            stroke-width: 2.2;
+        }
+        .edge text {
+            font-size: 13px;
+            font-weight: bold;
+            fill: #b02a37;
+        }
+        .edge-bg {
+            fill: white;
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Візуалізація скінченних автоматів</h1>
+
+    <div class="container">
+        <div class="card">
+            <h2>Задача 20: Непарна кількість '0' між '1'</h2>
+            <svg width="450" height="250" viewBox="0 0 450 250">
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="21" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#434343"/>
+                    </marker>
+                    <marker id="start-arrow" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#2b579a"/>
+                    </marker>
+                </defs>
+
+                <path d="M 20 125 L 50 125" fill="none" stroke="#2b579a" stroke-width="2" marker-end="url(#start-arrow)"/>
+
+                <g class="edge">
+                    <path d="M 75 100 A 22 22 0 1 1 95 100" marker-end="url(#arrow)"/>
+                    <rect x="78" y="45" width="14" height="18" class="edge-bg"/>
+                    <text x="85" y="58" text-anchor="middle">0</text>
+                </g>
+                <g class="edge">
+                    <path d="M 115 125 L 215 125" marker-end="url(#arrow)"/>
+                    <rect x="160" y="115" width="14" height="18" class="edge-bg"/>
+                    <text x="167" y="128" text-anchor="middle">1</text>
+                </g>
+                <g class="edge">
+                    <path d="M 245 115 Q 300 75 355 115" marker-end="url(#arrow)"/>
+                    <rect x="293" y="80" width="14" height="18" class="edge-bg"/>
+                    <text x="300" y="93" text-anchor="middle">0</text>
+                </g>
+                <g class="edge">
+                    <path d="M 355 135 Q 300 175 245 135" marker-end="url(#arrow)"/>
+                    <rect x="293" y="143" width="14" height="18" class="edge-bg"/>
+                    <text x="300" y="156" text-anchor="middle">1</text>
+                </g>
+                <g class="edge">
+                    <path d="M 355 100 A 22 22 0 1 1 375 100" marker-end="url(#arrow)"/>
+                    <rect x="358" y="45" width="14" height="18" class="edge-bg"/>
+                    <text x="365" y="58" text-anchor="middle">0</text>
+                </g>
+
+                <g class="node final" transform="translate(85, 125)">
+                    <circle class="outer" r="30"/>
+                    <circle class="inner" r="24"/>
+                    <text>a0</text>
+                </g>
+                <g class="node" transform="translate(230, 125)">
+                    <circle r="26"/>
+                    <text>a1</text>
+                </g>
+                <g class="node final" transform="translate(365, 125)">
+                    <circle class="outer" r="30"/>
+                    <circle class="inner" r="24"/>
+                    <text>a2</text>
+                </g>
+            </svg>
+        </div>
+
+        <div class="card">
+            <h2>Задача 21: Двійкові парні числа (фініш на 0)</h2>
+            <svg width="450" height="250" viewBox="0 0 450 250">
+                <path d="M 40 125 L 90 125" fill="none" stroke="#2b579a" stroke-width="2" marker-end="url(#start-arrow)"/>
+
+                <g class="edge">
+                    <path d="M 110 100 A 22 22 0 1 1 130 100" marker-end="url(#arrow)"/>
+                    <rect x="113" y="45" width="14" height="18" class="edge-bg"/>
+                    <text x="120" y="58" text-anchor="middle">1</text>
+                </g>
+                <g class="edge">
+                    <path d="M 150 115 Q 225 85 300 115" marker-end="url(#arrow)"/>
+                    <rect x="218" y="85" width="14" height="18" class="edge-bg"/>
+                    <text x="225" y="98" text-anchor="middle">0</text>
+                </g>
+                <g class="edge">
+                    <path d="M 300 135 Q 225 165 150 135" marker-end="url(#arrow)"/>
+                    <rect x="218" y="138" width="14" height="18" class="edge-bg"/>
+                    <text x="225" y="151" text-anchor="middle">1</text>
+                </g>
+                <g class="edge">
+                    <path d="M 290 100 A 22 22 0 1 1 310 100" marker-end="url(#arrow)"/>
+                    <rect x="293" y="45" width="14" height="18" class="edge-bg"/>
+                    <text x="300" y="58" text-anchor="middle">0</text>
+                </g>
+
+                <g class="node" transform="translate(120, 125)">
+                    <circle r="26"/>
+                    <text>a0</text>
+                </g>
+                <g class="node final" transform="translate(300, 125)">
+                    <circle class="outer" r="30"/>
+                    <circle class="inner" r="24"/>
+                    <text>a1</text>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+</body>
+</html>
