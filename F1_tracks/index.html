@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>F1 LINE RACER SIM - Autonomous Line-Following Visualizer</title>
+  <!-- Google Fonts for premium design: Outfit (Headers) & Inter (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="logo-accent"></div>
+      <h1>F1 LINE RACER SIM</h1>
+      <span class="version-tag">v2.0-Auto</span>
+    </div>
+    
+    <div class="system-status">
+      <span class="status-dot pulsing"></span>
+      <span class="status-text" id="status-display">SIMULATOR: ACTIVE</span>
+    </div>
+    
+    <nav class="header-nav">
+      <a href="#github" class="nav-link external">Hardware Spec</a>
+      <a href="#docs" class="nav-link external">Algorithm Docs</a>
+      <a href="#about" class="nav-link active">Visualizer</a>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <div class="app-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Tab Navigation -->
+      <div class="sidebar-tabs">
+        <button class="tab-btn active" data-tab="simulation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          Simulation
+        </button>
+        <button class="tab-btn" data-tab="telemetry">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="9" y2="15"/><line x1="12" y1="12" x2="12" y2="15"/><line x1="15" y1="6" x2="15" y2="15"/></svg>
+          Telemetry
+        </button>
+        <button class="tab-btn" data-tab="pid">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          PID Tuning
+        </button>
+      </div>
+
+      <!-- Tab Content Panels -->
+      <div class="sidebar-content">
+        <!-- Simulation Panel -->
+        <div class="tab-panel active" id="panel-simulation">
+          <div class="panel-section">
+            <h3 class="section-title">Circuit Controls</h3>
+            
+            <div class="control-group">
+              <label for="track-select">Active Track</label>
+              <select id="track-select" class="custom-select">
+                <option value="monaco">Monaco (Monte Carlo) - Street</option>
+                <option value="monza">Monza (Italy) - High Speed</option>
+                <option value="spa">Spa-Francorchamps (Belgium) - Elevation</option>
+                <option value="suzuka">Suzuka (Japan) - Figure 8</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-header">
+                <label for="slider-width">Track Width</label>
+                <span class="value-display" id="width-val">2.4m</span>
+              </div>
+              <input type="range" id="slider-width" min="1.2" max="4.5" step="0.1" value="2.4" class="custom-slider">
+            </div>
+
+            <div class="control-group">
+              <div class="slider-header">
+                <label for="slider-complexity">Detail/Complexity</label>
+                <span class="value-display" id="complexity-val">High</span>
+              </div>
+              <input type="range" id="slider-complexity" min="1" max="5" step="1" value="4" class="custom-slider">
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h3 class="section-title">Autonomous Vehicle</h3>
+            
+            <div class="control-group">
+              <div class="slider-header">
+                <label for="slider-speed">Target Speed</label>
+                <span class="value-display" id="speed-val">120 km/h</span>
+              </div>
+              <input type="range" id="slider-speed" min="30" max="250" step="5" value="120" class="custom-slider">
+            </div>
+
+            <div class="toggle-container">
+              <span class="toggle-label">Enable Autonomous Driving</span>
+              <label class="switch">
+                <input type="checkbox" id="toggle-drive" checked>
+                <span class="toggle-slider round"></span>
+              </label>
+            </div>
+            
+            <div class="button-row">
+              <button id="btn-reset" class="btn btn-secondary">Reset Sim</button>
+              <button id="btn-telemetry-clear" class="btn btn-secondary">Clear Laps</button>
+            </div>
+          </div>
+          
+          <div class="panel-section help-section">
+            <h4>Algorithm Type</h4>
+            <p class="algorithm-type-badge">PID Feed-forward Line Tracking</p>
+            <p class="help-text">Reads optical sensor positions at 100Hz and adjusts steering angle to match the yellow centerline path with preview distance control.</p>
+          </div>
+        </div>
+
+        <!-- Telemetry Panel -->
+        <div class="tab-panel" id="panel-telemetry">
+          <div class="panel-section">
+            <h3 class="section-title">Real-time Telemetry</h3>
+            
+            <div class="telemetry-grid">
+              <div class="telemetry-item">
+                <span class="tel-label">Current Speed</span>
+                <span class="tel-value" id="tel-speed">0.0 <span class="unit">km/h</span></span>
+              </div>
+              <div class="telemetry-item">
+                <span class="tel-label">Cross-Track Error (CTE)</span>
+                <span class="tel-value" id="tel-cte">0.00 <span class="unit">m</span></span>
+              </div>
+              <div class="telemetry-item">
+                <span class="tel-label">Steering Angle</span>
+                <span class="tel-value" id="tel-steer">0°</span>
+              </div>
+              <div class="telemetry-item">
+                <span class="tel-label">Lap Time</span>
+                <span class="tel-value font-mono" id="tel-time">0:00.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h3 class="section-title">Cross-Track Error Live</h3>
+            <!-- SVG mini chart showing error variance -->
+            <div class="mini-chart-container">
+              <svg id="cte-chart" viewBox="0 0 250 80">
+                <path d="M0 40 L250 40" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="4,4"/>
+                <path id="cte-path" d="" fill="none" stroke="#ff0000" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h3 class="section-title">Lap Records</h3>
+            <div class="lap-history-container">
+              <table class="lap-table">
+                <thead>
+                  <tr>
+                    <th>Lap</th>
+                    <th>Time</th>
+                    <th>Max Speed</th>
+                    <th>Avg CTE</th>
+                  </tr>
+                </thead>
+                <tbody id="lap-records-body">
+                  <tr class="empty-row"><td colspan="4">No lap data recorded yet</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- PID Controller Panel -->
+        <div class="tab-panel" id="panel-pid">
+          <div class="panel-section">
+            <h3 class="section-title">PID Parameters</h3>
+            <p class="section-desc">Adjust the controller terms to change how the car corrects steering based on line displacement.</p>
+            
+            <div class="control-group">
+              <div class="slider-header">
+                <label for="pid-kp">Proportional (Kp)</label>
+                <span class="value-display" id="pid-kp-val">3.5</span>
+              </div>
+              <input type="range" id="pid-kp" min="0.5" max="10.0" step="0.1" value="3.5" class="custom-slider">
+              <p class="slider-help">Corrects steering in proportion to current error. High values can cause oscillations.</p>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-header">
+                <label for="pid-ki">Integral (Ki)</label>
+                <span class="value-display" id="pid-ki-val">0.05</span>
+              </div>
+              <input type="range" id="pid-ki" min="0.0" max="0.5" step="0.01" value="0.05" class="custom-slider">
+              <p class="slider-help">Corrects accumulated steady-state error. Useful for banked tracks or constant curve offsets.</p>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-header">
+                <label for="pid-kd">Derivative (Kd)</label>
+                <span class="value-display" id="pid-kd-val">1.2</span>
+              </div>
+              <input type="range" id="pid-kd" min="0.0" max="5.0" step="0.1" value="1.2" class="custom-slider">
+              <p class="slider-help">Dampens oscillations by predicting future error based on rate of change.</p>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-header">
+                <label for="sensor-offset">Sensor Offset (Preview)</label>
+                <span class="value-display" id="sensor-offset-val">1.5m</span>
+              </div>
+              <input type="range" id="sensor-offset" min="0.5" max="4.0" step="0.1" value="1.5" class="custom-slider">
+              <p class="slider-help">How far ahead of the car the virtual sensor looks. Higher values are smoother but cut corners.</p>
+            </div>
+          </div>
+          
+          <button id="btn-pid-preset" class="btn btn-primary btn-block">Apply Balanced Preset</button>
+        </div>
+      </div>
+      
+      <!-- Footer details -->
+      <footer class="sidebar-footer">
+        <p>Formula 1 Line Racer Simulator</p>
+        <p>Built with Three.js & HTML5 canvas</p>
+      </footer>
+    </aside>
+
+    <!-- Main Visualizer Area -->
+    <main class="main-viewer">
+      <!-- 3D Canvas -->
+      <div id="canvas-container">
+        <!-- Overlay HUD controls -->
+        <div class="hud-overlay" id="hud-top-right">
+          <div class="camera-controls">
+            <button class="cam-btn active" data-cam="orbital">Orbit Cam</button>
+            <button class="cam-btn" data-cam="top">Top View</button>
+            <button class="cam-btn" data-cam="chase">Chase Cam</button>
+            <button class="cam-btn" data-cam="driver">Cockpit</button>
+          </div>
+        </div>
+
+        <div class="hud-overlay" id="hud-bottom-left">
+          <div class="hud-stat-box">
+            <span class="hud-stat-title">CURRENT CIRCUIT</span>
+            <span class="hud-stat-value" id="hud-track-name">Monaco GP</span>
+            <span class="hud-stat-sub" id="hud-track-length">3.337 km</span>
+          </div>
+        </div>
+
+        <div class="hud-overlay" id="hud-bottom-right">
+          <div class="telemetry-bar">
+            <div class="telemetry-bar-item">
+              <span class="bar-label">STEER</span>
+              <div class="bar-gauge"><div class="gauge-fill bg-yellow" id="steer-gauge" style="width: 50%;"></div></div>
+            </div>
+            <div class="telemetry-bar-item">
+              <span class="bar-label">THROTTLE</span>
+              <div class="bar-gauge"><div class="gauge-fill bg-green" id="throttle-gauge" style="width: 0%;"></div></div>
+            </div>
+            <div class="telemetry-bar-item">
+              <span class="bar-label">BRAKE</span>
+              <div class="bar-gauge"><div class="gauge-fill bg-red" id="brake-gauge" style="width: 0%;"></div></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Loading overlay -->
+        <div class="loading-overlay" id="loading-spinner">
+          <div class="spinner"></div>
+          <span class="loading-text">Generating Track Mesh...</span>
+        </div>
+      </div>
+      
+      <!-- Track Cards Grid -->
+      <section class="tracks-section">
+        <h2 class="section-title">Other Famous Formula 1 Circuits</h2>
+        <div class="tracks-grid">
+          
+          <!-- Card Monaco -->
+          <div class="track-card active" data-track="monaco">
+            <div class="mini-canvas-container" id="mini-monaco"></div>
+            <div class="track-card-info">
+              <span class="card-track-name">Monaco</span>
+              <span class="card-track-details">Monte Carlo, Monaco - 3.34 km</span>
+            </div>
+            <div class="card-action">Active</div>
+          </div>
+          
+          <!-- Card Monza -->
+          <div class="track-card" data-track="monza">
+            <div class="mini-canvas-container" id="mini-monza"></div>
+            <div class="track-card-info">
+              <span class="card-track-name">Monza</span>
+              <span class="card-track-details">Monza, Italy - 5.79 km</span>
+            </div>
+            <div class="card-action">Load Track</div>
+          </div>
+          
+          <!-- Card Spa -->
+          <div class="track-card" data-track="spa">
+            <div class="mini-canvas-container" id="mini-spa"></div>
+            <div class="track-card-info">
+              <span class="card-track-name">Spa-Francorchamps</span>
+              <span class="card-track-details">Stavelot, Belgium - 7.00 km</span>
+            </div>
+            <div class="card-action">Load Track</div>
+          </div>
+          
+          <!-- Card Suzuka -->
+          <div class="track-card" data-track="suzuka">
+            <div class="mini-canvas-container" id="mini-suzuka"></div>
+            <div class="track-card-info">
+              <span class="card-track-name">Suzuka</span>
+              <span class="card-track-details">Suzuka, Japan - 5.81 km</span>
+            </div>
+            <div class="card-action">Load Track</div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+  </div>
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- OrbitControls for camera manipulation -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <!-- Main Application Code -->
+  <script src="app.js"></script>
+</body>
+</html>
