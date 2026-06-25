@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Simulation AI Architecture</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="hero">
+        <div class="container">
+            <span class="badge">ELEVATED PERFORMANCE</span>
+            <h1>🏎️ F1-Simulation AI</h1>
+            <p>Еволюційний ШІ-Оптимізатор Траєкторії та Швидкості з ізоляцією фізичного рушія</p>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="grid">
+            <div class="card border-green">
+                <div class="card-icon">🎯</div>
+                <h3>Базова лінія 30 км/год</h3>
+                <p>Перше коло завжди починається на безпечній швидкості <strong>30 км/год</strong>. Це дозволяє ШІ стабільно зісканувати геометрію треку без ризику фантомних аварій.</p>
+            </div>
+
+            <div class="card border-blue">
+                <div class="card-icon">⚡</div>
+                <h3>Еволюційний крок +5 км/год</h3>
+                <p>Якщо коло пройдено успішно і час покращено, ШІ додає <strong>+5 км/год</strong> до швидкості та притискає траєкторію ближче до апексу на <strong>1 см</strong>.</p>
+            </div>
+
+            <div class="card border-red">
+                <div class="card-icon">💥</div>
+                <h3>Рекурсивний Rollback</h3>
+                <p>При аварії ШІ робить відкат (Backtracking) до успішного кола: скидає швидкість на <strong>30 км/год</strong>, але розширює радіус проблемного повороту на <strong>3 см</strong> назовні.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="architecture">
+            <h2>🧠 Технічні рішення боротьби з багами</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>🔒 Повна ізоляція станів (Tab Memory Separation)</h4>
+                    <p>Вкладка <em>Visualizer</em> (100+ км/год) та вкладка <em>AI Optimizer</em> повністю розділені на рівні Three.js та фізичних інстансів (<code>visualizerCarInstance</code> та <code>aiOptimizerCarInstance</code>). Швидкість ручного режиму більше фізично не протікає в ШІ.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>🛡️ Physics Grace Period (15 кадрів)</h4>
+                    <p>При телепортації боліда на лінію старту, підвіска та колеса мають 15 кадрів "імунітету". Будь-які мікро-стрибки амортизаторів Cannon.js ігноруються, що ліквідувало миттєві зависання на старті.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>🛑 Фільтрація стартових індексів (0, 1, 2)</h4>
+                    <p>На першому кадрі колеса мають кутову швидкість 0, а машина вже має лінійний імпульс, що давало фейковий 100% Slip Ratio. Логіка виявлення аварій тепер ігнорує стартову зону.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="launch-box">
+            <h2>🚀 Порядок запуску системи для презентації</h2>
+            <ol>
+                <li>Очистити кеш профілів у PostgreSQL: <code>DROP TABLE IF EXISTS optimized_race_profiles;</code></li>
+                <li>Запустити автономний бекенд на новому ізольованому порту: <code>node server.ts</code> (Port 3002)</li>
+                <li>Запустити Vite-фронтенд: <code>npm run dev</code></li>
+                <li>У браузері затиснути <strong>Ctrl + F5</strong> для жорсткого оновлення кешу пам'яті.</li>
+            </ol>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 F1-Simulation Project. Розроблено для демонстрації еволюційних алгоритмів.</p>
+    </footer>
+
+</body>
+</html>
