@@ -110,7 +110,6 @@ while x>y:
     y+=1
 print("palindrom")
 
-'''
 a=[int(i) for i in input().split()]
 pairs=[]
 for i in range(0,len(a),2):
@@ -119,3 +118,50 @@ for i in range(0,len(a),2):
 print("Отриманий список пар:")
 b=set(pairs)
 print(b)
+
+
+a=input().split()
+visited=set()
+for i in range(0,len(a)):
+    if a[i] in visited:
+        print(a[i],"Came back again")
+    else:
+        print(a[i],"came in first time")
+        visited.add(a[i])
+
+python_course = {(1, "Max"), (2, "Alex"), (3, "Dima")}
+design_course = {(2, "Alex"), (4, "Elena"), (3, "Dima")}
+print(python_course&design_course)
+print(python_course-design_course)
+
+
+
+stock = {"ноутбук": 5, "мишка": 12, "клавіатура": 0, "монітор": 3}
+for i in range(len(stock)):
+    print(stock.item().keys(1)) if stock.item().values(i)>0 else print 
+
+
+
+stock = {"ноутбук": 5, "мишка": 12, "клавіатура": 0, "монітор": 3}
+for x,y in stock.items():
+    if y>0:
+        print(f"{x}->{y}")
+
+
+a={}
+b=str(input())
+for char in b:
+    if char in a:
+        a[char]=a[char]+1
+    else:
+        a.setdefault(char,1)
+print(a)
+
+
+a=int(input())
+if a>0: print("odd")
+elif a==0: print("zero")
+else: print("<")
+
+'''
+
