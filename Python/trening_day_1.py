@@ -111,5 +111,11 @@ while x>y:
 print("palindrom")
 
 '''
-
-
+a=[int(i) for i in input().split()]
+pairs=[]
+for i in range(0,len(a),2):
+    pair=(a[i],a[i+1])
+    pairs.append(pair)
+print("Отриманий список пар:")
+b=set(pairs)
+print(b)
