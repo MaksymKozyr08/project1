@@ -79,5 +79,37 @@ for i in b:
     b[i],b[len(b)-i]=b[len(b)-i],b[i]
 print(b)
 
+
+b=[int(x) for x in input().split()]
+print(b)
+x=len(b)-1
+y=0
+while x>y:
+    b[x],b[y]=b[y],b[x]
+    y+=1
+    x-=1
+    #print(b[x],b[y])
+print(b)
+
+
+a=str(input())
+print(a[::-1])
+
+
+import sys
+a=str(input())
+
+x=len(a)-1
+y=0
+
+while x>y:
+    if a[x]!=a[y]:
+        print("it`s no palindrom")
+        sus.exit(0)
+    x-=1
+    y+=1
+print("palindrom")
+
 '''
+
 
