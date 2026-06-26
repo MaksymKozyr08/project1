@@ -41,5 +41,19 @@ a=[]
 a=input().split()
 a[0], a[-1]=a[-1],a[0]
 print(a)
-'''
 
+prices = {"apple": 50, "banana": 80, "orange": 90}  
+a=str(input())
+if(a in prices):
+    print(prices.get(a))
+else:
+    print(0)
+
+
+
+game_map = {(0, 0): "Старт", (1, 2): "Скриня з золотом", (3, 3): "Монстр"}
+b=input().split()
+a=(int(b[0]),int(b[1]))
+print(game_map.get(a,"empty coloum"))
+
+'''
