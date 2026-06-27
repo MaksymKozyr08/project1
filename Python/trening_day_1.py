@@ -163,5 +163,14 @@ if a>0: print("odd")
 elif a==0: print("zero")
 else: print("<")
 
+a=int(input())
+
+match a:
+    case 1: print("1ok")
+    case 2: print("2ok")
+    case 3: print("3ok")
+    case 4: print("4ok")
+    case 5: print("5WSok")
+
 '''
 
