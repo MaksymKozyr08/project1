@@ -387,3 +387,5 @@ mystery-таємниця, загадка
 confusion-плутанина
 potential-потенційний
 wasted-змарнований
+escape character-символ екранування,
+essentially-
