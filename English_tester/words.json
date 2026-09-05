@@ -1,0 +1,1794 @@
+{
+  "Chapter 1: Basics & Nouns": [
+    {
+      "en": "apple",
+      "ua": "яблуко"
+    },
+    {
+      "en": "book",
+      "ua": "книга"
+    },
+    {
+      "en": "house",
+      "ua": "будинок"
+    },
+    {
+      "en": "water",
+      "ua": "вода"
+    },
+    {
+      "en": "sun",
+      "ua": "сонце"
+    },
+    {
+      "en": "friend",
+      "ua": "друг"
+    },
+    {
+      "en": "family",
+      "ua": "сім'я"
+    },
+    {
+      "en": "city",
+      "ua": "місто"
+    },
+    {
+      "en": "road",
+      "ua": "дорога"
+    },
+    {
+      "en": "tree",
+      "ua": "дерево"
+    },
+    {
+      "en": "relational",
+      "ua": "реляційний"
+    },
+    {
+      "en": "Scalability",
+      "ua": "Масштабованість"
+    },
+    {
+      "en": "pre",
+      "ua": "defined-заздалегідь визначеними"
+    },
+    {
+      "en": "Backup",
+      "ua": "резервна копія"
+    },
+    {
+      "en": "arbitrary",
+      "ua": "довільний"
+    },
+    {
+      "en": "authenticity",
+      "ua": "автентичність"
+    },
+    {
+      "en": "optimization",
+      "ua": "оптимізація"
+    },
+    {
+      "en": "transparent",
+      "ua": "прозорий"
+    },
+    {
+      "en": "implied",
+      "ua": "мається на увазі"
+    },
+    {
+      "en": "obtained",
+      "ua": "отримано"
+    },
+    {
+      "en": "toolchain",
+      "ua": "набір інструментів"
+    },
+    {
+      "en": "expression",
+      "ua": "вираз"
+    },
+    {
+      "en": "attached",
+      "ua": "додано"
+    },
+    {
+      "en": "Interchange",
+      "ua": "трансфер"
+    },
+    {
+      "en": "Plain",
+      "ua": "простий"
+    },
+    {
+      "en": "aggregate",
+      "ua": "агрегат"
+    },
+    {
+      "en": "dedicated",
+      "ua": "виділений, спеціальний"
+    },
+    {
+      "en": "respectively",
+      "ua": "відповідно"
+    },
+    {
+      "en": "versions",
+      "ua": "версії"
+    },
+    {
+      "en": "golden",
+      "ua": "золотий"
+    },
+    {
+      "en": "concept",
+      "ua": "концепція"
+    },
+    {
+      "en": "downloaded",
+      "ua": "завантажений"
+    },
+    {
+      "en": "default",
+      "ua": "за замовчуванням"
+    },
+    {
+      "en": "options",
+      "ua": "опції, налаштування"
+    },
+    {
+      "en": "respect",
+      "ua": "повага"
+    },
+    {
+      "en": "omit",
+      "ua": "пропускати, вилучати"
+    },
+    {
+      "en": "embedded",
+      "ua": "вбудований"
+    },
+    {
+      "en": "negative",
+      "ua": "від'ємний"
+    },
+    {
+      "en": "monitor",
+      "ua": "стежити, моніторити"
+    },
+    {
+      "en": "specialized",
+      "ua": "спеціалізований, спеціалізований"
+    },
+    {
+      "en": "tired",
+      "ua": "втомлений"
+    },
+    {
+      "en": "collection",
+      "ua": "колекція"
+    },
+    {
+      "en": "suggestions",
+      "ua": "пропозиції, поради"
+    },
+    {
+      "en": "Hidden files",
+      "ua": "Приховані файли"
+    },
+    {
+      "en": "Preamble",
+      "ua": "Преамбула"
+    },
+    {
+      "en": "Single quotes",
+      "ua": "Одинарні лапки"
+    },
+    {
+      "en": "Pattern",
+      "ua": "Шаблон, зразок"
+    },
+    {
+      "en": "straightforward",
+      "ua": "прямий, простий, зрозумілий"
+    },
+    {
+      "en": "glance",
+      "ua": "погляд (на перший погляд)"
+    },
+    {
+      "en": "introduction",
+      "ua": "вступ, знайомство"
+    },
+    {
+      "en": "string",
+      "ua": "рядок (тексту)"
+    },
+    {
+      "en": "error prone",
+      "ua": "схильний до помилок"
+    },
+    {
+      "en": "alternate",
+      "ua": "альтернативний"
+    },
+    {
+      "en": "desire",
+      "ua": "бажати, бажаний"
+    },
+    {
+      "en": "teletype",
+      "ua": "телетайп"
+    },
+    {
+      "en": "escape character",
+      "ua": "символ екранування,"
+    }
+  ],
+  "Chapter 2: Verbs & Actions": [
+    {
+      "en": "to allow",
+      "ua": "дозволяти"
+    },
+    {
+      "en": "to maintain",
+      "ua": "підтримувати"
+    },
+    {
+      "en": "to uncover",
+      "ua": "виявляти"
+    },
+    {
+      "en": "to retrieve",
+      "ua": "вилучати"
+    },
+    {
+      "en": "to exceed",
+      "ua": "перевищувати"
+    },
+    {
+      "en": "to represent",
+      "ua": "представляти"
+    },
+    {
+      "en": "to differ",
+      "ua": "відрізнятися"
+    },
+    {
+      "en": "to enable",
+      "ua": "включати"
+    },
+    {
+      "en": "to validate",
+      "ua": "перевіряти"
+    },
+    {
+      "en": "to perform",
+      "ua": "виконувати"
+    },
+    {
+      "en": "related",
+      "ua": "пов'язаний"
+    },
+    {
+      "en": "capabilities",
+      "ua": "можливості"
+    },
+    {
+      "en": "invention",
+      "ua": "винаходи"
+    },
+    {
+      "en": "recovery",
+      "ua": "відновлення"
+    },
+    {
+      "en": "permision",
+      "ua": "дозвіл"
+    },
+    {
+      "en": "reliability",
+      "ua": "надійність"
+    },
+    {
+      "en": "accountability",
+      "ua": "відповідальність"
+    },
+    {
+      "en": "advanced",
+      "ua": "розвинений"
+    },
+    {
+      "en": "consuming",
+      "ua": "споживати"
+    },
+    {
+      "en": "warranty",
+      "ua": "гарантія"
+    },
+    {
+      "en": "conceived",
+      "ua": "задумано"
+    },
+    {
+      "en": "surprisingly",
+      "ua": "на диво"
+    },
+    {
+      "en": "semicolons",
+      "ua": "капка з комою"
+    },
+    {
+      "en": "responsible",
+      "ua": "відповідальний"
+    },
+    {
+      "en": "mapping",
+      "ua": "картографування"
+    },
+    {
+      "en": "insight",
+      "ua": "аналіз"
+    },
+    {
+      "en": "statically",
+      "ua": "статично"
+    },
+    {
+      "en": "operator",
+      "ua": "оператор"
+    },
+    {
+      "en": "notation",
+      "ua": "нотація, позначення"
+    },
+    {
+      "en": "significant",
+      "ua": "значний, важливий"
+    },
+    {
+      "en": "throw away",
+      "ua": "викидати"
+    },
+    {
+      "en": "universality",
+      "ua": "універсальність"
+    },
+    {
+      "en": "split",
+      "ua": "розділений"
+    },
+    {
+      "en": "attached",
+      "ua": "прикріплений, підключений"
+    },
+    {
+      "en": "glance",
+      "ua": "погляд (at first glance - на перший погляд)"
+    },
+    {
+      "en": "complex",
+      "ua": "складний"
+    },
+    {
+      "en": "counts",
+      "ua": "підрахунки"
+    },
+    {
+      "en": "compression",
+      "ua": "стиснення (архівація)"
+    },
+    {
+      "en": "positive",
+      "ua": "позитивний"
+    },
+    {
+      "en": "appended",
+      "ua": "доданий (в кінець)"
+    },
+    {
+      "en": "informative",
+      "ua": "інформативний"
+    },
+    {
+      "en": "cycle",
+      "ua": "цикл"
+    },
+    {
+      "en": "steel",
+      "ua": "сталь"
+    },
+    {
+      "en": "satisfying",
+      "ua": "такий, що приносить задоволення"
+    },
+    {
+      "en": "Tilde",
+      "ua": "Тильда"
+    },
+    {
+      "en": "Postscript",
+      "ua": "Постскриптум"
+    },
+    {
+      "en": "Escape character",
+      "ua": "Символ екранування"
+    },
+    {
+      "en": "Directory",
+      "ua": "Каталог, папка"
+    },
+    {
+      "en": "recall",
+      "ua": "згадувати"
+    },
+    {
+      "en": "include",
+      "ua": "включати"
+    },
+    {
+      "en": "decimal",
+      "ua": "десятковий дріб"
+    },
+    {
+      "en": "trailing",
+      "ua": "кінцевий, замикаючий"
+    },
+    {
+      "en": "slick",
+      "ua": "вправний, хитрий, класний"
+    },
+    {
+      "en": "unwanted",
+      "ua": "небажаний"
+    },
+    {
+      "en": "repair",
+      "ua": "лагодити, виправляти"
+    },
+    {
+      "en": "acknowledge",
+      "ua": "підтверджувати"
+    }
+  ],
+  "Chapter 3: Adjectives & Descriptions": [
+    {
+      "en": "relational",
+      "ua": "реляційний"
+    },
+    {
+      "en": "related",
+      "ua": "пов'язаний"
+    },
+    {
+      "en": "particular",
+      "ua": "особливий"
+    },
+    {
+      "en": "precise",
+      "ua": "точний"
+    },
+    {
+      "en": "handy",
+      "ua": "зручний"
+    },
+    {
+      "en": "arbitrary",
+      "ua": "довільний"
+    },
+    {
+      "en": "ongoing",
+      "ua": "поточний"
+    },
+    {
+      "en": "pre-defined",
+      "ua": "заздалегідь визначений"
+    },
+    {
+      "en": "opposed",
+      "ua": "протилежний"
+    },
+    {
+      "en": "complete",
+      "ua": "повний"
+    },
+    {
+      "en": "introduced",
+      "ua": "введений"
+    },
+    {
+      "en": "differs",
+      "ua": "відрізняється"
+    },
+    {
+      "en": "ongoing field",
+      "ua": "галузь"
+    },
+    {
+      "en": "sharding",
+      "ua": "шарування"
+    },
+    {
+      "en": "security",
+      "ua": "безпека"
+    },
+    {
+      "en": "non",
+      "ua": "repudiation-незворотність"
+    },
+    {
+      "en": "efficient",
+      "ua": "ефективний"
+    },
+    {
+      "en": "execute",
+      "ua": "виконувати"
+    },
+    {
+      "en": "assume",
+      "ua": "припустити"
+    },
+    {
+      "en": "expressive",
+      "ua": "виразний"
+    },
+    {
+      "en": "excutable",
+      "ua": "виконуваний файл"
+    },
+    {
+      "en": "Half",
+      "ua": "open intervals — напіввідкриті інтервали."
+    },
+    {
+      "en": "desired",
+      "ua": "бажаний"
+    },
+    {
+      "en": "consistency",
+      "ua": "послідовність"
+    },
+    {
+      "en": "comprehensive",
+      "ua": "всебічний"
+    },
+    {
+      "en": "valid",
+      "ua": "коректний"
+    },
+    {
+      "en": "refer",
+      "ua": "посилатися, звертатися"
+    },
+    {
+      "en": "placed",
+      "ua": "розміщений"
+    },
+    {
+      "en": "occur",
+      "ua": "відбуватися, траплятися"
+    },
+    {
+      "en": "applies",
+      "ua": "застосовується"
+    },
+    {
+      "en": "appeared",
+      "ua": "з'явився"
+    },
+    {
+      "en": "multiple",
+      "ua": "множинний, декілька"
+    },
+    {
+      "en": "keyboard",
+      "ua": "клавіатура"
+    },
+    {
+      "en": "versus",
+      "ua": "проти (vs.)"
+    },
+    {
+      "en": "operations",
+      "ua": "операції"
+    },
+    {
+      "en": "contained",
+      "ua": "міститься"
+    },
+    {
+      "en": "ignore",
+      "ua": "ігнорувати"
+    },
+    {
+      "en": "real time",
+      "ua": "реальний час"
+    },
+    {
+      "en": "plumbing",
+      "ua": "сантехніка (як метафора конвеєрів)"
+    },
+    {
+      "en": "imagination",
+      "ua": "уява"
+    },
+    {
+      "en": "sealed",
+      "ua": "запечатаний"
+    },
+    {
+      "en": "struts",
+      "ua": "розпірки, стійки"
+    },
+    {
+      "en": "occurs",
+      "ua": "відбувається"
+    },
+    {
+      "en": "Arithmetic",
+      "ua": "Арифметичний"
+    },
+    {
+      "en": "Nested",
+      "ua": "Вкладений"
+    },
+    {
+      "en": "Backslash",
+      "ua": "Зворотний слеш"
+    },
+    {
+      "en": "Pipeline",
+      "ua": "Конвеєр"
+    },
+    {
+      "en": "automatically",
+      "ua": "автоматично"
+    },
+    {
+      "en": "leading",
+      "ua": "провідний, той що стоїть на початку"
+    },
+    {
+      "en": "division",
+      "ua": "ділення"
+    },
+    {
+      "en": "comma",
+      "ua": "separated-розділений комами"
+    },
+    {
+      "en": "extensively",
+      "ua": "широко, детально"
+    },
+    {
+      "en": "exception",
+      "ua": "виняток"
+    },
+    {
+      "en": "damage",
+      "ua": "шкода, пошкодження"
+    },
+    {
+      "en": "originate",
+      "ua": "походити, брати початок"
+    }
+  ],
+  "Chapter 4: Database Concepts": [
+    {
+      "en": "durability",
+      "ua": "довговічність"
+    },
+    {
+      "en": "scalability",
+      "ua": "масштабованість"
+    },
+    {
+      "en": "consistency",
+      "ua": "послідовність"
+    },
+    {
+      "en": "integrity",
+      "ua": "цілісність"
+    },
+    {
+      "en": "sharding",
+      "ua": "шарування"
+    },
+    {
+      "en": "backup",
+      "ua": "резервна копія"
+    },
+    {
+      "en": "recovery",
+      "ua": "відновлення"
+    },
+    {
+      "en": "rows",
+      "ua": "рядки"
+    },
+    {
+      "en": "capabilities",
+      "ua": "можливості"
+    },
+    {
+      "en": "completeness",
+      "ua": "повнота"
+    },
+    {
+      "en": "allows",
+      "ua": "дозволяє"
+    },
+    {
+      "en": "reltionships",
+      "ua": "відносини"
+    },
+    {
+      "en": "uncover",
+      "ua": "виявлення"
+    },
+    {
+      "en": "variable",
+      "ua": "зміна"
+    },
+    {
+      "en": "characteristics",
+      "ua": "характеристики"
+    },
+    {
+      "en": "maintainability",
+      "ua": "підтримуваності"
+    },
+    {
+      "en": "traceability",
+      "ua": "стеження"
+    },
+    {
+      "en": "flexible",
+      "ua": "гнучкий"
+    },
+    {
+      "en": "necessary",
+      "ua": "необхідний"
+    },
+    {
+      "en": "omissions",
+      "ua": "пропуски"
+    },
+    {
+      "en": "execution",
+      "ua": "виконання"
+    },
+    {
+      "en": "labeled",
+      "ua": "з позначкою"
+    },
+    {
+      "en": "Platform",
+      "ua": "independent — платформонезалежний."
+    },
+    {
+      "en": "relative",
+      "ua": "відносний"
+    },
+    {
+      "en": "replicate",
+      "ua": "дублювати"
+    },
+    {
+      "en": "deprecated",
+      "ua": "застарілий"
+    },
+    {
+      "en": "redirecting",
+      "ua": "перенаправлення"
+    },
+    {
+      "en": "descriptor",
+      "ua": "дескриптор (файловий)"
+    },
+    {
+      "en": "immediately",
+      "ua": "негайно, відразу"
+    },
+    {
+      "en": "streamlined",
+      "ua": "оптимізований, спрощений"
+    },
+    {
+      "en": "particularly",
+      "ua": "особливо"
+    },
+    {
+      "en": "concatenate",
+      "ua": "зчеплювати, об'єднувати"
+    },
+    {
+      "en": "multimedia",
+      "ua": "мультимедіа"
+    },
+    {
+      "en": "processor",
+      "ua": "процесор (тут: текстовий редактор)"
+    },
+    {
+      "en": "connects",
+      "ua": "з'єднує"
+    },
+    {
+      "en": "frequently",
+      "ua": "часто"
+    },
+    {
+      "en": "handy",
+      "ua": "зручний"
+    },
+    {
+      "en": "case",
+      "ua": "регістр (великі/малі літери)"
+    },
+    {
+      "en": "progress",
+      "ua": "прогрес"
+    },
+    {
+      "en": "metaphor",
+      "ua": "метафора"
+    },
+    {
+      "en": "toy",
+      "ua": "іграшка, іграшка"
+    },
+    {
+      "en": "cartridges",
+      "ua": "картриджі, картриджей"
+    },
+    {
+      "en": "screws",
+      "ua": "гвинти"
+    },
+    {
+      "en": "Expansion",
+      "ua": "Розгортання"
+    },
+    {
+      "en": "Expression",
+      "ua": "Вираз"
+    },
+    {
+      "en": "Parameter",
+      "ua": "Параметр"
+    },
+    {
+      "en": "Sequence",
+      "ua": "Послідовність"
+    },
+    {
+      "en": "Suppress",
+      "ua": "Пригнічувати, скасовувати"
+    },
+    {
+      "en": "qualify",
+      "ua": "підходити, відповідати вимогам"
+    },
+    {
+      "en": "period",
+      "ua": "крапка (в контексті тексту)"
+    },
+    {
+      "en": "remainder",
+      "ua": "остача"
+    },
+    {
+      "en": "unquoted",
+      "ua": "не взятий у лапки"
+    },
+    {
+      "en": "capability",
+      "ua": "здатність, можливість"
+    },
+    {
+      "en": "embedded",
+      "ua": "вбудований (про пробіли)"
+    },
+    {
+      "en": "pesky",
+      "ua": "докучливий, допоскуний"
+    },
+    {
+      "en": "adopt",
+      "ua": "переймати, запроваджувати"
+    }
+  ],
+  "Chapter 5: Security & Compliance": [
+    {
+      "en": "confidentiality",
+      "ua": "конфіденційність"
+    },
+    {
+      "en": "availability",
+      "ua": "доступність"
+    },
+    {
+      "en": "authenticity",
+      "ua": "автентичність"
+    },
+    {
+      "en": "accountability",
+      "ua": "відповідальність"
+    },
+    {
+      "en": "reliability",
+      "ua": "надійність"
+    },
+    {
+      "en": "maintainability",
+      "ua": "підтримуваність"
+    },
+    {
+      "en": "security",
+      "ua": "безпека"
+    },
+    {
+      "en": "validation",
+      "ua": "перевірка"
+    },
+    {
+      "en": "compliance",
+      "ua": "дотримання"
+    },
+    {
+      "en": "permission",
+      "ua": "дозвіл"
+    },
+    {
+      "en": "rows",
+      "ua": "рядки"
+    },
+    {
+      "en": "particular",
+      "ua": "особливий"
+    },
+    {
+      "en": "retrieve",
+      "ua": "вилучати, отримувати"
+    },
+    {
+      "en": "precise",
+      "ua": "точний"
+    },
+    {
+      "en": "complexity",
+      "ua": "складність"
+    },
+    {
+      "en": "ability",
+      "ua": "можливість"
+    },
+    {
+      "en": "auditing",
+      "ua": "аудит"
+    },
+    {
+      "en": "robust",
+      "ua": "стійкий"
+    },
+    {
+      "en": "equals",
+      "ua": "дорівнює"
+    },
+    {
+      "en": "care",
+      "ua": "увага"
+    },
+    {
+      "en": "expression",
+      "ua": "вираз"
+    },
+    {
+      "en": "prevents",
+      "ua": "запобігає"
+    },
+    {
+      "en": "disappears",
+      "ua": "зникає"
+    },
+    {
+      "en": "assumed",
+      "ua": "пропустити"
+    },
+    {
+      "en": "deterministic",
+      "ua": "детермінований"
+    },
+    {
+      "en": "partition",
+      "ua": "розділ"
+    },
+    {
+      "en": "standard",
+      "ua": "стандартний"
+    },
+    {
+      "en": "produce",
+      "ua": "виробляти, створювати"
+    },
+    {
+      "en": "perform",
+      "ua": "виконувати"
+    },
+    {
+      "en": "append",
+      "ua": "додавати (в кінець файлу)"
+    },
+    {
+      "en": "status",
+      "ua": "стан, статус"
+    },
+    {
+      "en": "analogous",
+      "ua": "аналогічний"
+    },
+    {
+      "en": "arranged",
+      "ua": "розташований, впорядкований"
+    },
+    {
+      "en": "accepts",
+      "ua": "приймає"
+    },
+    {
+      "en": "overwrite",
+      "ua": "перезаписувати"
+    },
+    {
+      "en": "referred",
+      "ua": "згадується, називається"
+    },
+    {
+      "en": "limits",
+      "ua": "обмежує"
+    },
+    {
+      "en": "sensitive",
+      "ua": "чутливий"
+    },
+    {
+      "en": "missing",
+      "ua": "відсутній"
+    },
+    {
+      "en": "fitting",
+      "ua": "з'єднувач, фітинг"
+    },
+    {
+      "en": "analogy",
+      "ua": "аналогія"
+    },
+    {
+      "en": "discover",
+      "ua": "виявляти, відкривати"
+    },
+    {
+      "en": "nuts",
+      "ua": "гайки"
+    },
+    {
+      "en": "Shell",
+      "ua": "Оболонка"
+    },
+    {
+      "en": "Integers",
+      "ua": "Цілі числа"
+    },
+    {
+      "en": "Variable",
+      "ua": "Змінна"
+    },
+    {
+      "en": "Control codes",
+      "ua": "Керуючі коди"
+    },
+    {
+      "en": "examine",
+      "ua": "досліджувати, розглядати"
+    },
+    {
+      "en": "behave",
+      "ua": "поводитися"
+    },
+    {
+      "en": "refer",
+      "ua": "посилатися, вказувати"
+    },
+    {
+      "en": "significant",
+      "ua": "значний, вагомий"
+    },
+    {
+      "en": "whitespace",
+      "ua": "пробіл, пустий простір"
+    },
+    {
+      "en": "invoke",
+      "ua": "викликати"
+    },
+    {
+      "en": "unfortunate",
+      "ua": "нещасний"
+    },
+    {
+      "en": "succeeding",
+      "ua": "наступний"
+    },
+    {
+      "en": "mystery",
+      "ua": "таємниця, загадка"
+    }
+  ],
+  "Chapter 6: System & Infrastructure": [
+    {
+      "en": "disaster",
+      "ua": "збій"
+    },
+    {
+      "en": "instruction",
+      "ua": "інструкція"
+    },
+    {
+      "en": "variable",
+      "ua": "змінна"
+    },
+    {
+      "en": "complexity",
+      "ua": "складність"
+    },
+    {
+      "en": "performance",
+      "ua": "продуктивність"
+    },
+    {
+      "en": "characteristics",
+      "ua": "характеристики"
+    },
+    {
+      "en": "features",
+      "ua": "особливості"
+    },
+    {
+      "en": "relationships",
+      "ua": "відносини"
+    },
+    {
+      "en": "invention",
+      "ua": "винахід"
+    },
+    {
+      "en": "introduced",
+      "ua": "введений"
+    },
+    {
+      "en": "represents",
+      "ua": "представляє"
+    },
+    {
+      "en": "integrity",
+      "ua": "цілісність"
+    },
+    {
+      "en": "validation",
+      "ua": "перевірка"
+    },
+    {
+      "en": "application",
+      "ua": "застосування"
+    },
+    {
+      "en": "scalable",
+      "ua": "масштабований"
+    },
+    {
+      "en": "dementional",
+      "ua": "вимірний"
+    },
+    {
+      "en": "government",
+      "ua": "уряд"
+    },
+    {
+      "en": "inherited",
+      "ua": "успадкований"
+    },
+    {
+      "en": "appear",
+      "ua": "зявлятися"
+    },
+    {
+      "en": "gibberish",
+      "ua": "беліберда"
+    },
+    {
+      "en": "almost",
+      "ua": "майже"
+    },
+    {
+      "en": "systematic",
+      "ua": "систематичний"
+    },
+    {
+      "en": "properties",
+      "ua": "властивості"
+    },
+    {
+      "en": "error",
+      "ua": "помилка"
+    },
+    {
+      "en": "numbered",
+      "ua": "пронумерований"
+    },
+    {
+      "en": "capture",
+      "ua": "захоплювати, фіксувати"
+    },
+    {
+      "en": "disposing",
+      "ua": "утилізація, позбавлення"
+    },
+    {
+      "en": "suppress",
+      "ua": "придушувати, приховувати"
+    },
+    {
+      "en": "paging",
+      "ua": "розбиття на сторінки"
+    },
+    {
+      "en": "wildcards",
+      "ua": "символи підстановки (*, ?)"
+    },
+    {
+      "en": "source",
+      "ua": "джерело"
+    },
+    {
+      "en": "destroying",
+      "ua": "знищення"
+    },
+    {
+      "en": "executable",
+      "ua": "виконуваний (про файл)"
+    },
+    {
+      "en": "matching",
+      "ua": "відповідний, той що співпадає"
+    },
+    {
+      "en": "excerpt",
+      "ua": "уривок"
+    },
+    {
+      "en": "privileges",
+      "ua": "привілеї (права доступу)"
+    },
+    {
+      "en": "intermediate",
+      "ua": "проміжний"
+    },
+    {
+      "en": "shiny",
+      "ua": "блискучий"
+    },
+    {
+      "en": "limited",
+      "ua": "обмежений"
+    },
+    {
+      "en": "gears",
+      "ua": "шестерні, шестерні"
+    },
+    {
+      "en": "Substitution",
+      "ua": "Підстановка, заміна"
+    },
+    {
+      "en": "Modulo",
+      "ua": "Остача від ділення"
+    },
+    {
+      "en": "Quoting",
+      "ua": "Екранування, взяття в лапки"
+    },
+    {
+      "en": "Linefeed",
+      "ua": "Перенос рядка"
+    },
+    {
+      "en": "complex",
+      "ua": "складний"
+    },
+    {
+      "en": "expect",
+      "ua": "очікувати"
+    },
+    {
+      "en": "likely",
+      "ua": "ймовірно"
+    },
+    {
+      "en": "parentheses",
+      "ua": "круглі дужки"
+    },
+    {
+      "en": "zero",
+      "ua": "padded-доповнений нулями"
+    },
+    {
+      "en": "misspell",
+      "ua": "написати з помилкою"
+    },
+    {
+      "en": "victim",
+      "ua": "жертва"
+    },
+    {
+      "en": "eliminate",
+      "ua": "усувати"
+    },
+    {
+      "en": "confusion",
+      "ua": "плутанина"
+    }
+  ],
+  "Chapter 7: Business & Communication": [
+    {
+      "en": "agreement",
+      "ua": "угода"
+    },
+    {
+      "en": "opportunity",
+      "ua": "можливість"
+    },
+    {
+      "en": "challenge",
+      "ua": "виклик"
+    },
+    {
+      "en": "solution",
+      "ua": "рішення"
+    },
+    {
+      "en": "development",
+      "ua": "розробка"
+    },
+    {
+      "en": "management",
+      "ua": "управління"
+    },
+    {
+      "en": "resource",
+      "ua": "ресурс"
+    },
+    {
+      "en": "objective",
+      "ua": "мета"
+    },
+    {
+      "en": "strategy",
+      "ua": "стратегія"
+    },
+    {
+      "en": "feedback",
+      "ua": "зворотний зв'язок"
+    },
+    {
+      "en": "Durability",
+      "ua": "Довговічність"
+    },
+    {
+      "en": "consistency",
+      "ua": "послідовність"
+    },
+    {
+      "en": "completeness",
+      "ua": "повнота"
+    },
+    {
+      "en": "exceeds",
+      "ua": "перевищувати"
+    },
+    {
+      "en": "compliance",
+      "ua": "дотримання"
+    },
+    {
+      "en": "confidentiality",
+      "ua": "конфіденційність"
+    },
+    {
+      "en": "arbitrary",
+      "ua": "довільний"
+    },
+    {
+      "en": "reliable",
+      "ua": "надійний"
+    },
+    {
+      "en": "distinguish",
+      "ua": "розрізняти"
+    },
+    {
+      "en": "inquiries",
+      "ua": "запит"
+    },
+    {
+      "en": "variable",
+      "ua": "зміна"
+    },
+    {
+      "en": "certain",
+      "ua": "певний"
+    },
+    {
+      "en": "tempted",
+      "ua": "спокушення"
+    },
+    {
+      "en": "involve",
+      "ua": "залучати"
+    },
+    {
+      "en": "sub",
+      "ua": "система"
+    },
+    {
+      "en": "concurrent",
+      "ua": "паралельний"
+    },
+    {
+      "en": "lacks",
+      "ua": "бракує, не вистачає"
+    },
+    {
+      "en": "streams",
+      "ua": "потоки (даних)"
+    },
+    {
+      "en": "single",
+      "ua": "єдиний, один"
+    },
+    {
+      "en": "unwanted",
+      "ua": "небажаний"
+    },
+    {
+      "en": "culture",
+      "ua": "культура"
+    },
+    {
+      "en": "short",
+      "ua": "короткий"
+    },
+    {
+      "en": "expand",
+      "ua": "розгортати, розширювати"
+    },
+    {
+      "en": "serves",
+      "ua": "служить"
+    },
+    {
+      "en": "silently",
+      "ua": "мовчки (без виводу на екран)"
+    },
+    {
+      "en": "features",
+      "ua": "особливості, функції"
+    },
+    {
+      "en": "pattern",
+      "ua": "шаблон"
+    },
+    {
+      "en": "header",
+      "ua": "заголовок"
+    },
+    {
+      "en": "required",
+      "ua": "вимагається"
+    },
+    {
+      "en": "stage",
+      "ua": "етап, стадія"
+    },
+    {
+      "en": "graphics",
+      "ua": "графіка, графіка"
+    },
+    {
+      "en": "largest",
+      "ua": "найбільший"
+    },
+    {
+      "en": "pulleys",
+      "ua": "шківи, шківи"
+    },
+    {
+      "en": "Wildcards",
+      "ua": "Символи підстановки"
+    },
+    {
+      "en": "Exponentiation",
+      "ua": "Піднесення до степеня"
+    },
+    {
+      "en": "Delimiter",
+      "ua": "Роздільник"
+    },
+    {
+      "en": "Carriage return",
+      "ua": "Повернення каретки"
+    },
+    {
+      "en": "substitute",
+      "ua": "замінювати"
+    },
+    {
+      "en": "employ",
+      "ua": "застосовувати, використовувати"
+    },
+    {
+      "en": "incorrect",
+      "ua": "неправильний"
+    },
+    {
+      "en": "subexpression",
+      "ua": "підвираз"
+    },
+    {
+      "en": "reverse",
+      "ua": "зворотний"
+    },
+    {
+      "en": "mistype",
+      "ua": "зробити друкарську помилку"
+    },
+    {
+      "en": "treat",
+      "ua": "розглядати, обробляти, ставитися"
+    },
+    {
+      "en": "precede",
+      "ua": "передувати, стояти перед"
+    },
+    {
+      "en": "potential",
+      "ua": "потенційний"
+    }
+  ],
+  "Chapter 8: Advanced Phrases": [
+    {
+      "en": "ongoing field",
+      "ua": "галузь, що розвивається"
+    },
+    {
+      "en": "disaster recovery",
+      "ua": "аварійне відновлення"
+    },
+    {
+      "en": "data integrity",
+      "ua": "цілісність даних"
+    },
+    {
+      "en": "high availability",
+      "ua": "висока доступність"
+    },
+    {
+      "en": "scalability requirements",
+      "ua": "вимоги до масштабованості"
+    },
+    {
+      "en": "security compliance",
+      "ua": "дотримання безпеки"
+    },
+    {
+      "en": "performance optimization",
+      "ua": "оптимізація продуктивності"
+    },
+    {
+      "en": "pre-defined structure",
+      "ua": "заздалегідь визначена структура"
+    },
+    {
+      "en": "key features",
+      "ua": "ключові особливості"
+    },
+    {
+      "en": "arbitrary value",
+      "ua": "довільне значення"
+    },
+    {
+      "en": "enabling",
+      "ua": "включення"
+    },
+    {
+      "en": "maintain",
+      "ua": "підтримувати"
+    },
+    {
+      "en": "disaster",
+      "ua": "збій, аварія"
+    },
+    {
+      "en": "handy",
+      "ua": "зручний"
+    },
+    {
+      "en": "performance",
+      "ua": "продуктивність"
+    },
+    {
+      "en": "availability",
+      "ua": "доступність"
+    },
+    {
+      "en": "screch",
+      "ua": "шукати"
+    },
+    {
+      "en": "secure",
+      "ua": "безпечний"
+    },
+    {
+      "en": "aware",
+      "ua": "усвідомлювати"
+    },
+    {
+      "en": "permission",
+      "ua": "дозвіл"
+    },
+    {
+      "en": "appears",
+      "ua": "з'являється"
+    },
+    {
+      "en": "instance",
+      "ua": "приклад"
+    },
+    {
+      "en": "Likewise",
+      "ua": "аналогічно"
+    },
+    {
+      "en": "defining",
+      "ua": "визначення"
+    },
+    {
+      "en": "primarily",
+      "ua": "переважно"
+    },
+    {
+      "en": "durability",
+      "ua": "довговічність"
+    },
+    {
+      "en": "ease",
+      "ua": "легкість"
+    },
+    {
+      "en": "internally",
+      "ua": "внутрішньо"
+    },
+    {
+      "en": "traditional",
+      "ua": "традиційний"
+    },
+    {
+      "en": "silence",
+      "ua": "тиша"
+    },
+    {
+      "en": "ancient",
+      "ua": "стародавній"
+    },
+    {
+      "en": "join",
+      "ua": "з'єднувати"
+    },
+    {
+      "en": "supposed",
+      "ua": "повинен (був зробити)"
+    },
+    {
+      "en": "demonstrate",
+      "ua": "демонструвати"
+    },
+    {
+      "en": "treat",
+      "ua": "ставитися, обробляти"
+    },
+    {
+      "en": "duplicates",
+      "ua": "дублікати"
+    },
+    {
+      "en": "encounters",
+      "ua": "стикається"
+    },
+    {
+      "en": "footer",
+      "ua": "нижній колонтитул, підвал"
+    },
+    {
+      "en": "continues",
+      "ua": "продовжує"
+    },
+    {
+      "en": "documentation",
+      "ua": "документація"
+    },
+    {
+      "en": "cute",
+      "ua": "милий"
+    },
+    {
+      "en": "huge",
+      "ua": "величезний"
+    },
+    {
+      "en": "motors",
+      "ua": "мотори, двигуни"
+    },
+    {
+      "en": "Pathname",
+      "ua": "Назва шляху, шлях"
+    },
+    {
+      "en": "Brace",
+      "ua": "Фігурна дужка"
+    },
+    {
+      "en": "Double quotes",
+      "ua": "Подвійні лапки"
+    },
+    {
+      "en": "Summing up",
+      "ua": "Підбиття підсумків"
+    },
+    {
+      "en": "perform",
+      "ua": "виконувати"
+    },
+    {
+      "en": "reveal",
+      "ua": "виявляти, розкривати"
+    },
+    {
+      "en": "specific",
+      "ua": "конкретний, специфічний"
+    },
+    {
+      "en": "strange",
+      "ua": "дивний"
+    },
+    {
+      "en": "chronological",
+      "ua": "хронологічний"
+    },
+    {
+      "en": "thereby",
+      "ua": "таким чином"
+    },
+    {
+      "en": "separate",
+      "ua": "окремий, розділяти"
+    },
+    {
+      "en": "ordinary",
+      "ua": "звичайний"
+    },
+    {
+      "en": "wasted",
+      "ua": "змарнований"
+    }
+  ]
+}
