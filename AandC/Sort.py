@@ -53,6 +53,7 @@ def hanoi(k: int, src:str, dst: str, aux: str)->None:
     print(f"Диск {k}: {src} -> {dst}")
     hanoi(k-1,aux,dst,src)
 
-heap_sort()
+def heap_sort():
+    
 n = int(input())
 hanoi(n, "A", "C", "B")

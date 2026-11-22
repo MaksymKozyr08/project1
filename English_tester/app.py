@@ -1,8 +1,14 @@
 """
 app.py - Unified Desktop GUI Application for Vocabulary Flashcard Drilling.
 
-Self-contained application containing data models, repository, diff evaluator,
-and desktop GUI (with CustomTkinter and automatic Tkinter fallback support).
+Features:
+- Scientific & Rigorous Laboratory-grade UI Design.
+- Multi-Attempt Vocabulary Drilling with Character-Level Alignment & Diff Metrics.
+- Granular Lexical Selection: Select/deselect specific words from every chapter/block.
+- Robust Hint, Reveal, and Skip mechanisms with auto-cleared input vectors.
+- Bilingual Ukrainian/English interface with linguistic classification tags.
+- High-performance lazy rendering supporting 3,000+ words.
+- Automatic CustomTkinter support with seamless standard Tkinter fallback.
 """
 
 import json
@@ -26,9 +32,8 @@ except ImportError:
     HAS_CUSTOMTKINTER = False
     print("\n" + "=" * 70)
     print(" NOTICE: 'customtkinter' module is not installed.")
-    print(" To enable the modern styled dark theme interface, please run:")
-    print("     pip install customtkinter")
-    print(" Falling back to standard Tkinter interface...")
+    print(" Falling back to standard Tkinter interface with dark scientific theme...")
+    print(" To enable modern CustomTkinter widgets: pip install customtkinter")
     print("=" * 70 + "\n")
 
     def _resolve_master(master):
@@ -39,7 +44,7 @@ except ImportError:
     class CTkFallback(tk.Tk):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-            self.configure(bg="#181825")
+            self.configure(bg="#0b0f19")
 
     class CTkFrameFallback(tk.Frame):
         def __init__(self, master=None, **kwargs):
@@ -50,7 +55,7 @@ except ImportError:
             border_color = kwargs.pop("border_color", None)
             if fg_color is not None:
                 if fg_color == "transparent":
-                    bg = getattr(master, "cget", lambda x: "#181825")("bg") if master else "#181825"
+                    bg = getattr(master, "cget", lambda x: "#0b0f19")("bg") if master else "#0b0f19"
                     kwargs["bg"] = bg
                 else:
                     kwargs["bg"] = fg_color
@@ -69,7 +74,7 @@ except ImportError:
             kwargs.pop("border_color", None)
             if fg_color is not None:
                 if fg_color == "transparent":
-                    kwargs["bg"] = getattr(self.master, "cget", lambda x: "#181825")("bg")
+                    kwargs["bg"] = getattr(self.master, "cget", lambda x: "#0b0f19")("bg")
                 else:
                     kwargs["bg"] = fg_color
             if kwargs:
@@ -86,7 +91,7 @@ except ImportError:
             if fg_color and fg_color != "transparent":
                 kwargs["bg"] = fg_color
             elif "bg" not in kwargs:
-                kwargs["bg"] = getattr(master, "cget", lambda x: "#181825")("bg") if master else "#181825"
+                kwargs["bg"] = getattr(master, "cget", lambda x: "#0b0f19")("bg") if master else "#0b0f19"
             super().__init__(master, **kwargs)
 
         def configure(self, **kwargs):
@@ -96,7 +101,7 @@ except ImportError:
             if text_color:
                 kwargs["fg"] = text_color
             if fg_color:
-                kwargs["bg"] = fg_color if fg_color != "transparent" else getattr(self.master, "cget", lambda x: "#181825")("bg")
+                kwargs["bg"] = fg_color if fg_color != "transparent" else getattr(self.master, "cget", lambda x: "#0b0f19")("bg")
             if kwargs:
                 super().configure(**kwargs)
 
@@ -146,8 +151,8 @@ except ImportError:
             border_color = kwargs.pop("border_color", None)
             if fg_color:
                 kwargs["bg"] = fg_color
-                kwargs["insertbackground"] = "#cdd6f4"
-                kwargs["fg"] = "#cdd6f4"
+                kwargs["insertbackground"] = "#f8fafc"
+                kwargs["fg"] = "#f8fafc"
             if border_width:
                 kwargs["bd"] = border_width
                 kwargs["relief"] = "solid"
@@ -179,14 +184,20 @@ except ImportError:
             kwargs.pop("fg_color", None)
             kwargs.pop("hover_color", None)
             kwargs.pop("font", None)
+            self._variable = kwargs.get("variable", None)
             if text_color:
                 kwargs["fg"] = text_color
-            bg = getattr(master, "cget", lambda x: "#181825")("bg") if master else "#181825"
+            bg = getattr(master, "cget", lambda x: "#0b0f19")("bg") if master else "#0b0f19"
             kwargs.setdefault("bg", bg)
             kwargs.setdefault("activebackground", bg)
-            kwargs.setdefault("activeforeground", text_color or "#cdd6f4")
-            kwargs.setdefault("selectcolor", "#313244")
+            kwargs.setdefault("activeforeground", text_color or "#f8fafc")
+            kwargs.setdefault("selectcolor", "#1e293b")
             super().__init__(master, **kwargs)
+
+        def get(self):
+            if self._variable is not None:
+                return self._variable.get()
+            return 1
 
         def configure(self, **kwargs):
             text_color = kwargs.pop("text_color", None)
@@ -213,7 +224,7 @@ except ImportError:
     class CTkSegmentedButtonFallback(tk.Frame):
         def __init__(self, master=None, values=None, variable=None, command=None, **kwargs):
             master = _resolve_master(master)
-            bg = getattr(master, "cget", lambda x: "#181825")("bg") if master else "#181825"
+            bg = getattr(master, "cget", lambda x: "#0b0f19")("bg") if master else "#0b0f19"
             kwargs.pop("selected_color", None)
             kwargs.pop("selected_hover_color", None)
             kwargs.pop("font", None)
@@ -225,7 +236,7 @@ except ImportError:
             for val in self.values:
                 btn = tk.Button(
                     self, text=val, command=lambda v=val: self.set(v),
-                    bg="#313244", fg="#cdd6f4", activebackground="#45475a", activeforeground="#cdd6f4",
+                    bg="#1e293b", fg="#f8fafc", activebackground="#334155", activeforeground="#f8fafc",
                     relief="flat", bd=0, padx=10, pady=5
                 )
                 btn.pack(side="left", fill="x", expand=True, padx=2, pady=2)
@@ -245,9 +256,9 @@ except ImportError:
             curr = self.variable.get()
             for val, btn in self.buttons.items():
                 if val == curr:
-                    btn.configure(bg="#89b4fa", fg="#11111b")
+                    btn.configure(bg="#38bdf8", fg="#0b0f19")
                 else:
-                    btn.configure(bg="#313244", fg="#cdd6f4")
+                    btn.configure(bg="#1e293b", fg="#f8fafc")
 
         def configure(self, **kwargs):
             pass
@@ -257,7 +268,7 @@ except ImportError:
             master = _resolve_master(master)
             kwargs.pop("fg_color", None)
             height = kwargs.pop("height", 200)
-            bg = getattr(master, "cget", lambda x: "#181825")("bg") if master else "#181825"
+            bg = getattr(master, "cget", lambda x: "#0b0f19")("bg") if master else "#0b0f19"
             super().__init__(master, bg=bg)
             canvas = tk.Canvas(self, bg=bg, highlightthickness=0, height=height)
             scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
@@ -302,7 +313,30 @@ except ImportError:
 
 
 # ============================================================================
-# 1. DIFF EVALUATION ENGINE & DATA MODELS
+# SCIENTIFIC DESIGN PALETTE (ACADEMIC SLATE & CYAN)
+# ============================================================================
+PALETTE = {
+    "bg_main": "#0b0f19",       # Deep scientific slate
+    "bg_surface": "#111827",    # Panel slate
+    "bg_card": "#1e293b",       # Card container
+    "bg_inner": "#0f172a",      # Recessed input / well
+    "border": "#334155",        # Slate border
+    "border_focus": "#38bdf8",  # Scientific cyan focus
+    "accent_primary": "#38bdf8",# Cyan / Sky
+    "accent_hover": "#7dd3fc",
+    "accent_secondary": "#818cf8", # Indigo / violet
+    "success": "#10b981",       # Emerald green
+    "success_hover": "#34d399",
+    "error": "#ef4444",         # Red
+    "warning": "#f59e0b",       # Amber
+    "text_primary": "#f8fafc",  # White
+    "text_secondary": "#94a3b8",# Slate gray
+    "text_dim": "#64748b",      # Muted slate
+}
+
+
+# ============================================================================
+# 1. DIFF EVALUATION ENGINE & LINGUISTIC PARSER
 # ============================================================================
 
 @dataclass
@@ -320,9 +354,39 @@ class DiffResult:
     target_segments: List[Segment]
     accuracy_ratio: float  # 0.0 to 1.0 similarity score
     missing_count: int
+    matching_count: int
+    wrong_count: int
+    all_variants: List[str]
 
 
-def _evaluate_single(user_clean: str, target_clean: str) -> DiffResult:
+def parse_pos_tag(word_str: str) -> Tuple[str, str]:
+    """
+    Extracts grammatical part-of-speech classification from word prompt if present.
+    Returns: (cleaned_word, pos_label)
+    e.g. 'aim (n)' -> ('aim', 'NOUN')
+         'comment (v)' -> ('comment', 'VERB')
+         'to maintain' -> ('to maintain', 'VERBAL PHRASE')
+    """
+    raw = word_str.strip()
+    pos = ""
+    match = re.search(r'\((n|v|adj|adv|phr|prep)\b.*?\)', raw, re.IGNORECASE)
+    if match:
+        tag = match.group(1).lower()
+        tag_map = {
+            "n": "NOUN",
+            "v": "VERB",
+            "adj": "ADJECTIVE",
+            "adv": "ADVERB",
+            "phr": "PHRASE",
+            "prep": "PREPOSITION"
+        }
+        pos = tag_map.get(tag, tag.upper())
+    elif raw.lower().startswith("to ") and len(raw) > 3:
+        pos = "VERBAL PHRASE"
+    return raw, pos
+
+
+def _evaluate_single(user_clean: str, target_clean: str, all_variants: List[str]) -> DiffResult:
     """Evaluates user input against a single concrete target string with character-level alignment."""
     user_norm = user_clean.lower()
     target_norm = target_clean.lower()
@@ -335,6 +399,8 @@ def _evaluate_single(user_clean: str, target_clean: str) -> DiffResult:
     user_segments: List[Segment] = []
     target_segments: List[Segment] = []
     missing_count = 0
+    matching_count = 0
+    wrong_count = 0
 
     for tag, i1, i2, j1, j2 in matcher.get_opcodes():
         user_part = user_clean[i1:i2]
@@ -343,17 +409,20 @@ def _evaluate_single(user_clean: str, target_clean: str) -> DiffResult:
         if tag == 'equal':
             if user_part:
                 user_segments.append(Segment(text=user_part, tag='correct'))
+                matching_count += len(user_part)
             if target_part:
                 target_segments.append(Segment(text=target_part, tag='correct'))
         elif tag == 'replace':
             if user_part:
                 user_segments.append(Segment(text=user_part, tag='wrong'))
+                wrong_count += len(user_part)
             if target_part:
                 target_segments.append(Segment(text=target_part, tag='missing'))
                 missing_count += len(target_part)
         elif tag == 'delete':
             if user_part:
                 user_segments.append(Segment(text=user_part, tag='wrong'))
+                wrong_count += len(user_part)
         elif tag == 'insert':
             if target_part:
                 placeholders = " _ " * len(target_part)
@@ -368,15 +437,17 @@ def _evaluate_single(user_clean: str, target_clean: str) -> DiffResult:
         user_segments=user_segments,
         target_segments=target_segments,
         accuracy_ratio=ratio,
-        missing_count=missing_count
+        missing_count=missing_count,
+        matching_count=matching_count,
+        wrong_count=wrong_count,
+        all_variants=all_variants
     )
 
 
 def get_target_variants(target_str: str) -> List[str]:
     """
-    Parses a target string that may contain multiple alternative answers
-    (separated by '/' or ',') and optional parenthetical explanations (e.g. '(n)', '(одяг)').
-    Returns a list of distinct valid single-answer variants.
+    Parses a target string containing alternative answers ('/' or ',')
+    and parenthetical annotations. Returns list of accepted answer variants.
     """
     if not target_str:
         return []
@@ -398,31 +469,24 @@ def get_target_variants(target_str: str) -> List[str]:
                 variants.append(cleaned)
 
     for p in parts:
-        # Also handle comma-separated options e.g. "вступ, знайомство"
         sub_parts = [sp.strip() for sp in p.split(',') if sp.strip()]
         for sp in sub_parts:
-            # 1) Option without parentheses e.g. "приміряти" from "приміряти (одяг)" or "aim" from "aim (n)"
+            # 1) Variant without parentheses: e.g. "приміряти" from "приміряти (одяг)"
             no_paren = re.sub(r'\(.*?\)', '', sp).strip()
             if no_paren:
                 add_var(no_paren)
-            # 2) Option with parentheses
+            # 2) Full part
             add_var(sp)
             # 3) English verbs starting with "to "
             if sp.lower().startswith('to ') and len(sp) > 3:
                 add_var(sp[3:].strip())
 
-    # 4) Full raw string as fallback
     add_var(raw)
     return variants
 
 
 def evaluate_answer(user_input: str, target_word: str) -> DiffResult:
-    """
-    Evaluates user input against target word, supporting multiple accepted alternative answers.
-    - If user enters ANY of the valid alternative answers, it is considered exact and correct.
-    - Diff feedback and displayed target will strictly show the single matched or closest variant,
-      avoiding multiple answers grouped together in the target line.
-    """
+    """Evaluates user input against valid target variants with scientific similarity scoring."""
     user_clean = user_input.strip()
     user_norm = user_clean.lower()
 
@@ -430,17 +494,15 @@ def evaluate_answer(user_input: str, target_word: str) -> DiffResult:
     if not variants:
         variants = [target_word.strip()]
 
-    # 1. Check for exact match against any valid variant
+    # Check exact match against any valid variant
     for v in variants:
         if user_norm == v.lower():
-            res = _evaluate_single(user_clean, v)
+            res = _evaluate_single(user_clean, v, variants)
             res.target_word_raw = v
             return res
 
-    # 2. If no exact match, find the single closest variant to compare against
-    # Exclude the combined multi-word fallback (the last item) when there are individual variants
+    # Otherwise find closest candidate
     candidates = variants[:-1] if len(variants) > 1 else variants
-
     best_variant = candidates[0]
     best_ratio = -1.0
 
@@ -450,13 +512,13 @@ def evaluate_answer(user_input: str, target_word: str) -> DiffResult:
             best_ratio = ratio
             best_variant = v
 
-    res = _evaluate_single(user_clean, best_variant)
+    res = _evaluate_single(user_clean, best_variant, variants)
     res.target_word_raw = best_variant
     return res
 
 
 # ============================================================================
-# 2. VOCABULARY DATA REPOSITORY & GENERATOR
+# 2. VOCABULARY DATA REPOSITORY
 # ============================================================================
 
 DEFAULT_VOCABULARY: Dict[str, List[Dict[str, str]]] = {
@@ -483,120 +545,18 @@ DEFAULT_VOCABULARY: Dict[str, List[Dict[str, str]]] = {
         {"en": "to enable", "ua": "включати"},
         {"en": "to validate", "ua": "перевіряти"},
         {"en": "to perform", "ua": "виконувати"}
-    ],
-    "Chapter 3: Adjectives & Descriptions": [
-        {"en": "relational", "ua": "реляційний"},
-        {"en": "related", "ua": "пов'язаний"},
-        {"en": "particular", "ua": "особливий"},
-        {"en": "precise", "ua": "точний"},
-        {"en": "handy", "ua": "зручний"},
-        {"en": "arbitrary", "ua": "довільний"},
-        {"en": "ongoing", "ua": "поточний"},
-        {"en": "pre-defined", "ua": "заздалегідь визначений"},
-        {"en": "opposed", "ua": "протилежний"},
-        {"en": "complete", "ua": "повний"}
-    ],
-    "Chapter 4: Database Concepts": [
-        {"en": "durability", "ua": "довговічність"},
-        {"en": "scalability", "ua": "масштабованість"},
-        {"en": "consistency", "ua": "послідовність"},
-        {"en": "integrity", "ua": "цілісність"},
-        {"en": "sharding", "ua": "шарування"},
-        {"en": "backup", "ua": "резервна копія"},
-        {"en": "recovery", "ua": "відновлення"},
-        {"en": "rows", "ua": "рядки"},
-        {"en": "capabilities", "ua": "можливості"},
-        {"en": "completeness", "ua": "повнота"}
-    ],
-    "Chapter 5: Security & Compliance": [
-        {"en": "confidentiality", "ua": "конфіденційність"},
-        {"en": "availability", "ua": "доступність"},
-        {"en": "authenticity", "ua": "автентичність"},
-        {"en": "accountability", "ua": "відповідальність"},
-        {"en": "reliability", "ua": "надійність"},
-        {"en": "maintainability", "ua": "підтримуваність"},
-        {"en": "security", "ua": "безпека"},
-        {"en": "validation", "ua": "перевірка"},
-        {"en": "compliance", "ua": "дотримання"},
-        {"en": "permission", "ua": "дозвіл"}
-    ],
-    "Chapter 6: System & Infrastructure": [
-        {"en": "disaster", "ua": "збій"},
-        {"en": "instruction", "ua": "інструкція"},
-        {"en": "variable", "ua": "змінна"},
-        {"en": "complexity", "ua": "складність"},
-        {"en": "performance", "ua": "продуктивність"},
-        {"en": "characteristics", "ua": "характеристики"},
-        {"en": "features", "ua": "особливості"},
-        {"en": "relationships", "ua": "відносини"},
-        {"en": "invention", "ua": "винахід"},
-        {"en": "introduced", "ua": "введений"}
-    ],
-    "Chapter 7: Business & Communication": [
-        {"en": "agreement", "ua": "угода"},
-        {"en": "opportunity", "ua": "можливість"},
-        {"en": "challenge", "ua": "виклик"},
-        {"en": "solution", "ua": "рішення"},
-        {"en": "development", "ua": "розробка"},
-        {"en": "management", "ua": "управління"},
-        {"en": "resource", "ua": "ресурс"},
-        {"en": "objective", "ua": "мета"},
-        {"en": "strategy", "ua": "стратегія"},
-        {"en": "feedback", "ua": "зворотний зв'язок"}
-    ],
-    "Chapter 8: Advanced Phrases": [
-        {"en": "ongoing field", "ua": "галузь, що розвивається"},
-        {"en": "disaster recovery", "ua": "аварійне відновлення"},
-        {"en": "data integrity", "ua": "цілісність даних"},
-        {"en": "high availability", "ua": "висока доступність"},
-        {"en": "scalability requirements", "ua": "вимоги до масштабованості"},
-        {"en": "security compliance", "ua": "дотримання безпеки"},
-        {"en": "performance optimization", "ua": "оптимізація продуктивності"},
-        {"en": "pre-defined structure", "ua": "заздалегідь визначена структура"},
-        {"en": "key features", "ua": "ключові особливості"},
-        {"en": "arbitrary value", "ua": "довільне значення"}
     ]
 }
 
 
-def load_extra_words_from_txt(txt_path: str) -> List[Dict[str, str]]:
-    """Loads English-Ukrainian word pairs from a text file formatted as 'en-ua'."""
-    extra = []
-    if os.path.exists(txt_path):
-        try:
-            with open(txt_path, 'r', encoding='utf-8') as f:
-                for line in f:
-                    line = line.strip()
-                    if '-' in line:
-                        parts = line.split('-', 1)
-                        en = parts[0].strip()
-                        ua = parts[1].strip()
-                        if en and ua:
-                            extra.append({"en": en, "ua": ua})
-        except Exception as e:
-            print(f"Notice: could not parse extra words from {txt_path}: {e}")
-    return extra
-
-
-def generate_words_json(output_path: str = "words.json", source_txt: str = None) -> Dict[str, List[Dict[str, str]]]:
-    """Generates words.json with 8 chapters, augmenting with source_txt if available."""
+def generate_words_json(output_path: str = "words.json") -> Dict[str, List[Dict[str, str]]]:
+    """Generates words.json fallback template."""
     if not os.path.isabs(output_path):
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        output_path = os.path.join(base_dir, output_path)
+        output_path = os.path.join(base_dir, os.path.basename(output_path))
     data = {k: list(v) for k, v in DEFAULT_VOCABULARY.items()}
-
-    if source_txt and os.path.exists(source_txt):
-        extra_words = load_extra_words_from_txt(source_txt)
-        if extra_words:
-            chapter_keys = list(data.keys())
-            for idx, word in enumerate(extra_words):
-                chapter_key = chapter_keys[idx % len(chapter_keys)]
-                if not any(w['en'].lower() == word['en'].lower() for w in data[chapter_key]):
-                    data[chapter_key].append(word)
-
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-
     return data
 
 
@@ -606,25 +566,29 @@ class Flashcard:
     target: str
     direction: str  # 'EN->UA' or 'UA->EN'
     chapter: str
+    pos_tag: str
     original_pair: Dict[str, str]
 
 
 class VocabularyRepository:
-    """
-    In-memory vocabulary repository designed for high performance with 3,000+ words.
-    Uses indexed chapter dictionaries and lazy card deck generator.
-    """
+    """In-memory vocabulary repository designed for fast indexing across 40+ chapters."""
 
     def __init__(self, json_path: str = "words.json"):
         if not os.path.isabs(json_path):
             base_dir = os.path.dirname(os.path.abspath(__file__))
-            json_path = os.path.join(base_dir, json_path)
+            if os.path.exists(json_path):
+                json_path = os.path.abspath(json_path)
+            elif os.path.exists(os.path.join(base_dir, json_path)):
+                json_path = os.path.join(base_dir, json_path)
+            elif os.path.exists(os.path.join(base_dir, os.path.basename(json_path))):
+                json_path = os.path.join(base_dir, os.path.basename(json_path))
+            else:
+                json_path = os.path.join(base_dir, json_path)
         self.json_path = json_path
         self.chapters: Dict[str, List[Dict[str, str]]] = {}
         self.load_data()
 
     def load_data(self) -> None:
-        """Loads vocabulary from JSON file. Auto-generates fallback template if missing."""
         if not os.path.exists(self.json_path):
             print(f"[VocabularyRepository] '{self.json_path}' not found. Generating fallback template...")
             generate_words_json(self.json_path)
@@ -636,74 +600,46 @@ class VocabularyRepository:
             if isinstance(data, dict):
                 self.chapters = data
             elif isinstance(data, list):
-                self.chapters = self._group_flat_list(data)
+                self.chapters = {"Default Corpus": data}
             else:
                 raise ValueError("Invalid JSON format for vocabulary file.")
-
         except Exception as e:
             print(f"[VocabularyRepository] Error reading {self.json_path}: {e}. Re-generating fallback...")
             generate_words_json(self.json_path)
             with open(self.json_path, 'r', encoding='utf-8') as f:
                 self.chapters = json.load(f)
 
-        self._ensure_eight_chapters()
-
-    def _group_flat_list(self, words: List[Dict[str, str]]) -> Dict[str, List[Dict[str, str]]]:
-        """Groups a flat list into 8 balanced chapters."""
-        result: Dict[str, List[Dict[str, str]]] = {}
-        num_chapters = 8
-        chunk_size = max(1, len(words) // num_chapters)
-        for i in range(num_chapters):
-            ch_name = f"Chapter {i+1}"
-            start_idx = i * chunk_size
-            end_idx = (i + 1) * chunk_size if i < num_chapters - 1 else len(words)
-            result[ch_name] = words[start_idx:end_idx]
-        return result
-
-    def _ensure_eight_chapters(self) -> None:
-        """Guarantees that at least 8 chapter keys exist in the repository."""
-        if len(self.chapters) < 8:
-            for i in range(1, 9):
-                key = f"Chapter {i}"
-                if not any(k.startswith(f"Chapter {i}") for k in self.chapters):
-                    self.chapters[key] = []
-
     def get_chapter_names(self) -> List[str]:
-        """Returns sorted list of chapter names."""
         return list(self.chapters.keys())
 
     def get_chapter_counts(self) -> Dict[str, int]:
-        """Returns word count per chapter."""
         return {ch: len(words) for ch, words in self.chapters.items()}
 
     def get_total_word_count(self) -> int:
-        """Returns total count across all chapters."""
         return sum(len(words) for words in self.chapters.values())
 
     def create_session_deck(
         self,
-        selected_chapters: Optional[List[str]],
+        selected_word_pairs: Optional[List[Tuple[str, Dict[str, str]]]] = None,
+        selected_chapters: Optional[List[str]] = None,
         direction: str = "EN->UA",
         shuffle: bool = True,
         max_words: Optional[int] = None
     ) -> List[Flashcard]:
-        """
-        Creates a session deck of Flashcard objects for chosen chapters and practice direction.
-        Direction: 'EN->UA' (Prompt: English, Target: Ukrainian)
-                   'UA->EN' (Prompt: Ukrainian, Target: English)
-        """
+        """Creates session deck from specifically selected word pairs or chapters."""
         raw_pool: List[Tuple[str, Dict[str, str]]] = []
 
-        if not selected_chapters or "All Words" in selected_chapters:
-            for ch_name, words in self.chapters.items():
-                for pair in words:
-                    raw_pool.append((ch_name, pair))
+        if selected_word_pairs is not None:
+            raw_pool = list(selected_word_pairs)
+        elif selected_chapters:
+            for ch in selected_chapters:
+                if ch in self.chapters:
+                    for pair in self.chapters[ch]:
+                        raw_pool.append((ch, pair))
         else:
-            selected_set: Set[str] = set(selected_chapters)
-            for ch_name in selected_set:
-                if ch_name in self.chapters:
-                    for pair in self.chapters[ch_name]:
-                        raw_pool.append((ch_name, pair))
+            for ch, words in self.chapters.items():
+                for pair in words:
+                    raw_pool.append((ch, pair))
 
         if shuffle:
             random.shuffle(raw_pool)
@@ -718,8 +654,10 @@ class VocabularyRepository:
 
             if direction == "EN->UA":
                 prompt, target = en_val, ua_val
+                _, pos_tag = parse_pos_tag(en_val)
             else:
                 prompt, target = ua_val, en_val
+                _, pos_tag = parse_pos_tag(en_val)
 
             if prompt and target:
                 deck.append(Flashcard(
@@ -727,6 +665,7 @@ class VocabularyRepository:
                     target=target,
                     direction=direction,
                     chapter=ch_name,
+                    pos_tag=pos_tag,
                     original_pair=pair
                 ))
 
@@ -734,48 +673,63 @@ class VocabularyRepository:
 
 
 # ============================================================================
-# 3. GUI COMPONENTS & WIDGETS
+# 3. SCIENTIFIC DIFF FEEDBACK WIDGET
 # ============================================================================
 
 class DiffFeedbackWidget(ctk.CTkFrame):
     """
-    Custom widget displaying character-level diff highlighting using tk.Text widgets.
-    Per-character color coding:
-      - Green (#2ecc71) for matching characters.
-      - Red (#e74c3c) for incorrect/extra characters.
-      - Amber (#f59e0b) for missing/expected characters in correct word.
-      - Muted Gray (#7f8c8d) for placeholders ('_').
+    Scientific Error Decomposition Widget with character-level alignment,
+    similarity index (Levenshtein ratio), accepted variants, and metrics.
     """
 
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
-        self.configure(fg_color="#1e1e2e", corner_radius=12, border_width=1, border_color="#313244")
+        self.configure(
+            fg_color=PALETTE["bg_surface"],
+            corner_radius=12,
+            border_width=1,
+            border_color=PALETTE["border"]
+        )
+
+        # Header: Diagnostic status & Similarity Index
+        self.header_bar = ctk.CTkFrame(self, fg_color="transparent")
+        self.header_bar.pack(fill="x", padx=16, pady=(12, 6))
 
         self.status_label = ctk.CTkLabel(
-            self,
+            self.header_bar,
             text="",
-            font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold")
+            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
+            text_color=PALETTE["text_primary"]
         )
-        self.status_label.pack(anchor="w", padx=16, pady=(12, 6))
+        self.status_label.pack(side="left")
 
+        self.similarity_badge = ctk.CTkLabel(
+            self.header_bar,
+            text="Similarity Index: 0.0%",
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            text_color=PALETTE["accent_primary"]
+        )
+        self.similarity_badge.pack(side="right")
+
+        # Row 1: User Vector
         self.user_row = ctk.CTkFrame(self, fg_color="transparent")
-        self.user_row.pack(fill="x", padx=16, pady=4)
+        self.user_row.pack(fill="x", padx=16, pady=3)
 
         self.user_lbl = ctk.CTkLabel(
             self.user_row,
-            text="Your Guess:",
-            width=120,
+            text="Введена відповідь:",
+            width=140,
             anchor="w",
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color="#a6adc8"
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            text_color=PALETTE["text_secondary"]
         )
         self.user_lbl.pack(side="left")
 
         self.user_text = tk.Text(
             self.user_row,
             height=1.4,
-            bg="#181825",
-            fg="#cdd6f4",
+            bg=PALETTE["bg_inner"],
+            fg=PALETTE["text_primary"],
             relief="flat",
             bd=0,
             highlightthickness=0,
@@ -784,24 +738,25 @@ class DiffFeedbackWidget(ctk.CTkFrame):
         )
         self.user_text.pack(side="left", fill="x", expand=True)
 
+        # Row 2: Target Vector
         self.target_row = ctk.CTkFrame(self, fg_color="transparent")
-        self.target_row.pack(fill="x", padx=16, pady=4)
+        self.target_row.pack(fill="x", padx=16, pady=3)
 
         self.target_lbl = ctk.CTkLabel(
             self.target_row,
-            text="Correct Target:",
-            width=120,
+            text="Еталонний таргет:",
+            width=140,
             anchor="w",
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color="#a6adc8"
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            text_color=PALETTE["text_secondary"]
         )
         self.target_lbl.pack(side="left")
 
         self.target_text = tk.Text(
             self.target_row,
             height=1.4,
-            bg="#181825",
-            fg="#cdd6f4",
+            bg=PALETTE["bg_inner"],
+            fg=PALETTE["text_primary"],
             relief="flat",
             bd=0,
             highlightthickness=0,
@@ -810,261 +765,606 @@ class DiffFeedbackWidget(ctk.CTkFrame):
         )
         self.target_text.pack(side="left", fill="x", expand=True)
 
+        # Tag configurations
         for text_w in (self.user_text, self.target_text):
-            text_w.tag_config("correct", foreground="#2ecc71", font=("Segoe UI", 15, "bold"))
-            text_w.tag_config("wrong", foreground="#e74c3c", font=("Segoe UI", 15, "bold"))
-            text_w.tag_config("missing", foreground="#f59e0b", font=("Segoe UI", 15, "bold", "underline"))
-            text_w.tag_config("placeholder", foreground="#7f8c8d", font=("Segoe UI", 15, "bold"))
+            text_w.tag_config("correct", foreground=PALETTE["success"], font=("Segoe UI", 15, "bold"))
+            text_w.tag_config("wrong", foreground=PALETTE["error"], font=("Segoe UI", 15, "bold"))
+            text_w.tag_config("missing", foreground=PALETTE["warning"], font=("Segoe UI", 15, "bold", "underline"))
+            text_w.tag_config("placeholder", foreground=PALETTE["text_dim"], font=("Segoe UI", 15, "bold"))
+
+        # Row 3: Accepted Synonyms / Variants
+        self.variants_lbl = ctk.CTkLabel(
+            self,
+            text="",
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            text_color=PALETTE["accent_secondary"],
+            anchor="w"
+        )
+        self.variants_lbl.pack(fill="x", padx=16, pady=(4, 2))
+
+        # Bottom Bar: Metrics Breakdown & Color Legend
+        self.footer_bar = ctk.CTkFrame(self, fg_color="transparent")
+        self.footer_bar.pack(fill="x", padx=16, pady=(4, 10))
+
+        self.metrics_lbl = ctk.CTkLabel(
+            self.footer_bar,
+            text="",
+            font=ctk.CTkFont(family="Segoe UI", size=11),
+            text_color=PALETTE["text_dim"]
+        )
+        self.metrics_lbl.pack(side="left")
 
         self.legend_lbl = ctk.CTkLabel(
-            self,
-            text="🟢 Correct  |  🔴 Wrong  |  🟡 Missing  |  ⚪ Placeholder (_)",
+            self.footer_bar,
+            text="🟢 Збіг  |  🔴 Помилка  |  🟡 Очікувана літера  |  ⚪ Плейсхолдер (_)",
             font=ctk.CTkFont(family="Segoe UI", size=11),
-            text_color="#6c7086"
+            text_color=PALETTE["text_dim"]
         )
-        self.legend_lbl.pack(anchor="e", padx=16, pady=(4, 10))
+        self.legend_lbl.pack(side="right")
 
-    def display_diff(self, res: DiffResult, attempt_num: int = 1, is_revealed: bool = False) -> None:
-        """Renders character diff segments into text widgets."""
-        if is_revealed:
+    def display_diff(self, res: DiffResult, attempt_num: int = 1, is_revealed: bool = False, hint_msg: str = "") -> None:
+        """Renders character diff segments and metrics."""
+        sim_pct = round(res.accuracy_ratio * 100.0, 1)
+        self.similarity_badge.configure(text=f"Схожість: {sim_pct}%")
+
+        if hint_msg:
             self.status_label.configure(
-                text="💡 Solution Revealed:",
-                text_color="#f59e0b"
+                text=f"💡 ПІДКАЗКА: {hint_msg}",
+                text_color=PALETTE["warning"]
             )
-            self.target_lbl.configure(text="Correct Target:")
+            self.target_lbl.configure(text="Еталон (підказка):")
+        elif is_revealed:
+            self.status_label.configure(
+                text="👁 РІШЕННЯ РОЗКРИТО (REVEALED):",
+                text_color=PALETTE["warning"]
+            )
+            self.target_lbl.configure(text="Еталонний таргет:")
         elif res.is_exact:
             self.status_label.configure(
-                text=f"✓ Perfect! Correct on Attempt #{attempt_num}",
-                text_color="#2ecc71"
+                text=f"✓ ТОЧНИЙ ЗБІГ! Спроба #{attempt_num}",
+                text_color=PALETTE["success"]
             )
-            self.target_lbl.configure(text="Correct Target:")
+            self.target_lbl.configure(text="Еталонний таргет:")
         else:
             self.status_label.configure(
-                text=f"✕ Keep Trying! Attempt #{attempt_num} - Character Feedback:",
-                text_color="#e74c3c"
+                text=f"✕ НЕВІДПОВІДНІСТЬ — Спроба #{attempt_num}:",
+                text_color=PALETTE["error"]
             )
-            self.target_lbl.configure(text="Correct Letters:")
+            self.target_lbl.configure(text="Еталон (відомі літери):")
 
+        # Populate user text
         self.user_text.config(state="normal")
         self.user_text.delete("1.0", "end")
         if not res.user_segments:
-            self.user_text.insert("end", "(empty input)", "wrong")
+            self.user_text.insert("end", "(порожній ввід)", "wrong")
         else:
             for seg in res.user_segments:
                 self.user_text.insert("end", seg.text, seg.tag)
         self.user_text.config(state="disabled")
 
+        # Populate target text
         self.target_text.config(state="normal")
         self.target_text.delete("1.0", "end")
         for seg in res.target_segments:
-            if not is_revealed and not res.is_exact and seg.tag in ('missing', 'wrong'):
+            if not is_revealed and not res.is_exact and not hint_msg and seg.tag in ('missing', 'wrong'):
                 masked_text = "_" * len(seg.text)
                 self.target_text.insert("end", masked_text, "placeholder")
             else:
                 self.target_text.insert("end", seg.text, seg.tag)
         self.target_text.config(state="disabled")
 
+        # Accepted alternative variants
+        if res.all_variants and len(res.all_variants) > 1:
+            clean_vars = [v for v in res.all_variants if v.lower() != res.target_word_raw.lower()]
+            if clean_vars:
+                vars_str = " | ".join(clean_vars[:4])
+                self.variants_lbl.configure(text=f"Інші прийнятні еквіваленти:  {vars_str}")
+            else:
+                self.variants_lbl.configure(text="")
+        else:
+            self.variants_lbl.configure(text="")
+
+        # Metrics breakdown
+        self.metrics_lbl.configure(
+            text=f"Символи:  Збіг: {res.matching_count}  |  Помилка: {res.wrong_count}  |  Пропущено: {res.missing_count}"
+        )
+
+
+# ============================================================================
+# 4. GRANULAR WORD SELECTION: CHAPTER BLOCK ACCORDION WIDGET
+# ============================================================================
+
+class ChapterBlockWidget(ctk.CTkFrame):
+    """
+    Expandable accordion card representing one chapter/block.
+    Allows toggling the entire block or individual words within it.
+    """
+
+    def __init__(self, master, chapter_name: str, words: List[Dict[str, str]], on_selection_changed_cb):
+        super().__init__(master, fg_color=PALETTE["bg_surface"], corner_radius=10, border_width=1, border_color=PALETTE["border"])
+        self.chapter_name = chapter_name
+        self.words = words
+        self.on_selection_changed_cb = on_selection_changed_cb
+
+        # Set of selected word indices
+        self.selected_indices: Set[int] = set(range(len(words)))
+        self.is_expanded: bool = False
+        self.words_widgets_built: bool = False
+
+        self.word_vars: List[ctk.BooleanVar] = []
+        self.word_checkbox_rows: List[Tuple[ctk.CTkCheckBox, str, str]] = []  # (widget, en, ua)
+
+        self._build_header()
+
+    def _build_header(self):
+        self.header_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.header_frame.pack(fill="x", padx=12, pady=8)
+
+        self.ch_var = ctk.BooleanVar(value=True)
+        self.ch_chk = ctk.CTkCheckBox(
+            self.header_frame,
+            text=self.chapter_name,
+            variable=self.ch_var,
+            command=self._on_chapter_chk_toggled,
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color=PALETTE["text_primary"],
+            fg_color=PALETTE["accent_primary"],
+            hover_color=PALETTE["accent_hover"]
+        )
+        self.ch_chk.pack(side="left", padx=(0, 10))
+
+        self.count_badge = ctk.CTkLabel(
+            self.header_frame,
+            text=f"[{len(self.words)}/{len(self.words)} слів]",
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            text_color=PALETTE["accent_primary"]
+        )
+        self.count_badge.pack(side="left", padx=5)
+
+        # Right control buttons
+        btn_box = ctk.CTkFrame(self.header_frame, fg_color="transparent")
+        btn_box.pack(side="right")
+
+        self.expand_btn = ctk.CTkButton(
+            btn_box,
+            text=f"▼ Слова ({len(self.words)})",
+            width=110,
+            height=26,
+            fg_color=PALETTE["bg_card"],
+            hover_color="#475569",
+            font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
+            text_color=PALETTE["text_primary"],
+            command=self.toggle_expansion
+        )
+        self.expand_btn.pack(side="left", padx=4)
+
+        btn_all = ctk.CTkButton(
+            btn_box,
+            text="Всі",
+            width=40,
+            height=26,
+            fg_color=PALETTE["bg_card"],
+            hover_color="#475569",
+            font=ctk.CTkFont(family="Segoe UI", size=11),
+            text_color=PALETTE["text_secondary"],
+            command=self.select_all
+        )
+        btn_all.pack(side="left", padx=2)
+
+        btn_none = ctk.CTkButton(
+            btn_box,
+            text="0",
+            width=32,
+            height=26,
+            fg_color=PALETTE["bg_card"],
+            hover_color="#475569",
+            font=ctk.CTkFont(family="Segoe UI", size=11),
+            text_color=PALETTE["text_secondary"],
+            command=self.deselect_all
+        )
+        btn_none.pack(side="left", padx=2)
+
+        # Container for word items
+        self.words_container = ctk.CTkFrame(self, fg_color=PALETTE["bg_inner"], corner_radius=8)
+
+    def _ensure_words_built(self):
+        """Lazy builds word checkboxes upon first expansion for ultra-fast startup."""
+        if self.words_widgets_built:
+            return
+
+        self.words_widgets_built = True
+        for idx, w in enumerate(self.words):
+            var = ctk.BooleanVar(value=(idx in self.selected_indices))
+            self.word_vars.append(var)
+
+            en_txt = w.get("en", "")
+            ua_txt = w.get("ua", "")
+
+            row = ctk.CTkFrame(self.words_container, fg_color="transparent")
+            row.pack(fill="x", padx=10, pady=2)
+
+            chk = ctk.CTkCheckBox(
+                row,
+                text=f"{en_txt}   ➔   {ua_txt}",
+                variable=var,
+                command=lambda i=idx, v=var: self._on_word_chk_toggled(i, v.get()),
+                font=ctk.CTkFont(family="Segoe UI", size=12),
+                text_color=PALETTE["text_secondary"],
+                fg_color=PALETTE["accent_primary"],
+                hover_color=PALETTE["accent_hover"]
+            )
+            chk.pack(side="left", fill="x", expand=True)
+
+            self.word_checkbox_rows.append((chk, en_txt.lower(), ua_txt.lower()))
+
+    def toggle_expansion(self):
+        self.is_expanded = not self.is_expanded
+        if self.is_expanded:
+            self._ensure_words_built()
+            self.words_container.pack(fill="x", padx=12, pady=(0, 10))
+            self.expand_btn.configure(text="▲ Згорнути")
+        else:
+            self.words_container.pack_forget()
+            self.expand_btn.configure(text=f"▼ Слова ({len(self.words)})")
+
+    def filter_words(self, query: str) -> bool:
+        """Filters words inside this chapter. Returns True if chapter has matches."""
+        q = query.strip().lower()
+        if not q:
+            # Show all
+            if self.words_widgets_built:
+                for chk, _, _ in self.word_checkbox_rows:
+                    chk.master.pack(fill="x", padx=10, pady=2)
+            return True
+
+        ch_match = q in self.chapter_name.lower()
+        word_matches = 0
+
+        self._ensure_words_built()
+        for chk, en, ua in self.word_checkbox_rows:
+            if ch_match or q in en or q in ua:
+                chk.master.pack(fill="x", padx=10, pady=2)
+                word_matches += 1
+            else:
+                chk.master.pack_forget()
+
+        if word_matches > 0 and not self.is_expanded:
+            self.toggle_expansion()
+
+        return ch_match or (word_matches > 0)
+
+    def _on_chapter_chk_toggled(self):
+        val = self.ch_var.get()
+        if val:
+            self.select_all()
+        else:
+            self.deselect_all()
+
+    def _on_word_chk_toggled(self, idx: int, is_selected: bool):
+        if is_selected:
+            self.selected_indices.add(idx)
+        else:
+            self.selected_indices.discard(idx)
+        self._update_badges_and_vars()
+        self.on_selection_changed_cb()
+
+    def select_all(self):
+        self.selected_indices = set(range(len(self.words)))
+        if self.words_widgets_built:
+            for v in self.word_vars:
+                v.set(True)
+        self._update_badges_and_vars()
+        self.on_selection_changed_cb()
+
+    def deselect_all(self):
+        self.selected_indices.clear()
+        if self.words_widgets_built:
+            for v in self.word_vars:
+                v.set(False)
+        self._update_badges_and_vars()
+        self.on_selection_changed_cb()
+
+    def _update_badges_and_vars(self):
+        sel_cnt = len(self.selected_indices)
+        tot_cnt = len(self.words)
+        self.count_badge.configure(text=f"[{sel_cnt}/{tot_cnt} слів]")
+        self.ch_var.set(sel_cnt > 0)
+
+    def get_selected_pairs(self) -> List[Tuple[str, Dict[str, str]]]:
+        """Returns list of (chapter_name, pair) for all selected words."""
+        return [(self.chapter_name, self.words[idx]) for idx in sorted(self.selected_indices)]
+
+
+# ============================================================================
+# 5. START MENU FRAME (SESSION CONFIGURATION)
+# ============================================================================
 
 class StartMenuFrame(ctk.CTkFrame):
-    """Start Menu Frame for direction & chapter scope selection."""
+    """Scientific Parameter Configuration & Word Selection Frame."""
 
     def __init__(self, master, repository: VocabularyRepository, on_start_callback):
         super().__init__(master, fg_color="transparent")
         self.repo = repository
         self.on_start_callback = on_start_callback
 
-        self.selected_chapters: Dict[str, ctk.BooleanVar] = {}
         self.direction_var = ctk.StringVar(value="English ➔ Ukrainian")
-        self.size_var = ctk.StringVar(value="All")
+        self.size_var = ctk.StringVar(value="All Words")
         self.shuffle_var = ctk.BooleanVar(value=True)
 
-        self.dir_seg: ctk.CTkSegmentedButton
-        self.size_seg: ctk.CTkSegmentedButton
-        self.start_btn: ctk.CTkButton
-
+        self.block_widgets: List[ChapterBlockWidget] = []
         self._build_ui()
 
     def _build_ui(self):
-        content_box = ctk.CTkFrame(self, fg_color="#1e1e2e", corner_radius=16, border_width=1, border_color="#313244")
-        content_box.pack(fill="both", expand=True, padx=30, pady=20)
+        content_box = ctk.CTkFrame(
+            self,
+            fg_color=PALETTE["bg_surface"],
+            corner_radius=16,
+            border_width=1,
+            border_color=PALETTE["border"]
+        )
+        content_box.pack(fill="both", expand=True, padx=25, pady=15)
+
+        # Header Title
+        title_box = ctk.CTkFrame(content_box, fg_color="transparent")
+        title_box.pack(fill="x", padx=25, pady=(15, 5))
 
         title_lbl = ctk.CTkLabel(
-            content_box,
-            text="VocabDrill",
-            font=ctk.CTkFont(family="Segoe UI", size=32, weight="bold"),
-            text_color="#89b4fa"
+            title_box,
+            text="VOCABULARY DRILL SYSTEM",
+            font=ctk.CTkFont(family="Segoe UI", size=26, weight="bold"),
+            text_color=PALETTE["accent_primary"]
         )
-        title_lbl.pack(pady=(20, 2))
+        title_lbl.pack(anchor="w")
 
         subtitle_lbl = ctk.CTkLabel(
-            content_box,
-            text="Multi-Attempt Vocabulary Drilling with Character-Level Feedback",
-            font=ctk.CTkFont(family="Segoe UI", size=14),
-            text_color="#a6adc8"
+            title_box,
+            text="Платформа когнітивного тестування лексики з посимвольним аналізом та гранулярним вибором слів",
+            font=ctk.CTkFont(family="Segoe UI", size=13),
+            text_color=PALETTE["text_secondary"]
         )
-        subtitle_lbl.pack(pady=(0, 20))
+        subtitle_lbl.pack(anchor="w")
 
-        options_grid = ctk.CTkFrame(content_box, fg_color="transparent")
-        options_grid.pack(fill="both", expand=True, padx=25, pady=5)
+        # Two-column layout: Left (Parameters), Right (Corpus Selection)
+        grid_frame = ctk.CTkFrame(content_box, fg_color="transparent")
+        grid_frame.pack(fill="both", expand=True, padx=20, pady=5)
 
-        # Column 1: Direction & Session Settings
+        # Left Column: Configuration Parameters
         left_col = ctk.CTkFrame(
-            options_grid, fg_color="#181825", corner_radius=12, border_width=1, border_color="#313244"
+            grid_frame,
+            fg_color=PALETTE["bg_card"],
+            corner_radius=12,
+            border_width=1,
+            border_color=PALETTE["border"],
+            width=320
         )
-        left_col.pack(side="left", fill="both", expand=True, padx=(0, 10), pady=5)
+        left_col.pack(side="left", fill="both", padx=(0, 10), pady=5)
+        left_col.pack_propagate(False)
 
+        # 1. Practice Direction
         sec1_lbl = ctk.CTkLabel(
             left_col,
-            text="1. PRACTICE DIRECTION",
-            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
-            text_color="#cdd6f4"
+            text="1. НАПРЯМ ТЕСТУВАННЯ",
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color=PALETTE["text_primary"]
         )
-        sec1_lbl.pack(anchor="w", padx=16, pady=(16, 10))
+        sec1_lbl.pack(anchor="w", padx=16, pady=(16, 8))
 
         self.dir_seg = ctk.CTkSegmentedButton(
             left_col,
             values=["English ➔ Ukrainian", "Ukrainian ➔ English"],
             variable=self.direction_var,
-            selected_color="#89b4fa",
-            selected_hover_color="#b4befe",
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold")
+            selected_color=PALETTE["accent_primary"],
+            selected_hover_color=PALETTE["accent_hover"],
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold")
         )
         self.dir_seg.set("English ➔ Ukrainian")
-        self.dir_seg.pack(fill="x", padx=16, pady=5)
+        self.dir_seg.pack(fill="x", padx=16, pady=4)
 
-        sec_limit_lbl = ctk.CTkLabel(
+        # 2. Sample Size (N)
+        sec2_lbl = ctk.CTkLabel(
             left_col,
-            text="2. SESSION SIZE",
-            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
-            text_color="#cdd6f4"
+            text="2. ОБСЯГ СЕСІЇ (SAMPLE SIZE)",
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color=PALETTE["text_primary"]
         )
-        sec_limit_lbl.pack(anchor="w", padx=16, pady=(20, 10))
+        sec2_lbl.pack(anchor="w", padx=16, pady=(20, 8))
 
         self.size_seg = ctk.CTkSegmentedButton(
             left_col,
-            values=["10 Cards", "20 Cards", "50 Cards", "All Words"],
+            values=["10 Cards", "25 Cards", "50 Cards", "All Words"],
+            variable=self.size_var,
             font=ctk.CTkFont(family="Segoe UI", size=12)
         )
         self.size_seg.set("All Words")
-        self.size_seg.pack(fill="x", padx=16, pady=5)
+        self.size_seg.pack(fill="x", padx=16, pady=4)
+
+        # 3. Randomization
+        sec3_lbl = ctk.CTkLabel(
+            left_col,
+            text="3. СТОХАСТИЧНИЙ ПОРЯДОК",
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color=PALETTE["text_primary"]
+        )
+        sec3_lbl.pack(anchor="w", padx=16, pady=(20, 8))
 
         shuffle_chk = ctk.CTkCheckBox(
             left_col,
-            text="Randomize card order",
+            text="Випадковий порядок карток",
             variable=self.shuffle_var,
             font=ctk.CTkFont(family="Segoe UI", size=13),
-            text_color="#bac2de"
+            text_color=PALETTE["text_secondary"],
+            fg_color=PALETTE["accent_primary"],
+            hover_color=PALETTE["accent_hover"]
         )
-        shuffle_chk.pack(anchor="w", padx=16, pady=(20, 10))
+        shuffle_chk.pack(anchor="w", padx=16, pady=4)
 
-        # Column 2: Scope & Chapters Selection
+        # Live selection counter card
+        self.telemetry_box = ctk.CTkFrame(left_col, fg_color=PALETTE["bg_inner"], corner_radius=10, border_width=1, border_color=PALETTE["border"])
+        self.telemetry_box.pack(fill="x", padx=16, pady=(25, 10))
+
+        self.total_selected_lbl = ctk.CTkLabel(
+            self.telemetry_box,
+            text="Обрано слів: 0",
+            font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"),
+            text_color=PALETTE["accent_primary"]
+        )
+        self.total_selected_lbl.pack(pady=(12, 4))
+
+        self.blocks_selected_lbl = ctk.CTkLabel(
+            self.telemetry_box,
+            text="Блоків активних: 0",
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            text_color=PALETTE["text_secondary"]
+        )
+        self.blocks_selected_lbl.pack(pady=(0, 12))
+
+        # Right Column: Chapter & Granular Word Scope
         right_col = ctk.CTkFrame(
-            options_grid, fg_color="#181825", corner_radius=12, border_width=1, border_color="#313244"
+            grid_frame,
+            fg_color=PALETTE["bg_card"],
+            corner_radius=12,
+            border_width=1,
+            border_color=PALETTE["border"]
         )
         right_col.pack(side="right", fill="both", expand=True, padx=(10, 0), pady=5)
 
-        sec2_header = ctk.CTkFrame(right_col, fg_color="transparent")
-        sec2_header.pack(fill="x", padx=16, pady=(16, 5))
+        # Right Header Bar
+        rh_bar = ctk.CTkFrame(right_col, fg_color="transparent")
+        rh_bar.pack(fill="x", padx=16, pady=(14, 6))
 
-        sec2_lbl = ctk.CTkLabel(
-            sec2_header,
-            text="3. CHAPTER SCOPE SELECTION",
-            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
-            text_color="#cdd6f4"
+        rh_title = ctk.CTkLabel(
+            rh_bar,
+            text="4. КОРПУС ТА ВИБІР СЛІВ (CORPUS SELECTION)",
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color=PALETTE["text_primary"]
         )
-        sec2_lbl.pack(side="left")
+        rh_title.pack(side="left")
 
-        btn_box = ctk.CTkFrame(sec2_header, fg_color="transparent")
-        btn_box.pack(side="right")
+        # Global Action Buttons
+        glob_btns = ctk.CTkFrame(rh_bar, fg_color="transparent")
+        glob_btns.pack(side="right")
 
-        btn_all = ctk.CTkButton(
-            btn_box,
-            text="All",
-            width=45,
-            height=24,
-            fg_color="#313244",
-            hover_color="#45475a",
+        btn_all_glob = ctk.CTkButton(
+            glob_btns,
+            text="Обрати всі слова",
+            width=120,
+            height=26,
+            fg_color=PALETTE["bg_surface"],
+            hover_color="#475569",
+            font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
+            text_color=PALETTE["text_primary"],
+            command=self.select_all_globally
+        )
+        btn_all_glob.pack(side="left", padx=3)
+
+        btn_none_glob = ctk.CTkButton(
+            glob_btns,
+            text="Зняти всі",
+            width=80,
+            height=26,
+            fg_color=PALETTE["bg_surface"],
+            hover_color="#475569",
             font=ctk.CTkFont(family="Segoe UI", size=11),
-            command=self.select_all_chapters
+            text_color=PALETTE["text_secondary"],
+            command=self.deselect_all_globally
         )
-        btn_all.pack(side="left", padx=2)
+        btn_none_glob.pack(side="left", padx=3)
 
-        btn_none = ctk.CTkButton(
-            btn_box,
-            text="None",
-            width=45,
-            height=24,
-            fg_color="#313244",
-            hover_color="#45475a",
-            font=ctk.CTkFont(family="Segoe UI", size=11),
-            command=self.deselect_all_chapters
+        # Real-time search & filter bar
+        search_box = ctk.CTkFrame(right_col, fg_color="transparent")
+        search_box.pack(fill="x", padx=16, pady=4)
+
+        self.search_entry = ctk.CTkEntry(
+            search_box,
+            placeholder_text="🔍 Пошук слова або розділу (фільтр у реальному часі)...",
+            height=34,
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            fg_color=PALETTE["bg_inner"],
+            border_color=PALETTE["border"],
+            border_width=1
         )
-        btn_none.pack(side="left", padx=2)
+        self.search_entry.pack(fill="x")
+        self.search_entry.bind("<KeyRelease>", self._on_search_query_changed)
 
-        chapters_scroll = ctk.CTkScrollableFrame(right_col, fg_color="transparent", height=200)
-        chapters_scroll.pack(fill="both", expand=True, padx=12, pady=5)
+        # Scrollable container for chapters & words
+        self.scroll_area = ctk.CTkScrollableFrame(
+            right_col,
+            fg_color="transparent",
+            height=260
+        )
+        self.scroll_area.pack(fill="both", expand=True, padx=12, pady=6)
 
-        chapter_counts = self.repo.get_chapter_counts()
-        for ch_name, count in chapter_counts.items():
-            var = ctk.BooleanVar(value=True)
-            self.selected_chapters[ch_name] = var
-
-            chk = ctk.CTkCheckBox(
-                chapters_scroll,
-                text=f"{ch_name}  ({count} words)",
-                variable=var,
-                command=self.update_start_button_state,
-                font=ctk.CTkFont(family="Segoe UI", size=13),
-                text_color="#cdd6f4"
+        # Instantiate Chapter Block Widgets
+        for ch_name, words in self.repo.chapters.items():
+            block_w = ChapterBlockWidget(
+                self.scroll_area,
+                chapter_name=ch_name,
+                words=words,
+                on_selection_changed_cb=self._on_corpus_selection_updated
             )
-            chk.pack(anchor="w", padx=8, pady=6)
+            block_w.pack(fill="x", pady=4)
+            self.block_widgets.append(block_w)
 
+        # Bottom Start Practice Button
         self.start_btn = ctk.CTkButton(
             content_box,
-            text="🚀 Start Practice",
-            font=ctk.CTkFont(family="Segoe UI", size=18, weight="bold"),
-            fg_color="#a6e3a1",
-            hover_color="#94e2d5",
-            text_color="#11111b",
-            height=50,
-            corner_radius=12,
+            text="🚀 Почати тестування",
+            font=ctk.CTkFont(family="Segoe UI", size=16, weight="bold"),
+            fg_color=PALETTE["accent_primary"],
+            hover_color=PALETTE["accent_hover"],
+            text_color=PALETTE["bg_main"],
+            height=46,
+            corner_radius=10,
             command=self._on_start_clicked
         )
-        self.start_btn.pack(fill="x", padx=25, pady=(15, 20))
+        self.start_btn.pack(fill="x", padx=25, pady=(10, 16))
 
-        self.update_start_button_state()
+        self._on_corpus_selection_updated()
 
-    def select_all_chapters(self):
-        for var in self.selected_chapters.values():
-            var.set(True)
-        self.update_start_button_state()
+    def _on_search_query_changed(self, event=None):
+        q = self.search_entry.get().strip()
+        for bw in self.block_widgets:
+            has_match = bw.filter_words(q)
+            if has_match:
+                bw.pack(fill="x", pady=4)
+            else:
+                bw.pack_forget()
 
-    def deselect_all_chapters(self):
-        for var in self.selected_chapters.values():
-            var.set(False)
-        self.update_start_button_state()
+    def select_all_globally(self):
+        for bw in self.block_widgets:
+            bw.select_all()
 
-    def update_start_button_state(self):
-        chosen = [ch for ch, var in self.selected_chapters.items() if var.get()]
-        counts = self.repo.get_chapter_counts()
-        total_selected = sum(counts[ch] for ch in chosen if ch in counts)
+    def deselect_all_globally(self):
+        for bw in self.block_widgets:
+            bw.deselect_all()
+
+    def _on_corpus_selection_updated(self):
+        total_selected = sum(len(bw.selected_indices) for bw in self.block_widgets)
+        active_blocks = sum(1 for bw in self.block_widgets if len(bw.selected_indices) > 0)
+        total_available = self.repo.get_total_word_count()
+
+        self.total_selected_lbl.configure(text=f"Обрано: {total_selected} / {total_available} слів")
+        self.blocks_selected_lbl.configure(text=f"Блоків активних: {active_blocks} з {len(self.block_widgets)}")
 
         if total_selected == 0:
             self.start_btn.configure(
                 state="disabled",
-                text="Select At Least 1 Chapter to Start",
-                fg_color="#45475a"
+                text="Оберіть хоча б 1 слово для тренування",
+                fg_color=PALETTE["border"]
             )
         else:
             self.start_btn.configure(
                 state="normal",
-                text=f"🚀 Start Practice ({total_selected} Words Available)",
-                fg_color="#a6e3a1",
-                text_color="#11111b"
+                text=f"🚀 Почати тестування ({total_selected} слів)",
+                fg_color=PALETTE["accent_primary"],
+                text_color=PALETTE["bg_main"]
             )
 
     def _on_start_clicked(self):
-        chosen_ch = [ch for ch, var in self.selected_chapters.items() if var.get()]
+        chosen_pairs: List[Tuple[str, Dict[str, str]]] = []
+        for bw in self.block_widgets:
+            chosen_pairs.extend(bw.get_selected_pairs())
+
         raw_dir = (self.dir_seg.get() or self.direction_var.get() or "").strip()
         dir_val = "UA->EN" if raw_dir.startswith("Ukrainian") or "UA->EN" in raw_dir else "EN->UA"
 
@@ -1072,13 +1372,13 @@ class StartMenuFrame(ctk.CTkFrame):
         max_w = None
         if "10" in size_str:
             max_w = 10
-        elif "20" in size_str:
-            max_w = 20
+        elif "25" in size_str:
+            max_w = 25
         elif "50" in size_str:
             max_w = 50
 
         deck = self.repo.create_session_deck(
-            selected_chapters=chosen_ch,
+            selected_word_pairs=chosen_pairs,
             direction=dir_val,
             shuffle=self.shuffle_var.get(),
             max_words=max_w
@@ -1087,8 +1387,16 @@ class StartMenuFrame(ctk.CTkFrame):
         self.on_start_callback(deck)
 
 
+# ============================================================================
+# 6. FLASHCARD PRACTICE FRAME (SCIENTIFIC TESTING & FEEDBACK)
+# ============================================================================
+
 class FlashcardFrame(ctk.CTkFrame):
-    """Multi-Attempt Flashcard Practice Screen."""
+    """
+    Cognitive Lexical Testing Interface.
+    Features safe entry management (no ghost text), progressive hints,
+    full reveal, skip handling, and character diff analytics.
+    """
 
     def __init__(self, master, on_back_callback):
         super().__init__(master, fg_color="transparent")
@@ -1102,156 +1410,220 @@ class FlashcardFrame(ctk.CTkFrame):
 
         self.card_attempts: int = 0
         self.card_revealed: bool = False
+        self.hint_level: int = 0
         self.is_auto_advancing: bool = False
         self.current_card: Optional[Flashcard] = None
-
-        self.chapter_badge: ctk.CTkLabel
-        self.correct_badge: ctk.CTkLabel
-        self.incorrect_badge: ctk.CTkLabel
-        self.accuracy_badge: ctk.CTkLabel
-        self.card_count_lbl: ctk.CTkLabel
-        self.progress_bar: ctk.CTkProgressBar
-        self.lang_pill: ctk.CTkLabel
-        self.prompt_lbl: ctk.CTkLabel
-        self.entry: ctk.CTkEntry
-        self.giveup_btn: ctk.CTkButton
-        self.skip_btn: ctk.CTkButton
-        self.action_btn: ctk.CTkButton
-        self.diff_widget: DiffFeedbackWidget
 
         self._build_ui()
 
     def _build_ui(self):
-        hud_bar = ctk.CTkFrame(self, fg_color="#1e1e2e", corner_radius=12, border_width=1, border_color="#313244")
-        hud_bar.pack(fill="x", padx=20, pady=(15, 10))
+        # 1. Scientific Telemetry HUD Bar
+        hud_bar = ctk.CTkFrame(
+            self,
+            fg_color=PALETTE["bg_surface"],
+            corner_radius=12,
+            border_width=1,
+            border_color=PALETTE["border"]
+        )
+        hud_bar.pack(fill="x", padx=20, pady=(12, 8))
 
         back_btn = ctk.CTkButton(
             hud_bar,
-            text="⬅ Menu",
-            width=80,
-            height=32,
-            fg_color="#313244",
-            hover_color="#45475a",
+            text="⬅ До Меню",
+            width=90,
+            height=30,
+            fg_color=PALETTE["bg_card"],
+            hover_color="#475569",
             font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            text_color=PALETTE["text_primary"],
             command=self._on_back_clicked
         )
-        back_btn.pack(side="left", padx=12, pady=10)
+        back_btn.pack(side="left", padx=10, pady=8)
 
         self.chapter_badge = ctk.CTkLabel(
             hud_bar,
-            text="Chapter",
-            font=ctk.CTkFont(family="Segoe UI", size=13),
-            text_color="#a6adc8"
+            text="БЛОК: —",
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            text_color=PALETTE["accent_secondary"]
         )
         self.chapter_badge.pack(side="left", padx=10)
 
+        # Metric Chips (Right)
         score_box = ctk.CTkFrame(hud_bar, fg_color="transparent")
-        score_box.pack(side="right", padx=12)
+        score_box.pack(side="right", padx=10)
 
         self.correct_badge = ctk.CTkLabel(
             score_box, text="✓ 0",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color="#2ecc71"
+            text_color=PALETTE["success"]
         )
         self.correct_badge.pack(side="left", padx=8)
 
         self.incorrect_badge = ctk.CTkLabel(
             score_box, text="✕ 0",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color="#e74c3c"
+            text_color=PALETTE["error"]
         )
         self.incorrect_badge.pack(side="left", padx=8)
 
-        self.accuracy_badge = ctk.CTkLabel(
-            score_box, text="🎯 0%",
+        self.skip_badge = ctk.CTkLabel(
+            score_box, text="⏭ 0",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color="#89b4fa"
+            text_color=PALETTE["text_dim"]
+        )
+        self.skip_badge.pack(side="left", padx=8)
+
+        self.accuracy_badge = ctk.CTkLabel(
+            score_box, text="🎯 0.0%",
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color=PALETTE["accent_primary"]
         )
         self.accuracy_badge.pack(side="left", padx=8)
 
+        # 2. Progress Bar
         prog_box = ctk.CTkFrame(self, fg_color="transparent")
-        prog_box.pack(fill="x", padx=25, pady=(2, 10))
+        prog_box.pack(fill="x", padx=25, pady=(2, 8))
 
         self.card_count_lbl = ctk.CTkLabel(
-            prog_box, text="Card 0 / 0",
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color="#cdd6f4"
+            prog_box, text="Картка: 0 / 0",
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            text_color=PALETTE["text_primary"]
         )
         self.card_count_lbl.pack(side="left", padx=(0, 10))
 
         self.progress_bar = ctk.CTkProgressBar(
-            prog_box, height=10, corner_radius=5,
-            progress_color="#89b4fa", fg_color="#313244"
+            prog_box, height=8, corner_radius=4,
+            progress_color=PALETTE["accent_primary"], fg_color=PALETTE["bg_card"]
         )
         self.progress_bar.pack(side="left", fill="x", expand=True)
         self.progress_bar.set(0)
 
-        card_container = ctk.CTkFrame(self, fg_color="#181825", corner_radius=16, border_width=1, border_color="#313244")
+        # 3. Main Stimulus & Testing Card
+        card_container = ctk.CTkFrame(
+            self,
+            fg_color=PALETTE["bg_surface"],
+            corner_radius=16,
+            border_width=1,
+            border_color=PALETTE["border"]
+        )
         card_container.pack(fill="both", expand=True, padx=20, pady=5)
 
+        # Linguistic Meta Badges
+        meta_row = ctk.CTkFrame(card_container, fg_color="transparent")
+        meta_row.pack(fill="x", padx=40, pady=(16, 2))
+
         self.lang_pill = ctk.CTkLabel(
-            card_container, text="ENGLISH PROMPT",
+            meta_row,
+            text="ТЕСТУВАННЯ: ENGLISH ➔ UKRAINIAN",
             font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
-            text_color="#89b4fa"
+            text_color=PALETTE["accent_primary"]
         )
-        self.lang_pill.pack(pady=(16, 2))
+        self.lang_pill.pack(side="left")
 
+        self.pos_badge = ctk.CTkLabel(
+            meta_row,
+            text="",
+            font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
+            text_color=PALETTE["accent_secondary"]
+        )
+        self.pos_badge.pack(side="right")
+
+        # Lexical Prompt Display
         self.prompt_lbl = ctk.CTkLabel(
-            card_container, text="Target Word",
-            font=ctk.CTkFont(family="Segoe UI", size=28, weight="bold"),
-            text_color="#cdd6f4"
+            card_container,
+            text="Target Word",
+            font=ctk.CTkFont(family="Segoe UI", size=30, weight="bold"),
+            text_color=PALETTE["text_primary"]
         )
-        self.prompt_lbl.pack(pady=(5, 15))
+        self.prompt_lbl.pack(pady=(10, 16))
 
+        # Input Entry Frame
         entry_frame = ctk.CTkFrame(card_container, fg_color="transparent")
-        entry_frame.pack(fill="x", padx=40, pady=5)
+        entry_frame.pack(fill="x", padx=40, pady=4)
 
         self.entry = ctk.CTkEntry(
             entry_frame,
-            placeholder_text="Type answer and press Enter...",
-            height=50,
+            placeholder_text="Введіть відповідь та натисніть Enter...",
+            height=48,
             font=ctk.CTkFont(family="Segoe UI", size=18),
             corner_radius=10,
             border_width=2,
-            border_color="#45475a",
-            fg_color="#1e1e2e"
+            border_color=PALETTE["border"],
+            fg_color=PALETTE["bg_inner"]
         )
         self.entry.pack(fill="x")
         self.entry.bind("<Return>", self._on_enter_pressed)
 
+        # Action Controls
         controls_box = ctk.CTkFrame(card_container, fg_color="transparent")
         controls_box.pack(fill="x", padx=40, pady=10)
 
-        self.giveup_btn = ctk.CTkButton(
+        # Hint Button (Provides progressive clues without ending trial)
+        self.hint_btn = ctk.CTkButton(
             controls_box,
-            text="💡 Reveal Solution",
-            width=140, height=40,
-            fg_color="#d97706", hover_color="#f59e0b",
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            command=self._on_giveup_clicked
+            text="💡 Підказка",
+            width=115, height=38,
+            fg_color=PALETTE["warning"],
+            hover_color="#d97706",
+            text_color=PALETTE["bg_main"],
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            command=self._on_hint_clicked
         )
-        self.giveup_btn.pack(side="left", padx=(0, 10))
+        self.hint_btn.pack(side="left", padx=(0, 8))
 
+        # Reveal Solution Button
+        self.reveal_btn = ctk.CTkButton(
+            controls_box,
+            text="👁 Розкрити",
+            width=105, height=38,
+            fg_color=PALETTE["bg_card"],
+            hover_color="#475569",
+            text_color=PALETTE["text_primary"],
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            command=self._on_reveal_clicked
+        )
+        self.reveal_btn.pack(side="left", padx=(0, 8))
+
+        # Skip Button
         self.skip_btn = ctk.CTkButton(
-            controls_box, text="Skip Card ➔",
-            width=110, height=40,
-            fg_color="#313244", hover_color="#45475a",
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            controls_box,
+            text="⏭ Пропустити",
+            width=115, height=38,
+            fg_color=PALETTE["bg_card"],
+            hover_color="#475569",
+            text_color=PALETTE["text_secondary"],
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
             command=self._on_skip_clicked
         )
         self.skip_btn.pack(side="left")
 
+        # Primary Action / Validation Button
         self.action_btn = ctk.CTkButton(
-            controls_box, text="Check Answer ↵",
-            height=40,
-            fg_color="#89b4fa", hover_color="#b4befe",
-            text_color="#11111b",
-            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
+            controls_box,
+            text="✓ Перевірити (Enter)",
+            height=38,
+            fg_color=PALETTE["accent_primary"],
+            hover_color=PALETTE["accent_hover"],
+            text_color=PALETTE["bg_main"],
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             command=self._on_action_clicked
         )
         self.action_btn.pack(side="right", fill="x", expand=True, padx=(15, 0))
 
+        # Diff Feedback Engine
         self.diff_widget = DiffFeedbackWidget(card_container)
+
+    def _reset_entry(self, initial_text: str = "", state: str = "normal", border_color: str = PALETTE["border"]):
+        """
+        Safely configures and resets the entry widget.
+        Guarantees that state='normal' is set BEFORE calling delete/insert,
+        completely resolving Tkinter's disabled-entry ghost text bug.
+        """
+        self.entry.configure(state="normal")
+        self.entry.delete(0, "end")
+        if initial_text:
+            self.entry.insert(0, initial_text)
+        self.entry.configure(state=state, border_color=border_color)
 
     def start_session(self, deck: List[Flashcard]):
         """Initializes a new practice session with the provided deck."""
@@ -1276,41 +1648,51 @@ class FlashcardFrame(ctk.CTkFrame):
 
         self.card_attempts = 0
         self.card_revealed = False
+        self.hint_level = 0
         self.is_auto_advancing = False
         self.current_card = self.deck[self.current_idx]
 
-        self.entry.delete(0, "end")
-        self.entry.configure(state="normal", border_color="#45475a")
+        # Reset Entry completely
+        self._reset_entry(initial_text="", state="normal", border_color=PALETTE["border"])
         self.diff_widget.pack_forget()
         self.entry.focus_set()
 
-        dir_text = "TRANSLATE TO UKRAINIAN" if self.current_card.direction == "EN->UA" else "TRANSLATE TO ENGLISH"
+        # Update Linguistic Prompt & Badges
+        dir_text = "ТЕСТУВАННЯ: ENGLISH ➔ UKRAINIAN" if self.current_card.direction == "EN->UA" else "ТЕСТУВАННЯ: UKRAINIAN ➔ ENGLISH"
         self.lang_pill.configure(text=dir_text)
         self.prompt_lbl.configure(text=self.current_card.prompt)
-        self.chapter_badge.configure(text=self.current_card.chapter)
+        self.chapter_badge.configure(text=f"БЛОК: {self.current_card.chapter}")
 
+        if self.current_card.pos_tag:
+            self.pos_badge.configure(text=f"[{self.current_card.pos_tag}]")
+        else:
+            self.pos_badge.configure(text="")
+
+        # Progress telemetry
         total = len(self.deck)
         current_num = self.current_idx + 1
-        self.card_count_lbl.configure(text=f"Card {current_num} / {total}")
+        self.card_count_lbl.configure(text=f"Картка: {current_num} / {total}")
         self.progress_bar.set(current_num / total)
 
         self._update_score_hud()
 
-        self.giveup_btn.configure(state="normal")
+        self.hint_btn.configure(state="normal")
+        self.reveal_btn.configure(state="normal")
         self.skip_btn.configure(state="normal")
         self.action_btn.configure(
-            text="Check Answer ↵",
-            fg_color="#89b4fa",
-            text_color="#11111b",
+            text="✓ Перевірити (Enter)",
+            fg_color=PALETTE["accent_primary"],
+            text_color=PALETTE["bg_main"],
             state="normal"
         )
 
     def _update_score_hud(self):
         self.correct_badge.configure(text=f"✓ {self.correct_count}")
         self.incorrect_badge.configure(text=f"✕ {self.incorrect_count}")
+        self.skip_badge.configure(text=f"⏭ {self.skipped_count}")
 
         total_answered = self.correct_count + self.incorrect_count
-        acc = int((self.correct_count / total_answered) * 100) if total_answered > 0 else 0
+        acc = round((self.correct_count / total_answered) * 100.0, 1) if total_answered > 0 else 0.0
         self.accuracy_badge.configure(text=f"🎯 {acc}%")
 
     def _on_enter_pressed(self, event=None):
@@ -1320,11 +1702,18 @@ class FlashcardFrame(ctk.CTkFrame):
         if self.is_auto_advancing:
             return
 
+        # If card was already revealed, Enter proceeds to next card
         if self.card_revealed:
             self._advance_to_next_card()
             return
 
-        user_input = self.entry.get()
+        user_input = self.entry.get().strip()
+
+        # Check if user explicitly typed "skip" or "скіп" into input
+        if user_input.lower() in ("skip", "скіп", "/skip", ":skip"):
+            self._on_skip_clicked()
+            return
+
         if not self.current_card:
             return
 
@@ -1332,28 +1721,66 @@ class FlashcardFrame(ctk.CTkFrame):
         res = evaluate_answer(user_input, self.current_card.target)
 
         self.diff_widget.display_diff(res, attempt_num=self.card_attempts)
-        self.diff_widget.pack(fill="x", padx=20, pady=(5, 15))
+        self.diff_widget.pack(fill="x", padx=20, pady=(5, 12))
 
         if res.is_exact:
             self.correct_count += 1
             self._update_score_hud()
 
-            self.entry.delete(0, "end")
-            self.entry.configure(border_color="#2ecc71", state="disabled")
+            self._reset_entry(initial_text=res.target_word_raw, state="disabled", border_color=PALETTE["success"])
             self.action_btn.configure(
-                text="✓ Correct! Advancing...",
-                fg_color="#2ecc71",
-                text_color="#11111b",
+                text="✓ Правильно! Перехід...",
+                fg_color=PALETTE["success"],
+                text_color=PALETTE["bg_main"],
                 state="disabled"
             )
 
             self.is_auto_advancing = True
             self.after(750, self._advance_to_next_card)
         else:
-            self.entry.configure(border_color="#e74c3c")
+            self.entry.configure(border_color=PALETTE["error"])
             self.entry.focus_set()
 
-    def _on_giveup_clicked(self):
+    def _on_hint_clicked(self):
+        """
+        Progressive Hint:
+        Clears any erroneous input/skip text and provides the next correct prefix character.
+        Keeps entry active and focused so user can continue typing.
+        """
+        if not self.current_card or self.card_revealed:
+            return
+
+        variants = get_target_variants(self.current_card.target)
+        primary_target = variants[0] if variants else self.current_card.target
+
+        curr_input = self.entry.get().strip()
+
+        # Find matching common prefix
+        common_len = 0
+        min_l = min(len(curr_input), len(primary_target))
+        for i in range(min_l):
+            if curr_input[i].lower() == primary_target[i].lower():
+                common_len += 1
+            else:
+                break
+
+        # Reveal next letter
+        new_prefix_len = min(len(primary_target), common_len + 1)
+        next_prefix = primary_target[:new_prefix_len]
+        next_char = primary_target[new_prefix_len - 1]
+        remaining = max(0, len(primary_target) - new_prefix_len)
+
+        # Safely reset entry with next prefix
+        self._reset_entry(initial_text=next_prefix, state="normal", border_color=PALETTE["warning"])
+        self.entry.focus_set()
+
+        hint_msg = f"відкрито '{next_char}' | залишилось символів: {remaining}"
+        res = evaluate_answer(next_prefix, primary_target)
+        self.diff_widget.display_diff(res, attempt_num=self.card_attempts, hint_msg=hint_msg)
+        self.diff_widget.pack(fill="x", padx=20, pady=(5, 12))
+
+    def _on_reveal_clicked(self):
+        """Reveals full target solution, fills entry cleanly, and prepares Enter to advance."""
         if not self.current_card or self.card_revealed:
             return
 
@@ -1361,21 +1788,24 @@ class FlashcardFrame(ctk.CTkFrame):
         self.incorrect_count += 1
         self._update_score_hud()
 
-        user_input = self.entry.get()
-        res = evaluate_answer(user_input, self.current_card.target)
+        res = evaluate_answer("", self.current_card.target)
         self.diff_widget.display_diff(res, is_revealed=True)
-        self.diff_widget.pack(fill="x", padx=20, pady=(5, 15))
+        self.diff_widget.pack(fill="x", padx=20, pady=(5, 12))
 
-        self.entry.configure(border_color="#f59e0b", state="disabled")
+        # Fill the correct target cleanly in amber disabled state
+        self._reset_entry(initial_text=res.target_word_raw, state="disabled", border_color=PALETTE["warning"])
+
         self.action_btn.configure(
-            text="Next Card ➔ (Press Enter)",
-            fg_color="#f59e0b",
-            text_color="#11111b",
+            text="Наступна картка ➔ (Натисніть Enter)",
+            fg_color=PALETTE["warning"],
+            text_color=PALETTE["bg_main"],
             state="normal"
         )
         self.action_btn.focus_set()
 
     def _on_skip_clicked(self):
+        """Safely skips the card and advances without leaving ghost text."""
+        self._reset_entry(initial_text="", state="normal")
         self.skipped_count += 1
         self._advance_to_next_card()
 
@@ -1384,6 +1814,7 @@ class FlashcardFrame(ctk.CTkFrame):
         self._load_current_card()
 
     def _on_back_clicked(self):
+        self._reset_entry(initial_text="", state="normal")
         self.on_back_callback()
 
     def _finish_session(self):
@@ -1396,87 +1827,105 @@ class FlashcardFrame(ctk.CTkFrame):
         )
 
 
+# ============================================================================
+# 7. SUMMARY FRAME (SCIENTIFIC PERFORMANCE REPORT)
+# ============================================================================
+
 class SummaryFrame(ctk.CTkFrame):
-    """Session summary frame showing final statistics and options to restart or menu."""
+    """Session performance evaluation report with scientific accuracy indices."""
 
     def __init__(self, master, on_menu_callback, on_restart_callback):
         super().__init__(master, fg_color="transparent")
         self.on_menu_callback = on_menu_callback
         self.on_restart_callback = on_restart_callback
-
-        self.acc_lbl: ctk.CTkLabel
-        self.details_lbl: ctk.CTkLabel
-
         self._build_ui()
 
     def _build_ui(self):
-        box = ctk.CTkFrame(self, fg_color="#1e1e2e", corner_radius=16, border_width=1, border_color="#313244")
-        box.pack(fill="both", expand=True, padx=40, pady=30)
+        box = ctk.CTkFrame(
+            self,
+            fg_color=PALETTE["bg_surface"],
+            corner_radius=16,
+            border_width=1,
+            border_color=PALETTE["border"]
+        )
+        box.pack(fill="both", expand=True, padx=40, pady=25)
 
         title = ctk.CTkLabel(
             box,
-            text="🎉 Practice Session Complete!",
-            font=ctk.CTkFont(family="Segoe UI", size=28, weight="bold"),
-            text_color="#a6e3a1"
+            text="📊 ЗВІТ СЕСІЇ ТЕСТУВАННЯ (SESSION REPORT)",
+            font=ctk.CTkFont(family="Segoe UI", size=24, weight="bold"),
+            text_color=PALETTE["accent_primary"]
         )
-        title.pack(pady=(30, 10))
+        title.pack(pady=(25, 10))
 
         self.acc_lbl = ctk.CTkLabel(
             box,
-            text="Accuracy: 0%",
-            font=ctk.CTkFont(family="Segoe UI", size=36, weight="bold"),
-            text_color="#89b4fa"
+            text="Точність (Accuracy P_acc): 0.0%",
+            font=ctk.CTkFont(family="Segoe UI", size=32, weight="bold"),
+            text_color=PALETTE["success"]
         )
-        self.acc_lbl.pack(pady=10)
+        self.acc_lbl.pack(pady=8)
 
-        stats_grid = ctk.CTkFrame(box, fg_color="#181825", corner_radius=12)
+        # Performance Metrics Grid
+        stats_grid = ctk.CTkFrame(
+            box,
+            fg_color=PALETTE["bg_inner"],
+            corner_radius=12,
+            border_width=1,
+            border_color=PALETTE["border"]
+        )
         stats_grid.pack(fill="x", padx=50, pady=15)
 
         self.details_lbl = ctk.CTkLabel(
             stats_grid,
-            text="Total Cards: 0  |  Correct: 0  |  Incorrect: 0  |  Skipped: 0",
-            font=ctk.CTkFont(family="Segoe UI", size=15),
-            text_color="#cdd6f4"
+            text="Карток: 0  |  ✓ Успішно: 0  |  ✕ Помилок: 0  |  ⏭ Пропущено: 0",
+            font=ctk.CTkFont(family="Segoe UI", size=14),
+            text_color=PALETTE["text_primary"]
         )
         self.details_lbl.pack(pady=16)
 
         btn_row = ctk.CTkFrame(box, fg_color="transparent")
-        btn_row.pack(pady=(20, 30))
+        btn_row.pack(pady=(20, 25))
 
         btn_menu = ctk.CTkButton(
             btn_row,
-            text="Main Menu",
+            text="Головне меню",
             width=140,
-            height=45,
-            fg_color="#313244",
-            hover_color="#45475a",
-            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
+            height=42,
+            fg_color=PALETTE["bg_card"],
+            hover_color="#475569",
+            text_color=PALETTE["text_primary"],
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             command=self.on_menu_callback
         )
         btn_menu.pack(side="left", padx=10)
 
         btn_again = ctk.CTkButton(
             btn_row,
-            text="Practice Again",
-            width=160,
-            height=45,
-            fg_color="#a6e3a1",
-            hover_color="#94e2d5",
-            text_color="#11111b",
-            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
+            text="🔁 Повторити тестування",
+            width=190,
+            height=42,
+            fg_color=PALETTE["accent_primary"],
+            hover_color=PALETTE["accent_hover"],
+            text_color=PALETTE["bg_main"],
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             command=self.on_restart_callback
         )
         btn_again.pack(side="left", padx=10)
 
     def set_summary(self, total: int, correct: int, incorrect: int, skipped: int):
         answered = correct + incorrect
-        acc = int((correct / answered) * 100) if answered > 0 else 0
+        acc = round((correct / answered) * 100.0, 1) if answered > 0 else 0.0
 
-        self.acc_lbl.configure(text=f"Accuracy: {acc}%")
+        self.acc_lbl.configure(text=f"Точність (Accuracy): {acc}%")
         self.details_lbl.configure(
-            text=f"Total Cards: {total}   |   ✓ Correct: {correct}   |   ✕ Incorrect: {incorrect}   |   ⏭ Skipped: {skipped}"
+            text=f"Всього карток (N): {total}   |   ✓ Успішно: {correct}   |   ✕ Помилок: {incorrect}   |   ⏭ Пропущено: {skipped}"
         )
 
+
+# ============================================================================
+# 8. MAIN APPLICATION CONTAINER
+# ============================================================================
 
 class VocabDrillApp(ctk.CTk):
     """Main Application Window."""
@@ -1484,9 +1933,11 @@ class VocabDrillApp(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("VocabDrill - Multi-Attempt Vocabulary Drilling")
-        self.geometry("960x700")
-        self.minsize(880, 620)
+        self.title("VocabDrill - Cognitive Lexical Testing & Error Analysis System")
+        self.geometry("1040x740")
+        self.minsize(920, 660)
+
+        self.configure(fg_color=PALETTE["bg_main"])
 
         self.repository = VocabularyRepository("words.json")
         self.last_deck: List[Flashcard] = []
