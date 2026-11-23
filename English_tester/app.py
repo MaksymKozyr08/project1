@@ -568,6 +568,118 @@ class Flashcard:
     chapter: str
     pos_tag: str
     original_pair: Dict[str, str]
+    mode: str = "word"  # 'word' or 'sentence'
+    source_sentence: str = ""
+    target_sentence_cloze: str = ""
+    target_sentence_full: str = ""
+
+
+CURATED_SENTENCES: Dict[str, Tuple[str, str]] = {
+    "apple": ("She ate a sweet red apple after lunch.", "Вона з'їла солодке червоне яблуко після обіду."),
+    "book": ("I am reading a fascinating book about history.", "Я читаю захоплюючу книгу про історію."),
+    "house": ("They built a modern house near the forest.", "Вони побудували сучасний будинок біля лісу."),
+    "water": ("Fresh drinking water is vital for human health.", "Свіжа питна вода життєво необхідна для здоров'я."),
+    "sun": ("The morning sun was shining brightly in the sky.", "Ранкове сонце яскраво світило в небі."),
+    "friend": ("A loyal friend will always support you in difficult times.", "Вірний друг завжди підтримає тебе у скрутну хвилину."),
+    "family": ("Spending quality time with family is very important.", "Проводити якісний час із сім'єю дуже важливо."),
+    "city": ("Kyiv is a vibrant and historic European city.", "Київ — жваве та історичне європейське місто."),
+    "road": ("The winding road led through scenic mountains.", "Звивиста дорога вела крізь мальовничі гори."),
+    "tree": ("An ancient oak tree stood in the middle of the park.", "Стародавнє дерево стояло посеред парку."),
+    "actual": ("The actual results exceeded our initial expectations.", "Фактичні результати перевершили наші початкові очікування."),
+    "actually": ("I thought it would rain, but it was actually sunny.", "Я думав, що піде дощ, але насправді було сонячно."),
+    "admire": ("We sincerely admire your dedication and hard work.", "Ми щиро захоплюємося вашою відданістю та наполегливою працею."),
+    "accent": ("He speaks English fluently with a slight French accent.", "Він вільно говорить англійською з легким французьким акцентом."),
+    "apartment": ("They recently rented a cozy apartment downtown.", "Нещодавно вони орендували затишну квартиру в центрі міста."),
+    "awesome": ("The live performance was absolutely awesome.", "Живий виступ був просто неймовірний."),
+    "abroad": ("Many students dream of studying abroad for a semester.", "Багато студентів мріють навчатися за кордоном протягом семестру."),
+    "advantage": ("Having strong communication skills is a huge advantage.", "Володіння сильними комунікативними навичками є величезною перевагою."),
+    "allow": ("The new security rules allow authorized access only.", "Нові правила безпеки дозволяють доступ лише авторизованим користувачам."),
+    "to allow": ("The new security rules allow authorized access only.", "Нові правила безпеки дозволяють доступ лише авторизованим користувачам."),
+    "maintain": ("Engineers must maintain database integrity at all times.", "Інженери повинні підтримувати цілісність бази даних повсякчас."),
+    "to maintain": ("Engineers must maintain database integrity at all times.", "Інженери повинні підтримувати цілісність бази даних повсякчас."),
+    "durability": ("ACID transactions guarantee durability during power failures.", "ACID транзакції гарантують довговічність під час збоїв живлення."),
+    "scalability": ("Horizontal sharding provides high scalability for massive workloads.", "Горизонтальне шарування забезпечує високу масштабованість для великих навантажень."),
+    "consistency": ("Eventual consistency is widely used in distributed caches.", "Кінцева послідовність широко використовується у розподілених кешах."),
+    "integrity": ("Referential integrity prevents orphan records in relational tables.", "Референційна цілісність запобігає появі осиротілих записів у таблицях."),
+    "sharding": ("Database sharding splits heavy tables across cluster nodes.", "Шарування баз даних розділяє великі таблиці між вузлами кластера."),
+    "backup": ("Always create an automated daily backup of critical files.", "Завжди створюйте автоматичну щоденну резервну копію важливих файлів."),
+    "recovery": ("A solid disaster recovery plan ensures business continuity.", "Надійний план аварійного відновлення забезпечує безперервність бізнесу."),
+    "security": ("Multi-factor authentication improves account security.", "Багатофакторна автентифікація покращує безпеку облікового запису."),
+    "solution": ("Developers implemented an elegant solution to the latency issue.", "Розробники впровадили елегантне рішення проблеми із затримкою."),
+    "strategy": ("A clear testing strategy reduces software bugs significantly.", "Чітка стратегія тестування суттєво зменшує кількість помилок."),
+    "performance": ("Indexing frequently queried columns maximizes search performance.", "Індексування часто запитуваних колонок максимізує продуктивність пошуку."),
+    "compliance": ("Regular system audits guarantee strict compliance with industry standards.", "Регулярні аудити гарантують суворе дотримання галузевих стандартів."),
+    "challenge": ("Refactoring legacy systems presents a formidable technical challenge.", "Рефакторинг застарілих систем становить серйозний технічний виклик."),
+    "opportunity": ("Artificial intelligence provides a tremendous opportunity for growth.", "Штучний інтелект надає колосальну можливість для зростання."),
+    "permission": ("The administrator granted write permission to the team directory.", "Адміністратор надав дозвіл на запис у директорію команди.")
+}
+
+
+def get_context_sentences(en_raw: str, ua_raw: str, direction: str) -> Tuple[str, str, str]:
+    """
+    Constructs contextual sentences:
+    Returns (source_sentence, target_sentence_cloze, target_sentence_full).
+    """
+    en_clean = re.sub(r'\(.*?\)', '', en_raw).strip()
+    ua_clean = re.sub(r'\(.*?\)', '', ua_raw).split('/')[0].strip()
+
+    base_en = en_clean[3:].strip() if en_clean.lower().startswith("to ") else en_clean
+    key_en = base_en.lower()
+
+    if key_en in CURATED_SENTENCES:
+        en_s, ua_s = CURATED_SENTENCES[key_en]
+    elif en_clean.lower() in CURATED_SENTENCES:
+        en_s, ua_s = CURATED_SENTENCES[en_clean.lower()]
+    else:
+        _, pos = parse_pos_tag(en_raw)
+        if pos in ("VERB", "VERBAL PHRASE") or "(v)" in en_raw.lower() or en_clean.lower().startswith("to "):
+            en_s = f"It is very important to {base_en} these project requirements carefully."
+            ua_s = f"Дуже важливо ретельно {ua_clean} ці вимоги проєкту."
+        elif pos == "ADJECTIVE" or "(adj)" in en_raw.lower() or any(en_clean.lower().endswith(s) for s in ("able", "ible", "al", "ic", "ive", "ous", "ed")):
+            en_s = f"The team presented an {en_clean} demonstration during the technical review."
+            ua_s = f"Команда представила {ua_clean} демонстрацію під час технічного огляду."
+        elif pos == "ADVERB" or "(adv)" in en_raw.lower() or en_clean.lower().endswith("ly"):
+            en_s = f"The software {en_clean} processed the incoming network request."
+            ua_s = f"Програмне забезпечення {ua_clean} обробило вхідний мережевий запит."
+        elif " " in en_clean:
+            en_s = f"Modern high-tech systems strongly emphasize {en_clean}."
+            ua_s = f"Сучасні високотехнологічні системи значно наголошують на {ua_clean}."
+        else:
+            en_s = f"We observed that the {en_clean} played a significant role in this task."
+            ua_s = f"Ми помітили, що цей {ua_clean} відіграв значну роль у цьому завданні."
+
+    def mask_word(sent: str, target_w: str) -> Tuple[str, str]:
+        # Try direct case-insensitive match
+        pat = re.compile(r'\b' + re.escape(target_w) + r'\b', re.IGNORECASE)
+        m = pat.search(sent)
+        if m:
+            matched_text = m.group(0)
+            cloze = pat.sub("[ _______ ]", sent, count=1)
+            full = pat.sub(f"[ {matched_text} ]", sent, count=1)
+            return cloze, full
+
+        # Try stem match (for inflected Ukrainian endings)
+        if len(target_w) > 4:
+            stem = target_w[:-2]
+            pat_stem = re.compile(r'\b' + re.escape(stem) + r'\w*', re.IGNORECASE)
+            m_stem = pat_stem.search(sent)
+            if m_stem:
+                matched_text = m_stem.group(0)
+                cloze = pat_stem.sub("[ _______ ]", sent, count=1)
+                full = pat_stem.sub(f"[ {matched_text} ]", sent, count=1)
+                return cloze, full
+
+        # Fallback
+        return f"{sent} [ _______ ]", f"{sent} [ {target_w} ]"
+
+    if direction == "UA->EN":
+        # Target language is English
+        cloze_s, full_s = mask_word(en_s, base_en)
+        return ua_s, cloze_s, full_s
+    else:
+        # Target language is Ukrainian
+        cloze_s, full_s = mask_word(ua_s, ua_clean)
+        return en_s, cloze_s, full_s
 
 
 class VocabularyRepository:
@@ -624,9 +736,10 @@ class VocabularyRepository:
         selected_chapters: Optional[List[str]] = None,
         direction: str = "EN->UA",
         shuffle: bool = True,
-        max_words: Optional[int] = None
+        max_words: Optional[int] = None,
+        practice_mode: str = "word"
     ) -> List[Flashcard]:
-        """Creates session deck from specifically selected word pairs or chapters."""
+        """Creates session deck from specifically selected word pairs or chapters in Word or Sentence mode."""
         raw_pool: List[Tuple[str, Dict[str, str]]] = []
 
         if selected_word_pairs is not None:
@@ -660,13 +773,21 @@ class VocabularyRepository:
                 _, pos_tag = parse_pos_tag(en_val)
 
             if prompt and target:
+                src_s, clz_s, ful_s = "", "", ""
+                if practice_mode == "sentence":
+                    src_s, clz_s, ful_s = get_context_sentences(en_val, ua_val, direction)
+
                 deck.append(Flashcard(
                     prompt=prompt,
                     target=target,
                     direction=direction,
                     chapter=ch_name,
                     pos_tag=pos_tag,
-                    original_pair=pair
+                    original_pair=pair,
+                    mode=practice_mode,
+                    source_sentence=src_s,
+                    target_sentence_cloze=clz_s,
+                    target_sentence_full=ful_s
                 ))
 
         return deck
@@ -772,19 +893,9 @@ class DiffFeedbackWidget(ctk.CTkFrame):
             text_w.tag_config("missing", foreground=PALETTE["warning"], font=("Segoe UI", 15, "bold", "underline"))
             text_w.tag_config("placeholder", foreground=PALETTE["text_dim"], font=("Segoe UI", 15, "bold"))
 
-        # Row 3: Accepted Synonyms / Variants
-        self.variants_lbl = ctk.CTkLabel(
-            self,
-            text="",
-            font=ctk.CTkFont(family="Segoe UI", size=12),
-            text_color=PALETTE["accent_secondary"],
-            anchor="w"
-        )
-        self.variants_lbl.pack(fill="x", padx=16, pady=(4, 2))
-
         # Bottom Bar: Metrics Breakdown & Color Legend
         self.footer_bar = ctk.CTkFrame(self, fg_color="transparent")
-        self.footer_bar.pack(fill="x", padx=16, pady=(4, 10))
+        self.footer_bar.pack(fill="x", padx=16, pady=(6, 10))
 
         self.metrics_lbl = ctk.CTkLabel(
             self.footer_bar,
@@ -802,18 +913,54 @@ class DiffFeedbackWidget(ctk.CTkFrame):
         )
         self.legend_lbl.pack(side="right")
 
-    def display_diff(self, res: DiffResult, attempt_num: int = 1, is_revealed: bool = False, hint_msg: str = "") -> None:
+    def display_diff(
+        self,
+        res: DiffResult,
+        attempt_num: int = 1,
+        is_revealed: bool = False,
+        hint_level: int = 0,
+        hint_prefix: str = "",
+        hint_target: str = ""
+    ) -> None:
         """Renders character diff segments and metrics."""
-        sim_pct = round(res.accuracy_ratio * 100.0, 1)
-        self.similarity_badge.configure(text=f"Схожість: {sim_pct}%")
+        if hint_level > 0 and not is_revealed:
+            tot_len = len(hint_target)
+            curr_char = hint_target[hint_level - 1] if 0 < hint_level <= tot_len else ""
+            remaining = max(0, tot_len - hint_level)
 
-        if hint_msg:
+            self.similarity_badge.configure(text=f"Відкрито: {hint_level}/{tot_len} літер")
             self.status_label.configure(
-                text=f"💡 ПІДКАЗКА: {hint_msg}",
+                text=f"💡 ПІДКАЗКА #{hint_level}: відкрито літеру '{curr_char}' (позиція {hint_level} з {tot_len})",
                 text_color=PALETTE["warning"]
             )
             self.target_lbl.configure(text="Еталон (підказка):")
-        elif is_revealed:
+
+            # User input display
+            self.user_text.config(state="normal")
+            self.user_text.delete("1.0", "end")
+            self.user_text.insert("end", hint_prefix, "correct")
+            self.user_text.config(state="disabled")
+
+            # Target display: strictly only revealed letters, rest are placeholders
+            self.target_text.config(state="normal")
+            self.target_text.delete("1.0", "end")
+            self.target_text.insert("end", hint_prefix, "correct")
+            if remaining > 0:
+                placeholders = " _" * remaining
+                self.target_text.insert("end", placeholders, "placeholder")
+            self.target_text.config(state="disabled")
+
+            # Do not show other variants during hint
+            self.variants_lbl.configure(text="")
+            self.metrics_lbl.configure(
+                text=f"Підказка: відкрито {hint_level} з {tot_len} літер | Залишилось: {remaining}"
+            )
+            return
+
+        sim_pct = round(res.accuracy_ratio * 100.0, 1)
+        self.similarity_badge.configure(text=f"Схожість: {sim_pct}%")
+
+        if is_revealed:
             self.status_label.configure(
                 text="👁 РІШЕННЯ РОЗКРИТО (REVEALED):",
                 text_color=PALETTE["warning"]
@@ -846,23 +993,12 @@ class DiffFeedbackWidget(ctk.CTkFrame):
         self.target_text.config(state="normal")
         self.target_text.delete("1.0", "end")
         for seg in res.target_segments:
-            if not is_revealed and not res.is_exact and not hint_msg and seg.tag in ('missing', 'wrong'):
+            if not is_revealed and not res.is_exact and seg.tag in ('missing', 'wrong'):
                 masked_text = "_" * len(seg.text)
                 self.target_text.insert("end", masked_text, "placeholder")
             else:
                 self.target_text.insert("end", seg.text, seg.tag)
         self.target_text.config(state="disabled")
-
-        # Accepted alternative variants
-        if res.all_variants and len(res.all_variants) > 1:
-            clean_vars = [v for v in res.all_variants if v.lower() != res.target_word_raw.lower()]
-            if clean_vars:
-                vars_str = " | ".join(clean_vars[:4])
-                self.variants_lbl.configure(text=f"Інші прийнятні еквіваленти:  {vars_str}")
-            else:
-                self.variants_lbl.configure(text="")
-        else:
-            self.variants_lbl.configure(text="")
 
         # Metrics breakdown
         self.metrics_lbl.configure(
@@ -1087,6 +1223,7 @@ class StartMenuFrame(ctk.CTkFrame):
         self.repo = repository
         self.on_start_callback = on_start_callback
 
+        self.mode_var = ctk.StringVar(value="Слова (Words)")
         self.direction_var = ctk.StringVar(value="English ➔ Ukrainian")
         self.size_var = ctk.StringVar(value="All Words")
         self.shuffle_var = ctk.BooleanVar(value=True)
@@ -1140,14 +1277,34 @@ class StartMenuFrame(ctk.CTkFrame):
         left_col.pack(side="left", fill="both", padx=(0, 10), pady=5)
         left_col.pack_propagate(False)
 
-        # 1. Practice Direction
-        sec1_lbl = ctk.CTkLabel(
+        # 0. Practice Mode (Words vs Sentences)
+        sec0_lbl = ctk.CTkLabel(
             left_col,
-            text="1. НАПРЯМ ТЕСТУВАННЯ",
+            text="1. РЕЖИМ ТРЕНУВАННЯ",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             text_color=PALETTE["text_primary"]
         )
-        sec1_lbl.pack(anchor="w", padx=16, pady=(16, 8))
+        sec0_lbl.pack(anchor="w", padx=16, pady=(14, 6))
+
+        self.mode_seg = ctk.CTkSegmentedButton(
+            left_col,
+            values=["Слова (Words)", "Речення (Sentences)"],
+            variable=self.mode_var,
+            selected_color=PALETTE["accent_primary"],
+            selected_hover_color=PALETTE["accent_hover"],
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold")
+        )
+        self.mode_seg.set("Слова (Words)")
+        self.mode_seg.pack(fill="x", padx=16, pady=4)
+
+        # 1. Practice Direction
+        sec1_lbl = ctk.CTkLabel(
+            left_col,
+            text="2. НАПРЯМ ТЕСТУВАННЯ",
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color=PALETTE["text_primary"]
+        )
+        sec1_lbl.pack(anchor="w", padx=16, pady=(16, 6))
 
         self.dir_seg = ctk.CTkSegmentedButton(
             left_col,
@@ -1163,11 +1320,11 @@ class StartMenuFrame(ctk.CTkFrame):
         # 2. Sample Size (N)
         sec2_lbl = ctk.CTkLabel(
             left_col,
-            text="2. ОБСЯГ СЕСІЇ (SAMPLE SIZE)",
+            text="3. ОБСЯГ СЕСІЇ (SAMPLE SIZE)",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             text_color=PALETTE["text_primary"]
         )
-        sec2_lbl.pack(anchor="w", padx=16, pady=(20, 8))
+        sec2_lbl.pack(anchor="w", padx=16, pady=(16, 6))
 
         self.size_seg = ctk.CTkSegmentedButton(
             left_col,
@@ -1181,11 +1338,11 @@ class StartMenuFrame(ctk.CTkFrame):
         # 3. Randomization
         sec3_lbl = ctk.CTkLabel(
             left_col,
-            text="3. СТОХАСТИЧНИЙ ПОРЯДОК",
+            text="4. СТОХАСТИЧНИЙ ПОРЯДОК",
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             text_color=PALETTE["text_primary"]
         )
-        sec3_lbl.pack(anchor="w", padx=16, pady=(20, 8))
+        sec3_lbl.pack(anchor="w", padx=16, pady=(16, 6))
 
         shuffle_chk = ctk.CTkCheckBox(
             left_col,
@@ -1200,7 +1357,7 @@ class StartMenuFrame(ctk.CTkFrame):
 
         # Live selection counter card
         self.telemetry_box = ctk.CTkFrame(left_col, fg_color=PALETTE["bg_inner"], corner_radius=10, border_width=1, border_color=PALETTE["border"])
-        self.telemetry_box.pack(fill="x", padx=16, pady=(25, 10))
+        self.telemetry_box.pack(fill="x", padx=16, pady=(20, 10))
 
         self.total_selected_lbl = ctk.CTkLabel(
             self.telemetry_box,
@@ -1368,6 +1525,9 @@ class StartMenuFrame(ctk.CTkFrame):
         raw_dir = (self.dir_seg.get() or self.direction_var.get() or "").strip()
         dir_val = "UA->EN" if raw_dir.startswith("Ukrainian") or "UA->EN" in raw_dir else "EN->UA"
 
+        mode_str = (self.mode_seg.get() or self.mode_var.get() or "").strip()
+        practice_mode = "sentence" if ("Речення" in mode_str or "Sentences" in mode_str) else "word"
+
         size_str = self.size_seg.get()
         max_w = None
         if "10" in size_str:
@@ -1381,7 +1541,8 @@ class StartMenuFrame(ctk.CTkFrame):
             selected_word_pairs=chosen_pairs,
             direction=dir_val,
             shuffle=self.shuffle_var.get(),
-            max_words=max_w
+            max_words=max_w,
+            practice_mode=practice_mode
         )
 
         self.on_start_callback(deck)
@@ -1391,11 +1552,19 @@ class StartMenuFrame(ctk.CTkFrame):
 # 6. FLASHCARD PRACTICE FRAME (SCIENTIFIC TESTING & FEEDBACK)
 # ============================================================================
 
+@dataclass
+class CardSessionRecord:
+    card: Flashcard
+    status: str  # 'correct', 'mistake', 'skipped'
+    attempts: int
+    last_user_input: str
+
+
 class FlashcardFrame(ctk.CTkFrame):
     """
     Cognitive Lexical Testing Interface.
     Features safe entry management (no ghost text), progressive hints,
-    full reveal, skip handling, and character diff analytics.
+    full reveal, skip handling, error tracking, and character diff analytics.
     """
 
     def __init__(self, master, on_back_callback):
@@ -1411,6 +1580,9 @@ class FlashcardFrame(ctk.CTkFrame):
         self.card_attempts: int = 0
         self.card_revealed: bool = False
         self.hint_level: int = 0
+        self.current_had_mistake: bool = False
+        self.current_user_input: str = ""
+        self.session_records: List[CardSessionRecord] = []
         self.is_auto_advancing: bool = False
         self.current_card: Optional[Flashcard] = None
 
@@ -1528,6 +1700,34 @@ class FlashcardFrame(ctk.CTkFrame):
         )
         self.pos_badge.pack(side="right")
 
+        # Contextual Sentence Box (Sentence Cloze Mode)
+        self.sentence_box = ctk.CTkFrame(
+            card_container,
+            fg_color=PALETTE["bg_inner"],
+            corner_radius=12,
+            border_width=1,
+            border_color=PALETTE["border"]
+        )
+        self.source_sentence_lbl = ctk.CTkLabel(
+            self.sentence_box,
+            text="",
+            font=ctk.CTkFont(family="Segoe UI", size=13),
+            text_color=PALETTE["text_secondary"],
+            wraplength=840,
+            justify="center"
+        )
+        self.source_sentence_lbl.pack(padx=20, pady=(10, 4))
+
+        self.cloze_sentence_lbl = ctk.CTkLabel(
+            self.sentence_box,
+            text="",
+            font=ctk.CTkFont(family="Segoe UI", size=17, weight="bold"),
+            text_color=PALETTE["accent_primary"],
+            wraplength=840,
+            justify="center"
+        )
+        self.cloze_sentence_lbl.pack(padx=20, pady=(4, 10))
+
         # Lexical Prompt Display
         self.prompt_lbl = ctk.CTkLabel(
             card_container,
@@ -1632,6 +1832,7 @@ class FlashcardFrame(ctk.CTkFrame):
         self.correct_count = 0
         self.incorrect_count = 0
         self.skipped_count = 0
+        self.session_records = []
 
         self.diff_widget.pack_forget()
 
@@ -1649,6 +1850,8 @@ class FlashcardFrame(ctk.CTkFrame):
         self.card_attempts = 0
         self.card_revealed = False
         self.hint_level = 0
+        self.current_had_mistake = False
+        self.current_user_input = ""
         self.is_auto_advancing = False
         self.current_card = self.deck[self.current_idx]
 
@@ -1660,13 +1863,30 @@ class FlashcardFrame(ctk.CTkFrame):
         # Update Linguistic Prompt & Badges
         dir_text = "ТЕСТУВАННЯ: ENGLISH ➔ UKRAINIAN" if self.current_card.direction == "EN->UA" else "ТЕСТУВАННЯ: UKRAINIAN ➔ ENGLISH"
         self.lang_pill.configure(text=dir_text)
-        self.prompt_lbl.configure(text=self.current_card.prompt)
         self.chapter_badge.configure(text=f"БЛОК: {self.current_card.chapter}")
 
         if self.current_card.pos_tag:
             self.pos_badge.configure(text=f"[{self.current_card.pos_tag}]")
         else:
             self.pos_badge.configure(text="")
+
+        if self.current_card.mode == "sentence" and self.current_card.source_sentence:
+            self.sentence_box.pack(fill="x", padx=40, pady=(4, 10), before=self.prompt_lbl)
+            self.source_sentence_lbl.configure(text=f"📖 Контекст: {self.current_card.source_sentence}")
+            self.cloze_sentence_lbl.configure(
+                text=self.current_card.target_sentence_cloze,
+                text_color=PALETTE["accent_primary"]
+            )
+            self.prompt_lbl.configure(
+                text=f"Вставте слово: {self.current_card.prompt}",
+                font=ctk.CTkFont(family="Segoe UI", size=22, weight="bold")
+            )
+        else:
+            self.sentence_box.pack_forget()
+            self.prompt_lbl.configure(
+                text=self.current_card.prompt,
+                font=ctk.CTkFont(family="Segoe UI", size=30, weight="bold")
+            )
 
         # Progress telemetry
         total = len(self.deck)
@@ -1704,10 +1924,18 @@ class FlashcardFrame(ctk.CTkFrame):
 
         # If card was already revealed, Enter proceeds to next card
         if self.card_revealed:
+            if self.current_card:
+                self.session_records.append(CardSessionRecord(
+                    card=self.current_card,
+                    status="mistake",
+                    attempts=self.card_attempts,
+                    last_user_input=self.current_user_input
+                ))
             self._advance_to_next_card()
             return
 
         user_input = self.entry.get().strip()
+        self.current_user_input = user_input
 
         # Check if user explicitly typed "skip" or "скіп" into input
         if user_input.lower() in ("skip", "скіп", "/skip", ":skip"):
@@ -1727,6 +1955,20 @@ class FlashcardFrame(ctk.CTkFrame):
             self.correct_count += 1
             self._update_score_hud()
 
+            if self.current_card.mode == "sentence" and self.current_card.target_sentence_full:
+                self.cloze_sentence_lbl.configure(
+                    text=f"✓ {self.current_card.target_sentence_full}",
+                    text_color=PALETTE["success"]
+                )
+
+            status = "mistake" if (self.current_had_mistake or self.card_attempts > 1 or self.hint_level > 0) else "correct"
+            self.session_records.append(CardSessionRecord(
+                card=self.current_card,
+                status=status,
+                attempts=self.card_attempts,
+                last_user_input=user_input
+            ))
+
             self._reset_entry(initial_text=res.target_word_raw, state="disabled", border_color=PALETTE["success"])
             self.action_btn.configure(
                 text="✓ Правильно! Перехід...",
@@ -1738,45 +1980,48 @@ class FlashcardFrame(ctk.CTkFrame):
             self.is_auto_advancing = True
             self.after(750, self._advance_to_next_card)
         else:
+            self.current_had_mistake = True
             self.entry.configure(border_color=PALETTE["error"])
             self.entry.focus_set()
 
     def _on_hint_clicked(self):
         """
         Progressive Hint:
-        Clears any erroneous input/skip text and provides the next correct prefix character.
-        Keeps entry active and focused so user can continue typing.
+        1st click: reveals strictly only the 1st letter.
+        2nd click: reveals the 2nd letter (prefix of length 2).
+        k-th click: reveals the k-th letter, and so on.
         """
         if not self.current_card or self.card_revealed:
             return
 
+        self.current_had_mistake = True
         variants = get_target_variants(self.current_card.target)
         primary_target = variants[0] if variants else self.current_card.target
+        tot_len = len(primary_target)
 
-        curr_input = self.entry.get().strip()
+        # Advance hint level strictly by 1 on each click
+        self.hint_level += 1
+        if self.hint_level > tot_len:
+            self.hint_level = tot_len
 
-        # Find matching common prefix
-        common_len = 0
-        min_l = min(len(curr_input), len(primary_target))
-        for i in range(min_l):
-            if curr_input[i].lower() == primary_target[i].lower():
-                common_len += 1
-            else:
-                break
+        hint_prefix = primary_target[:self.hint_level]
 
-        # Reveal next letter
-        new_prefix_len = min(len(primary_target), common_len + 1)
-        next_prefix = primary_target[:new_prefix_len]
-        next_char = primary_target[new_prefix_len - 1]
-        remaining = max(0, len(primary_target) - new_prefix_len)
-
-        # Safely reset entry with next prefix
-        self._reset_entry(initial_text=next_prefix, state="normal", border_color=PALETTE["warning"])
+        # Safely reset entry with current prefix and keep it editable/focused
+        self._reset_entry(initial_text=hint_prefix, state="normal", border_color=PALETTE["warning"])
         self.entry.focus_set()
+        try:
+            self.entry.icursor("end")
+        except Exception:
+            pass
 
-        hint_msg = f"відкрито '{next_char}' | залишилось символів: {remaining}"
-        res = evaluate_answer(next_prefix, primary_target)
-        self.diff_widget.display_diff(res, attempt_num=self.card_attempts, hint_msg=hint_msg)
+        res = evaluate_answer(hint_prefix, primary_target)
+        self.diff_widget.display_diff(
+            res,
+            attempt_num=self.card_attempts,
+            hint_level=self.hint_level,
+            hint_prefix=hint_prefix,
+            hint_target=primary_target
+        )
         self.diff_widget.pack(fill="x", padx=20, pady=(5, 12))
 
     def _on_reveal_clicked(self):
@@ -1785,12 +2030,19 @@ class FlashcardFrame(ctk.CTkFrame):
             return
 
         self.card_revealed = True
+        self.current_had_mistake = True
         self.incorrect_count += 1
         self._update_score_hud()
 
         res = evaluate_answer("", self.current_card.target)
         self.diff_widget.display_diff(res, is_revealed=True)
         self.diff_widget.pack(fill="x", padx=20, pady=(5, 12))
+
+        if self.current_card.mode == "sentence" and self.current_card.target_sentence_full:
+            self.cloze_sentence_lbl.configure(
+                text=f"👁 {self.current_card.target_sentence_full}",
+                text_color=PALETTE["warning"]
+            )
 
         # Fill the correct target cleanly in amber disabled state
         self._reset_entry(initial_text=res.target_word_raw, state="disabled", border_color=PALETTE["warning"])
@@ -1805,6 +2057,13 @@ class FlashcardFrame(ctk.CTkFrame):
 
     def _on_skip_clicked(self):
         """Safely skips the card and advances without leaving ghost text."""
+        if self.current_card:
+            self.session_records.append(CardSessionRecord(
+                card=self.current_card,
+                status="skipped",
+                attempts=self.card_attempts,
+                last_user_input=self.current_user_input
+            ))
         self._reset_entry(initial_text="", state="normal")
         self.skipped_count += 1
         self._advance_to_next_card()
@@ -1823,7 +2082,8 @@ class FlashcardFrame(ctk.CTkFrame):
             total=len(self.deck),
             correct=self.correct_count,
             incorrect=self.incorrect_count,
-            skipped=self.skipped_count
+            skipped=self.skipped_count,
+            records=list(self.session_records)
         )
 
 
@@ -1832,12 +2092,13 @@ class FlashcardFrame(ctk.CTkFrame):
 # ============================================================================
 
 class SummaryFrame(ctk.CTkFrame):
-    """Session performance evaluation report with scientific accuracy indices."""
+    """Session performance evaluation report with detailed mistake & correct lists."""
 
     def __init__(self, master, on_menu_callback, on_restart_callback):
         super().__init__(master, fg_color="transparent")
         self.on_menu_callback = on_menu_callback
         self.on_restart_callback = on_restart_callback
+        self.records: List[CardSessionRecord] = []
         self._build_ui()
 
     def _build_ui(self):
@@ -1848,79 +2109,259 @@ class SummaryFrame(ctk.CTkFrame):
             border_width=1,
             border_color=PALETTE["border"]
         )
-        box.pack(fill="both", expand=True, padx=40, pady=25)
+        box.pack(fill="both", expand=True, padx=40, pady=20)
 
         title = ctk.CTkLabel(
             box,
             text="📊 ЗВІТ СЕСІЇ ТЕСТУВАННЯ (SESSION REPORT)",
-            font=ctk.CTkFont(family="Segoe UI", size=24, weight="bold"),
+            font=ctk.CTkFont(family="Segoe UI", size=22, weight="bold"),
             text_color=PALETTE["accent_primary"]
         )
-        title.pack(pady=(25, 10))
+        title.pack(pady=(16, 6))
 
         self.acc_lbl = ctk.CTkLabel(
             box,
             text="Точність (Accuracy P_acc): 0.0%",
-            font=ctk.CTkFont(family="Segoe UI", size=32, weight="bold"),
+            font=ctk.CTkFont(family="Segoe UI", size=28, weight="bold"),
             text_color=PALETTE["success"]
         )
-        self.acc_lbl.pack(pady=8)
+        self.acc_lbl.pack(pady=4)
 
         # Performance Metrics Grid
         stats_grid = ctk.CTkFrame(
             box,
             fg_color=PALETTE["bg_inner"],
-            corner_radius=12,
+            corner_radius=10,
             border_width=1,
             border_color=PALETTE["border"]
         )
-        stats_grid.pack(fill="x", padx=50, pady=15)
+        stats_grid.pack(fill="x", padx=30, pady=8)
 
         self.details_lbl = ctk.CTkLabel(
             stats_grid,
-            text="Карток: 0  |  ✓ Успішно: 0  |  ✕ Помилок: 0  |  ⏭ Пропущено: 0",
-            font=ctk.CTkFont(family="Segoe UI", size=14),
+            text="Карток: 0  |  ✓ Успішно: 0  |  ✕ З помилками: 0  |  ⏭ Пропущено: 0",
+            font=ctk.CTkFont(family="Segoe UI", size=13),
             text_color=PALETTE["text_primary"]
         )
-        self.details_lbl.pack(pady=16)
+        self.details_lbl.pack(pady=10)
+
+        # Scrollable area showing detailed list of words (mistakes & corrects)
+        self.results_scroll = ctk.CTkScrollableFrame(
+            box,
+            fg_color=PALETTE["bg_inner"],
+            corner_radius=10,
+            height=320
+        )
+        self.results_scroll.pack(fill="both", expand=True, padx=30, pady=8)
 
         btn_row = ctk.CTkFrame(box, fg_color="transparent")
-        btn_row.pack(pady=(20, 25))
+        btn_row.pack(pady=(10, 16))
 
         btn_menu = ctk.CTkButton(
             btn_row,
             text="Головне меню",
-            width=140,
-            height=42,
+            width=130,
+            height=40,
             fg_color=PALETTE["bg_card"],
             hover_color="#475569",
             text_color=PALETTE["text_primary"],
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
             command=self.on_menu_callback
         )
-        btn_menu.pack(side="left", padx=10)
+        btn_menu.pack(side="left", padx=8)
 
-        btn_again = ctk.CTkButton(
+        self.btn_again = ctk.CTkButton(
             btn_row,
-            text="🔁 Повторити тестування",
-            width=190,
-            height=42,
+            text="🔁 Повторити все (помилки × 3)",
+            width=210,
+            height=40,
             fg_color=PALETTE["accent_primary"],
             hover_color=PALETTE["accent_hover"],
             text_color=PALETTE["bg_main"],
             font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            command=self.on_restart_callback
+            command=lambda: self.on_restart_callback(repeat_mistakes_factor=3, only_mistakes=False)
         )
-        btn_again.pack(side="left", padx=10)
+        self.btn_again.pack(side="left", padx=8)
 
-    def set_summary(self, total: int, correct: int, incorrect: int, skipped: int):
-        answered = correct + incorrect
-        acc = round((correct / answered) * 100.0, 1) if answered > 0 else 0.0
+        self.btn_mistakes_only = ctk.CTkButton(
+            btn_row,
+            text="🎯 Тільки проблемні слова (× 3)",
+            width=230,
+            height=40,
+            fg_color=PALETTE["warning"],
+            hover_color="#d97706",
+            text_color=PALETTE["bg_main"],
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            command=lambda: self.on_restart_callback(repeat_mistakes_factor=3, only_mistakes=True)
+        )
+        self.btn_mistakes_only.pack(side="left", padx=8)
+
+    def set_summary(self, total: int, correct: int, incorrect: int, skipped: int, records: Optional[List[CardSessionRecord]] = None):
+        self.records = records or []
+        for child in self.results_scroll.winfo_children():
+            child.destroy()
+
+        mistakes = [r for r in self.records if r.status == "mistake"]
+        skipped_items = [r for r in self.records if r.status == "skipped"]
+        corrects = [r for r in self.records if r.status == "correct"]
+
+        num_mistakes = len(mistakes)
+        num_correct = len(corrects)
+        num_skipped = len(skipped_items)
+
+        total_tested = num_correct + num_mistakes
+        acc = round((num_correct / total_tested) * 100.0, 1) if total_tested > 0 else 0.0
 
         self.acc_lbl.configure(text=f"Точність (Accuracy): {acc}%")
         self.details_lbl.configure(
-            text=f"Всього карток (N): {total}   |   ✓ Успішно: {correct}   |   ✕ Помилок: {incorrect}   |   ⏭ Пропущено: {skipped}"
+            text=f"Всього карток (N): {len(self.records)}   |   ✓ Без помилок: {num_correct}   |   ✕ З помилками: {num_mistakes}   |   ⏭ Пропущено: {num_skipped}"
         )
+
+        problematic_count = num_mistakes + num_skipped
+
+        if problematic_count > 0:
+            self.btn_mistakes_only.pack(side="left", padx=8)
+            self.btn_mistakes_only.configure(
+                text=f"🎯 Тільки проблемні ({problematic_count}) × 3",
+                state="normal"
+            )
+            self.btn_again.configure(text="🔁 Повторити все (помилки × 3)")
+        else:
+            self.btn_mistakes_only.pack_forget()
+            self.btn_again.configure(text="🔁 Повторити тестування")
+
+        # 1. Section: Mistake Words
+        if mistakes:
+            sec_err = ctk.CTkFrame(self.results_scroll, fg_color="transparent")
+            sec_err.pack(fill="x", padx=6, pady=(6, 4))
+
+            lbl_err = ctk.CTkLabel(
+                sec_err,
+                text=f"❌ СЛОВА З ПОМИЛКАМИ (будуть повторені по 3 рази — {len(mistakes)}):",
+                font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+                text_color=PALETTE["error"]
+            )
+            lbl_err.pack(anchor="w")
+
+            for r in mistakes:
+                row = ctk.CTkFrame(
+                    self.results_scroll,
+                    fg_color=PALETTE["bg_surface"],
+                    corner_radius=8,
+                    border_width=1,
+                    border_color=PALETTE["error"]
+                )
+                row.pack(fill="x", padx=6, pady=3)
+
+                txt_left = f"❌  {r.card.prompt}   ➔   {r.card.target}"
+                lbl_word = ctk.CTkLabel(
+                    row,
+                    text=txt_left,
+                    font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+                    text_color=PALETTE["text_primary"]
+                )
+                lbl_word.pack(side="left", padx=12, pady=8)
+
+                info_txt = f"Спроб: {r.attempts}"
+                if r.last_user_input and r.last_user_input.lower() != r.card.target.lower():
+                    info_txt += f"  (Введено: \"{r.last_user_input}\")"
+
+                lbl_info = ctk.CTkLabel(
+                    row,
+                    text=info_txt,
+                    font=ctk.CTkFont(family="Segoe UI", size=11),
+                    text_color=PALETTE["error"]
+                )
+                lbl_info.pack(side="right", padx=12)
+
+        # 2. Section: Skipped Words
+        if skipped_items:
+            sec_skip = ctk.CTkFrame(self.results_scroll, fg_color="transparent")
+            sec_skip.pack(fill="x", padx=6, pady=(12, 4))
+
+            lbl_skip = ctk.CTkLabel(
+                sec_skip,
+                text=f"⏭ ПРОПУЩЕНІ СЛОВА ({len(skipped_items)}):",
+                font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+                text_color=PALETTE["warning"]
+            )
+            lbl_skip.pack(anchor="w")
+
+            for r in skipped_items:
+                row = ctk.CTkFrame(
+                    self.results_scroll,
+                    fg_color=PALETTE["bg_surface"],
+                    corner_radius=8,
+                    border_width=1,
+                    border_color=PALETTE["border"]
+                )
+                row.pack(fill="x", padx=6, pady=3)
+
+                txt_left = f"⏭  {r.card.prompt}   ➔   {r.card.target}"
+                lbl_word = ctk.CTkLabel(
+                    row,
+                    text=txt_left,
+                    font=ctk.CTkFont(family="Segoe UI", size=13),
+                    text_color=PALETTE["text_secondary"]
+                )
+                lbl_word.pack(side="left", padx=12, pady=8)
+
+                lbl_info = ctk.CTkLabel(
+                    row,
+                    text="Пропущено",
+                    font=ctk.CTkFont(family="Segoe UI", size=11),
+                    text_color=PALETTE["text_dim"]
+                )
+                lbl_info.pack(side="right", padx=12)
+
+        # 3. Section: Correct Words
+        if corrects:
+            sec_cor = ctk.CTkFrame(self.results_scroll, fg_color="transparent")
+            sec_cor.pack(fill="x", padx=6, pady=(12, 4))
+
+            lbl_cor = ctk.CTkLabel(
+                sec_cor,
+                text=f"✓ ПРАВИЛЬНО ЗАСВОЄНІ СЛОВА ({len(corrects)}):",
+                font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold"),
+                text_color=PALETTE["success"]
+            )
+            lbl_cor.pack(anchor="w")
+
+            for r in corrects:
+                row = ctk.CTkFrame(
+                    self.results_scroll,
+                    fg_color=PALETTE["bg_surface"],
+                    corner_radius=8,
+                    border_width=1,
+                    border_color=PALETTE["border"]
+                )
+                row.pack(fill="x", padx=6, pady=3)
+
+                txt_left = f"✓  {r.card.prompt}   ➔   {r.card.target}"
+                lbl_word = ctk.CTkLabel(
+                    row,
+                    text=txt_left,
+                    font=ctk.CTkFont(family="Segoe UI", size=13),
+                    text_color=PALETTE["text_primary"]
+                )
+                lbl_word.pack(side="left", padx=12, pady=6)
+
+                lbl_info = ctk.CTkLabel(
+                    row,
+                    text="✓ З 1-ї спроби",
+                    font=ctk.CTkFont(family="Segoe UI", size=11),
+                    text_color=PALETTE["success"]
+                )
+                lbl_info.pack(side="right", padx=12)
+
+        if not mistakes and not skipped_items and corrects:
+            celebration = ctk.CTkLabel(
+                self.results_scroll,
+                text="🎉 Ідеальний результат! Усі слова засвоєно без жодної помилки!",
+                font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold"),
+                text_color=PALETTE["success"]
+            )
+            celebration.pack(pady=30)
 
 
 # ============================================================================
@@ -1941,6 +2382,8 @@ class VocabDrillApp(ctk.CTk):
 
         self.repository = VocabularyRepository("words.json")
         self.last_deck: List[Flashcard] = []
+        self.base_session_deck: List[Flashcard] = []
+        self.last_records: List[CardSessionRecord] = []
 
         self.start_menu_frame: StartMenuFrame
         self.flashcard_frame: FlashcardFrame
@@ -1972,23 +2415,51 @@ class VocabDrillApp(ctk.CTk):
         self.summary_frame.pack_forget()
         self.start_menu_frame.pack(fill="both", expand=True)
 
-    def start_practice(self, deck: List[Flashcard]):
-        self.last_deck = deck
+    def start_practice(self, deck: List[Flashcard], is_retry: bool = False):
+        if not is_retry:
+            self.base_session_deck = list(deck)
+        self.last_deck = list(deck)
         self.start_menu_frame.pack_forget()
         self.summary_frame.pack_forget()
         self.flashcard_frame.pack(fill="both", expand=True)
         self.flashcard_frame.start_session(deck)
 
-    def restart_practice(self):
-        if self.last_deck:
-            self.start_practice(list(self.last_deck))
-        else:
+    def restart_practice(self, repeat_mistakes_factor: int = 3, only_mistakes: bool = False):
+        source_deck = self.base_session_deck if self.base_session_deck else self.last_deck
+        if not source_deck:
             self.show_start_menu()
+            return
 
-    def show_summary(self, total: int, correct: int, incorrect: int, skipped: int):
+        mistake_prompts = {r.card.prompt for r in self.last_records if r.status in ("mistake", "skipped")}
+
+        # Deduplicate source cards by prompt
+        seen_prompts = set()
+        unique_source: List[Flashcard] = []
+        for card in source_deck:
+            if card.prompt not in seen_prompts:
+                seen_prompts.add(card.prompt)
+                unique_source.append(card)
+
+        new_deck: List[Flashcard] = []
+        for card in unique_source:
+            if card.prompt in mistake_prompts:
+                # Word had a mistake - repeat it multiple times!
+                for _ in range(repeat_mistakes_factor):
+                    new_deck.append(card)
+            elif not only_mistakes:
+                new_deck.append(card)
+
+        if not new_deck:
+            new_deck = list(unique_source)
+
+        random.shuffle(new_deck)
+        self.start_practice(new_deck, is_retry=True)
+
+    def show_summary(self, total: int, correct: int, incorrect: int, skipped: int, records: Optional[List[CardSessionRecord]] = None):
+        self.last_records = records or []
         self.flashcard_frame.pack_forget()
         self.start_menu_frame.pack_forget()
-        self.summary_frame.set_summary(total, correct, incorrect, skipped)
+        self.summary_frame.set_summary(total, correct, incorrect, skipped, self.last_records)
         self.summary_frame.pack(fill="both", expand=True)
 
 

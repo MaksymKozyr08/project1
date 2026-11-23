@@ -53,7 +53,34 @@ def hanoi(k: int, src:str, dst: str, aux: str)->None:
     print(f"Диск {k}: {src} -> {dst}")
     hanoi(k-1,aux,dst,src)
 
-def heap_sort():
-    
-n = int(input())
-hanoi(n, "A", "C", "B")
+def max_heapy(a: list[int], hip_size: int, i:int)->None:
+    l=i<<1
+    r=i<<1|1
+    largest=i
+    if l<=hip_size and a[l]>a[largest]:
+        largest=l
+    if r<=hip_size and a[r]>a[largest]:
+        largest=r
+    if largest!=i:
+        a[i],a[largest]=a[largest],a[i]
+        max_heapy(a,hip_size,largest)
+
+
+
+def build_max_heap(a:list[int],n:int)->None:
+    for i in range(n>>1,0,-1):
+        max_heapy(a,n,i)
+
+def heapsort(a:list[int])->list[int]:
+    n=len(a)
+    a=[0]+a
+    build_max_heap(a,n)
+    heap_size=n
+    for i in range(n,1,-1):
+        a[1],a[i]=a[i],a[1]
+        heap_size-=1
+        max_heapy(a,heap_size,1)
+    return a[1:]
+
+arr=[4,1,3,2,16,9,10,14,8,7]
+print(*heapsort(arr))
